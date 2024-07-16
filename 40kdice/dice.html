@@ -6,6 +6,7 @@
         <link href="dice.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="dice-TOKEN.js"></script>
         <script type="text/javascript" src="chart.js/dist/chart.umd.js"></script>
+        <script src="unit_lookup.js"></script>
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ghostlords.com/favicon-144.png" />
         <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://ghostlords.com/favicon-152.png" />
         <link rel="icon" type="image/png" href="http://ghostlords.com/favicon-32.png" sizes="32x32" />
@@ -87,43 +88,51 @@
             <option value="">No wound rolls</option>
             <option value="1">Wound rolls of 1</option>
             <option value="fail">Failed wound rolls</option>
-            <option value="noncrit">Non-critical wound rolls</option>
+            <option value="noncrit">Non-critical wound r∆olls</option>
         </select>
         </p>
     </div>
     <div>
-        <h2>Defense Stats</h2>
-        <p><label>T: <input type="text" id="t"></label>
-        <span class="description">Ex: 4, leave blank to auto-wound</span>
-        </p>
-        <p><label>Save: <input type="text" id="save"></label>
-        <span class="description">Ex: 4</span>
-        </p>
-        <p><label>Save Modifier: <input type="text" id="save_mod"></label>
-        <span class="description">Ex: 1, -2</span>
-        </p>
-        <p>
-        <label><input type="checkbox" id="cover" value="1">Cover</label>
-        </p>
-        <p><label>Invulnerable Save: <input type="text" id="invulnerable"></label>
-        <span class="description">Ex: 4</span>
-        </p>
-        <p>
-        Reroll: <select id="save_reroll">
-            <option value="">No save rolls</option>
-            <option value="1">Any save rolls of 1</option>
-            <option value="fail">Any failed save rolls</option>
-            <option value="inv_1">Invulnerable save rolls of 1</option>
-            <option value="inv_fail">Failed invulnerable save rolls</option>
-        </select>
-        </p>
-        <p><label>Wounds per model: <input type="text" id="wounds"></label>
-        <span class="description">Ex: 1, 13, leave blank if you don't care</span>
-        </p>
-        <p><label>Feel No Pain: <input type="text" id="fnp"></label>
-        <span class="description">Ex: 4, 6</span>
-        </p>
-    </div>
+      <h2>Defense Stats</h2>
+      <h3>Select Faction</h3>
+
+      <!-- File list container -->
+      <div id="file-list-container">
+        <!-- File names will be populated dynamically -->
+      </div>
+      <!-- End file list container -->
+
+      <p><label>T: <input type="text" id="t"></label>
+      <span class="description">Ex: 4, leave blank to auto-wound</span>
+      </p>
+      <p><label>Save: <input type="text" id="save"></label>
+      <span class="description">Ex: 4</span>
+      </p>
+      <p><label>Save Modifier: <input type="text" id="save_mod"></label>
+      <span class="description">Ex: 1, -2</span>
+      </p>
+      <p>
+      <label><input type="checkbox" id="cover" value="1">Cover</label>
+      </p>
+      <p><label>Invulnerable Save: <input type="text" id="invulnerable"></label>
+      <span class="description">Ex: 4</span>
+      </p>
+      <p>
+      Reroll: <select id="save_reroll">
+          <option value="">No save rolls</option>
+          <option value="1">Any save rolls of 1</option>
+          <option value="fail">Any failed save rolls</option>
+          <option value="inv_1">Invulnerable save rolls of 1</option>
+          <option value="inv_fail">Failed invulnerable save rolls</option>
+      </select>
+      </p>
+      <p><label>Wounds per model: <input type="text" id="wounds"></label>
+      <span class="description">Ex: 1, 13, leave blank if you don't care</span>
+      </p>
+      <p><label>Feel No Pain: <input type="text" id="fnp"></label>
+      <span class="description">Ex: 4, 6</span>
+      </p>
+  </div>
     <p><button onclick="roll_40k()">Roll</button></p>
 
     <div class="output">
