@@ -633,7 +633,74 @@ function do_killed_aos(damage, wound_val) {
     return killed;
 }
 
+function save_profile() {
+    console.log("called save profile")
+    // Get page inputs 
+    const hit_dice = fetch_value('attacks');
+    const hit_stat = fetch_int_value('bs');
+    const hit_mod = fetch_int_value('hit_mod');
+    const hit_reroll = fetch_value('hit_reroll');
+    const hit_leth = is_checked('hit_leth');
+    const hit_sus = fetch_value('hit_sus');
+    const hit_crit = fetch_int_value('hit_crit') || 6;
+    const hit_of_6 = fetch_value('hit_of_6');
+    const s = fetch_int_value('s');
+    const t = fetch_int_value('t');
+    const wound_mod = fetch_int_value('wound_mod');
+    const wound_reroll = fetch_value('wound_reroll');
+    const wound_dev = is_checked('wound_dev');
+    const wound_crit = fetch_int_value('wound_crit') || 6;
+    const wound_of_6 = fetch_value('wound_of_6');
+    const save_stat = fetch_int_value('save');
+    const invuln_stat = fetch_int_value('invulnerable');
+    const ap_val = fetch_int_value('ap');
+    const save_mod = fetch_int_value('save_mod');
+    const cover = is_checked('cover');
+    const save_reroll = fetch_value('save_reroll');
+    const damage_val = fetch_value('d');
+    const wound_val = fetch_int_value('wounds');
+    const fnp = fetch_int_value('fnp');
+
+    let page_inputs = [hit_dice, hit_stat, hit_mod, hit_reroll, hit_leth ]
+
+    // Get the input value
+    var newItemText = document.getElementById("newItemInput").value;
+
+    // Clear the input field
+    document.getElementById("newItemInput").value = '';
+
+    // Create a new list item element
+    var li = document.createElement("li");
+    
+    // Create a text node for the item text
+    var itemText = document.createTextNode(newItemText);
+    
+    // Append the text node to the list item
+    li.appendChild(itemText);
+
+    // Create a button element
+    var remove_button = document.createElement("button");
+    remove_button.textContent = "Remove";
+    remove_button.onclick = function() {
+        // Remove the list item when the button is clicked
+        li.remove();
+    };
+
+    var roll_button = document.createElement("button");
+    roll_button.textContent = "Roll";
+    roll_button.onclick = function() {
+        roll_40k()
+    };
+    // Append the button to the list item
+    li.appendChild(remove_button);
+    li.appendChild(roll_button);
+
+    // Append the new list item to the list
+    document.getElementById("dynamic-list").appendChild(li);
+}
+
 function roll_40k() {
+    console.log("called roll 40k")
     // Fetch all values up front
     var hit_dice = fetch_value('attacks');
     var hit_stat = fetch_int_value('bs');
