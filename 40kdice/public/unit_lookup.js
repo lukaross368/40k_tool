@@ -66,59 +66,80 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function displayCharacteristics(modelName) {
     console.log('Selected Model:', modelName);  // Log selected model
-    const profile = Array.from(xmlDoc.querySelectorAll('profile')).find(profile => profile.getAttribute('name') === modelName);
-    console.log('Profile:', profile);  // Log profile
-    if (profile) {
-      const characteristics = profile.querySelectorAll('characteristic');
-      const characteristicsMap = {};
 
-      characteristics.forEach(characteristic => {
-        const name = characteristic.getAttribute('name');
-        const value = characteristic.textContent;
-        characteristicsMap[name] = value;
-      });
+    // Find the selectionEntry for the model
+    const selectionEntry = Array.from(xmlDoc.querySelectorAll('selectionEntry')).find(entry => entry.querySelector(`profile[name="${modelName}"]`));
+    console.log('Selection Entry:', selectionEntry);  // Log selection entry
 
-      console.log('Characteristics Map:', characteristicsMap);  // Log characteristics map
+    if (selectionEntry) {
+      // Find the profile within the selectionEntry
+      const profile = selectionEntry.querySelector(`profile[name="${modelName}"]`);
+      console.log('Profile:', profile);  // Log profile
 
-      const T = characteristicsMap['T'];
-      const SV = characteristicsMap['SV'];
-      const W = characteristicsMap['W'];
+      if (profile) {
+        const characteristics = profile.querySelectorAll('characteristic');
+        const characteristicsMap = {};
 
-      // Check for Invulnerable Save
-      let invulnerableSaveValue = 'N/A';
-      const invulnerableSaveInfoLink = Array.from(profile.querySelectorAll('infoLink')).find(infoLink => infoLink.getAttribute('name').toLowerCase().includes('invulnerable save'));
-      console.log('Invulnerable Save InfoLink:', invulnerableSaveInfoLink);  // Log infoLink
+        characteristics.forEach(characteristic => {
+          const name = characteristic.getAttribute('name');
+          const value = characteristic.textContent;
+          characteristicsMap[name] = value;
+        });
 
-      if (invulnerableSaveInfoLink) {
-        const targetId = invulnerableSaveInfoLink.getAttribute('targetId');
-        const invulnerableSaveProfile = xmlDoc.querySelector(`profile[id="${targetId}"]`);
-        console.log('Invulnerable Save Profile:', invulnerableSaveProfile);  // Log invulnerable save profile
+        console.log('Characteristics Map:', characteristicsMap);  // Log characteristics map
 
-        if (invulnerableSaveProfile) {
-          const invulnerableSaveComment = invulnerableSaveProfile.querySelector('comment');
-          console.log('Invulnerable Save Comment:', invulnerableSaveComment);  // Log invulnerable save comment
+        const T = characteristicsMap['T'];
+        const SV = characteristicsMap['SV'];
+        const W = characteristicsMap['W'];
 
-          if (invulnerableSaveComment) {
-            const invulnerableSaveText = invulnerableSaveComment.textContent.trim();
-            console.log('Invulnerable Save Text:', invulnerableSaveText);  // Log invulnerable save text
-            // Extract the number followed by '+'
-            const regex = /(\d+\+)/;
-            const match = invulnerableSaveText.match(regex);
-            invulnerableSaveValue = match ? match[0] : 'N/A';
-          }
+        // Extract and display invulnerable save value
+        const invulnerableSaveValue = getInvulnerableSaveValue(selectionEntry);
+        
+        // Display the characteristics in HTML
+        displayCharacteristicsInHTML(T, SV, W, invulnerableSaveValue);
+      } else {
+        characteristicsDisplay.innerHTML = '<p>No characteristics found for the selected model.</p>';
+      }
+    } else {
+      characteristicsDisplay.innerHTML = '<p>No selection entry found for the selected model.</p>';
+    }
+  }
+
+  function getInvulnerableSaveValue(selectionEntry) {
+    let invulnerableSaveValue = 'N/A';
+    const invulnerableSaveInfoLink = Array.from(selectionEntry.querySelectorAll('infoLink')).find(infoLink => infoLink.getAttribute('name').toLowerCase().includes('invulnerable save'));
+    console.log('Invulnerable Save InfoLink:', invulnerableSaveInfoLink);  // Log infoLink
+
+    if (invulnerableSaveInfoLink) {
+      const targetId = invulnerableSaveInfoLink.getAttribute('targetId');
+      const invulnerableSaveProfile = xmlDoc.querySelector(`profile[id="${targetId}"]`);
+      console.log('Invulnerable Save Profile:', invulnerableSaveProfile);  // Log invulnerable save profile
+
+      if (invulnerableSaveProfile) {
+        const invulnerableSaveComment = invulnerableSaveProfile.querySelector('comment');
+        console.log('Invulnerable Save Comment:', invulnerableSaveComment);  // Log invulnerable save comment
+
+        if (invulnerableSaveComment) {
+          const invulnerableSaveText = invulnerableSaveComment.textContent.trim();
+          console.log('Invulnerable Save Text:', invulnerableSaveText);  // Log invulnerable save text
+          // Extract the number followed by '+'
+          const regex = /(\d+\+)/;
+          const match = invulnerableSaveText.match(regex);
+          invulnerableSaveValue = match ? match[0] : 'N/A';
         }
       }
-
-      // Display the characteristics in HTML
-      characteristicsDisplay.innerHTML = `
-        <p><strong>T:</strong> ${T || 'N/A'}</p>
-        <p><strong>SV:</strong> ${SV || 'N/A'}</p>
-        <p><strong>W:</strong> ${W || 'N/A'}</p>
-        <p><strong>Invulnerable Save:</strong> ${invulnerableSaveValue}</p>
-      `;
-    } else {
-      characteristicsDisplay.innerHTML = '<p>No characteristics found for the selected model.</p>';
     }
+
+    return invulnerableSaveValue;
+  }
+
+  function displayCharacteristicsInHTML(T, SV, W, invulnerableSaveValue) {
+    characteristicsDisplay.innerHTML = `
+      <p><strong>T:</strong> ${T || 'N/A'}</p>
+      <p><strong>SV:</strong> ${SV || 'N/A'}</p>
+      <p><strong>W:</strong> ${W || 'N/A'}</p>
+      <p><strong>Invulnerable Save:</strong> ${invulnerableSaveValue}</p>
+    `;
   }
 
   fetchFileNames();
