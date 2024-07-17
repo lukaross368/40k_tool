@@ -122,7 +122,11 @@ document.addEventListener("DOMContentLoaded", function() {
     if (invulnerableSaveProfile) {
       const characteristic = invulnerableSaveProfile.querySelector('characteristic[name="Description"]');
       if (characteristic) {
-        invulnerableSaveValue = characteristic.textContent.trim();
+        // invulnerableSaveValue = characteristic.textContent.trim();
+        const invulnerableSaveText = characteristic.textContent.trim();
+        const regex = /(\d+\+)/;
+        const match = invulnerableSaveText.match(regex);
+        invulnerableSaveValue = match ? match[0] : 'N/A';
         console.log('Direct Invulnerable Save Text:', invulnerableSaveValue);  // Log invulnerable save text
       }
     } else {
