@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fileArray.forEach(file => {
       const option = document.createElement('option');
       option.value = file;
+      option.textContent = file;
       atk_fileListContainer.appendChild(option);
     });
   }
@@ -40,10 +41,12 @@ document.addEventListener("DOMContentLoaded", function() {
       const fileContent = await response.text();
       const parser = new DOMParser();
       atk_xmlDoc = parser.parseFromString(fileContent, "application/xml"); // Assign atk_xmlDoc here
+      console.log('Parsed XML Document:', atk_xmlDoc); // Log the parsed XML document
       const profiles = atk_xmlDoc.querySelectorAll('profile');
       const modelNames = Array.from(profiles)
         .filter(profile => profile.querySelector('characteristic[name="T"]') && profile.querySelector('characteristic[name="SV"]') && profile.querySelector('characteristic[name="W"]'))
         .map(profile => profile.getAttribute('name'));
+      console.log('Model names:', modelNames); // Log model names
       atk_populateModelList(modelNames);
     } catch (error) {
       console.error('Error fetching models:', error);
@@ -55,11 +58,13 @@ document.addEventListener("DOMContentLoaded", function() {
     modelArray.forEach(model => {
       const option = document.createElement('option');
       option.value = model;
+      option.textContent = model;
       atk_modelListContainer.appendChild(option);
     });
 
     atk_modelFilter.addEventListener('change', function() {
       const selectedModel = atk_modelFilter.value;
+      console.log('Selected model:', selectedModel);
       atk_fetchWeapons(selectedModel);
     });
   }
@@ -69,25 +74,58 @@ document.addEventListener("DOMContentLoaded", function() {
       if (!atk_xmlDoc) {
         throw new Error('XML document not initialized');
       }
-      const profiles = atk_xmlDoc.querySelectorAll('profile');
-      const weapons = Array.from(profiles)
-        .filter(profile => {
-          const typeName = profile.querySelector('typeName');
-          return typeName && typeName.textContent.toLowerCase().includes('weapon');
-        })
-        .map(profile => profile.getAttribute('name'));
-
-      atk_populateWeaponsList(weapons);
+  
+      const modelEntries = atk_xmlDoc.querySelectorAll('selectionEntry[type="unit"]');
+      console.log('Model Entries:', modelEntries);
+  
+      let selectedModelEntry = null;
+  
+      // Find the selected model entry
+      modelEntries.forEach(entry => {
+        const entryName = entry.getAttribute('name');
+        if (entryName.toLowerCase() === modelName.toLowerCase()) {
+          selectedModelEntry = entry;
+        }
+      });
+  
+      if (!selectedModelEntry) {
+        throw new Error(`Model entry for ${modelName} not found`);
+      }
+  
+      console.log('Selected Model Entry:', selectedModelEntry);
+  
+      const weaponNames = new Set();
+  
+      // Extract weapons from the selected model entry
+      const profiles = selectedModelEntry.querySelectorAll('profile');
+      profiles.forEach(profile => {
+        const profileTypeName = profile.getAttribute('typeName');
+        // Assuming profileTypeName contains 'weapon' as part of the name or type
+        if (profileTypeName.toLowerCase().includes('weapon')) {
+          const profileName = profile.getAttribute('name');
+          console.log('Weapon Profile Name:', profileName);
+          weaponNames.add(profileName);
+        }
+      });
+  
+      atk_populateWeaponsList(Array.from(weaponNames));
+  
     } catch (error) {
       console.error('Error fetching weapons:', error);
     }
   }
 
   function atk_populateWeaponsList(weaponsArray) {
-    atk_weaponsListContainer.innerHTML = '';
-    weaponsArray.forEach(weapon => {
+    const uniqueWeapons = [...new Set(weaponsArray)]; // Get unique elements using Set
+  
+    // Assuming atk_weaponsListContainer is a <select> element
+    atk_weaponsListContainer.innerHTML = ''; // Clear existing options
+  
+    // Create and append new options
+    uniqueWeapons.forEach(weapon => {
       const option = document.createElement('option');
       option.value = weapon;
+      option.textContent = weapon;
       atk_weaponsListContainer.appendChild(option);
     });
   }
@@ -104,6 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   atk_fileFilter.addEventListener('change', function() {
     const selectedFile = atk_fileFilter.value;
+    console.log('Selected file:', selectedFile);
     atk_fetchModelNames(selectedFile);
   });
 
