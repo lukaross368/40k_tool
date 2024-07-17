@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function() {
   const modelFilter = document.getElementById('model-filter');
   const modelListContainer = document.getElementById('model-list-container');
   const characteristicsDisplay = document.getElementById('characteristics-display');
+  const tInput = document.getElementById('t');
+  const saveInput = document.getElementById('save');
+  const invulnerableInput = document.getElementById('invulnerable');
+  const woundsInput = document.getElementById('wounds');
   let xmlDoc; // Declare xmlDoc variable to hold the parsed XML document
 
   async function fetchFileNames() {
@@ -95,13 +99,16 @@ document.addEventListener("DOMContentLoaded", function() {
         // Extract and display invulnerable save value
         const invulnerableSaveValue = getInvulnerableSaveValue(selectionEntry);
         
-        // Display the characteristics in HTML
-        displayCharacteristicsInHTML(T, SV, W, invulnerableSaveValue);
+        // Set input values
+        tInput.value = T || '';
+        saveInput.value = SV || '';
+        invulnerableInput.value = invulnerableSaveValue !== 'N/A' ? invulnerableSaveValue : '';
+        woundsInput.value = W || '';
       } else {
-        characteristicsDisplay.innerHTML = '<p>No characteristics found for the selected model.</p>';
+        clearInputValues();
       }
     } else {
-      characteristicsDisplay.innerHTML = '<p>No selection entry found for the selected model.</p>';
+      clearInputValues();
     }
   }
 
@@ -133,13 +140,11 @@ document.addEventListener("DOMContentLoaded", function() {
     return invulnerableSaveValue;
   }
 
-  function displayCharacteristicsInHTML(T, SV, W, invulnerableSaveValue) {
-    characteristicsDisplay.innerHTML = `
-      <p><strong>T:</strong> ${T || 'N/A'}</p>
-      <p><strong>SV:</strong> ${SV || 'N/A'}</p>
-      <p><strong>W:</strong> ${W || 'N/A'}</p>
-      <p><strong>Invulnerable Save:</strong> ${invulnerableSaveValue}</p>
-    `;
+  function clearInputValues() {
+    tInput.value = '';
+    saveInput.value = '';
+    invulnerableInput.value = '';
+    woundsInput.value = '';
   }
 
   fetchFileNames();
