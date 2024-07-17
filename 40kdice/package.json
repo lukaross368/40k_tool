@@ -1,0 +1,12 @@
+{
+  "name": "40kdice",
+  "version": "1.0.0",
+  "description": "Statistical analysis tool for Warhammer 40,000 and Age of Sigmar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

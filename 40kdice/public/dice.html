@@ -6,6 +6,7 @@
         <link href="dice.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="dice-TOKEN.js"></script>
         <script type="text/javascript" src="chart.js/dist/chart.umd.js"></script>
+        <script src="unit_lookup.js"></script>
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ghostlords.com/favicon-144.png" />
         <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://ghostlords.com/favicon-152.png" />
         <link rel="icon" type="image/png" href="http://ghostlords.com/favicon-32.png" sizes="32x32" />
@@ -93,6 +94,24 @@
     </div>
     <div>
         <h2>Defense Stats</h2>
+        <!-- File filter input box added here -->
+        <label for="file-filter">Select Faction:</label>
+        <input list="file-list-container" id="file-filter" placeholder="Enter faction...">
+        <datalist id="file-list-container">
+          <!-- File names will be populated dynamically -->
+        </datalist>
+        <!-- End here-->
+        <label for="model-filter">Select Model:</label>
+        <input list="model-list-container" id="model-filter" placeholder="Enter model...">
+        <datalist id="model-list-container">
+            <!-- Model names will be populated dynamically -->
+        </datalist>
+        <!-- End here-->
+        <!-- Characteristics Display -->
+        <div id="characteristics-display">
+          <!-- Characteristics like T, SV, W will be displayed here -->
+        </div>
+        <!-- End here-->
         <p><label>T: <input type="text" id="t"></label>
         <span class="description">Ex: 4, leave blank to auto-wound</span>
         </p>
