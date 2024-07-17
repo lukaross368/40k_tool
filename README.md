@@ -10,4 +10,9 @@
 - setup branch rules and javascript linting (backlog)
 - write terraform module for deploying calculator to s3 with dns and networking (backlog) 
 - write actions pipeline to deploy terraform and application on merge (backlog)
-- graph improvements (nth percentiles for different levels of condidence) (idea)  
+- graph improvements (nth percentiles for different levels of condidence) (idea)
+- given a defense profile -> what what are some general attack profiles would be required to kill the whole unit with 95 percent confidence (high level idea)
+- given an attack profile -> what are some general defense profiles that result in the whole unit being killed with 95 percent confidence (high level idea)
+- given a standard form army list -> some data-driven insights generated (high level idea)
+- 
+  
