@@ -5,6 +5,7 @@
 - profile pr (up for review)
 - defense drop down pulling from bs data pr (in progress)
 - attacker drop down pulling from bs data pr (backlog)
+- impliment local browser storage for saving profiles between sessions (backlog)
 - clean up repo and remove aos logic and unused files (backlog)
 - remove bs data from repo (use github as source of truth) (backlog) 
 - setup branch rules and javascript linting (backlog)
