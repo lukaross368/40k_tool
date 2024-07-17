@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const regex = /(\d+\+)/;
         const match = invulnerableSaveText.match(regex);
         invulnerableSaveValue = match ? match[0] : 'N/A';
-        console.log('Direct Invulnerable Save Text:', invulnerableSaveValue);  // Log invulnerable save text
+        console.log('Direct Invulnerable Save Text:', invulnerableSaveValue);  // Log invulnerable savje text
       }
     } else {
       // If not found directly, fallback to the infoLink method
