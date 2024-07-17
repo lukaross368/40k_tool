@@ -10,4 +10,4 @@
 - setup branch rules and javascript linting (backlog)
 - write terraform module for deploying calculator to s3 with dns and networking (backlog) 
 - write actions pipeline to deploy terraform and application on merge (backlog)
--  
+- graph improvements (nth percentiles for different levels of condidence) (idea)  
