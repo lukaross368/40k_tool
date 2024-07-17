@@ -122,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (invulnerableSaveProfile) {
       const characteristic = invulnerableSaveProfile.querySelector('characteristic[name="Description"]');
       if (characteristic) {
-        // invulnerableSaveValue = characteristic.textContent.trim();
         const invulnerableSaveText = characteristic.textContent.trim();
         const regex = /(\d+\+)/;
         const match = invulnerableSaveText.match(regex);
