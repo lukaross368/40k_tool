@@ -10,27 +10,27 @@ document.addEventListener("DOMContentLoaded", function() {
   const woundsInput = document.getElementById('wounds');
   let xmlDoc; // Declare xmlDoc variable to hold the parsed XML document
 
-  async function fetchFileNames() {
+  async function fetchDefFileNames() {
     try {
       const response = await fetch('http://localhost:3000/wh40k-10e');
       if (!response.ok) {
         throw new Error('Failed to fetch');
       }
-      const files = await response.json();
-      const catFiles = files.filter(file => file.endsWith('.cat'));
-      const fileNames = catFiles.map(file => file.replace('.cat', ''));
-      populateFileList(fileNames);
+      const def_files = await response.json();
+      const def_catFiles = def_files.filter(def_file => def_file.endsWith('.cat'));
+      const def_fileNames = def_catFiles.map(def_file => def_file.replace('.cat', ''));
+      populateFileList(def_fileNames);
     } catch (error) {
       console.error('Error fetching files:', error);
     }
   }
 
-  function populateFileList(fileArray) {
-    fileListContainer.innerHTML = '';
-    fileArray.forEach(file => {
+  function populateDefFileList(def_fileArray) {
+    fileDefListContainer.innerHTML = '';
+    def_fileArray.forEach(file => {
       const option = document.createElement('option');
       option.value = file;
-      fileListContainer.appendChild(option);
+      fileDefListContainer.appendChild(option);
     });
   }
 
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
     woundsInput.value = '';
   }
 
-  fetchFileNames();
+  fetchDefFileNames();
 
   fileFilter.addEventListener('input', function() {
     const searchText = fileFilter.value.toLowerCase();
