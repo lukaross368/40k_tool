@@ -114,25 +114,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function getInvulnerableSaveValue(selectionEntry) {
     let invulnerableSaveValue = 'N/A';
-    const invulnerableSaveInfoLink = Array.from(selectionEntry.querySelectorAll('infoLink')).find(infoLink => infoLink.getAttribute('name').toLowerCase().includes('invulnerable save'));
-    console.log('Invulnerable Save InfoLink:', invulnerableSaveInfoLink);  // Log infoLink
 
-    if (invulnerableSaveInfoLink) {
-      const targetId = invulnerableSaveInfoLink.getAttribute('targetId');
-      const invulnerableSaveProfile = xmlDoc.querySelector(`profile[id="${targetId}"]`);
-      console.log('Invulnerable Save Profile:', invulnerableSaveProfile);  // Log invulnerable save profile
+    // Check if there's a profile with the exact name "Invulnerable Save"
+    const invulnerableSaveProfile = Array.from(selectionEntry.querySelectorAll('profile')).find(profile => profile.getAttribute('name').includes('Invulnerable Save'));
+    console.log('Invulnerable Save Profile:', invulnerableSaveProfile);  // Log invulnerable save profile
 
-      if (invulnerableSaveProfile) {
-        const invulnerableSaveComment = invulnerableSaveProfile.querySelector('comment');
-        console.log('Invulnerable Save Comment:', invulnerableSaveComment);  // Log invulnerable save comment
+    if (invulnerableSaveProfile) {
+      const characteristic = invulnerableSaveProfile.querySelector('characteristic[name="Description"]');
+      if (characteristic) {
+        invulnerableSaveValue = characteristic.textContent.trim();
+        console.log('Direct Invulnerable Save Text:', invulnerableSaveValue);  // Log invulnerable save text
+      }
+    } else {
+      // If not found directly, fallback to the infoLink method
+      const invulnerableSaveInfoLink = Array.from(selectionEntry.querySelectorAll('infoLink')).find(infoLink => infoLink.getAttribute('name').includes('Invulnerable Save'));
+      console.log('Invulnerable Save InfoLink:', invulnerableSaveInfoLink);  // Log infoLink
 
-        if (invulnerableSaveComment) {
-          const invulnerableSaveText = invulnerableSaveComment.textContent.trim();
-          console.log('Invulnerable Save Text:', invulnerableSaveText);  // Log invulnerable save text
-          // Extract the number followed by '+'
-          const regex = /(\d+\+)/;
-          const match = invulnerableSaveText.match(regex);
-          invulnerableSaveValue = match ? match[0] : 'N/A';
+      if (invulnerableSaveInfoLink) {
+        const targetId = invulnerableSaveInfoLink.getAttribute('targetId');
+        const invulnerableSaveProfile = xmlDoc.querySelector(`profile[id="${targetId}"]`);
+        console.log('Invulnerable Save Profile:', invulnerableSaveProfile);  // Log invulnerable save profile
+
+        if (invulnerableSaveProfile) {
+          const invulnerableSaveComment = invulnerableSaveProfile.querySelector('comment');
+          console.log('Invulnerable Save Comment:', invulnerableSaveComment);  // Log invulnerable save comment
+
+          if (invulnerableSaveComment) {
+            const invulnerableSaveText = invulnerableSaveComment.textContent.trim();
+            console.log('Invulnerable Save Text:', invulnerableSaveText);  // Log invulnerable save text
+            // Extract the number followed by '+'
+            const regex = /(\d+\+)/;
+            const match = invulnerableSaveText.match(regex);
+            invulnerableSaveValue = match ? match[0] : 'N/A';
+          }
         }
       }
     }
