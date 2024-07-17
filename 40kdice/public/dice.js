@@ -633,32 +633,160 @@ function do_killed_aos(damage, wound_val) {
     return killed;
 }
 
-function roll_40k() {
-    // Fetch all values up front
-    var hit_dice = fetch_value('attacks');
-    var hit_stat = fetch_int_value('bs');
-    var hit_mod = fetch_int_value('hit_mod');
-    var hit_reroll = fetch_value('hit_reroll');
-    var hit_leth = is_checked('hit_leth');
-    var hit_sus = fetch_value('hit_sus');
-    var hit_crit = fetch_int_value('hit_crit') || 6;
-    var hit_of_6 = fetch_value('hit_of_6');
-    var s = fetch_int_value('s');
-    var t = fetch_int_value('t');
-    var wound_mod = fetch_int_value('wound_mod');
-    var wound_reroll = fetch_value('wound_reroll');
-    var wound_dev = is_checked('wound_dev');
-    var wound_crit = fetch_int_value('wound_crit') || 6;
-    var wound_of_6 = fetch_value('wound_of_6');
-    var save_stat = fetch_int_value('save');
-    var invuln_stat = fetch_int_value('invulnerable');
-    var ap_val = fetch_int_value('ap');
-    var save_mod = fetch_int_value('save_mod');
-    var cover = is_checked('cover');
-    var save_reroll = fetch_value('save_reroll');
-    var damage_val = fetch_value('d');
-    var wound_val = fetch_int_value('wounds');
-    var fnp = fetch_int_value('fnp');
+function save_profile() {
+    console.log("called save profile")
+    // Get page inputs 
+    let hit_dice = fetch_value('attacks');
+    let hit_stat = fetch_int_value('bs');
+    let hit_mod = fetch_int_value('hit_mod');
+    let hit_reroll = fetch_value('hit_reroll');
+    let hit_leth = is_checked('hit_leth');
+    let hit_sus = fetch_value('hit_sus');
+    let hit_crit = fetch_int_value('hit_crit') || 6;
+    let hit_of_6 = fetch_value('hit_of_6');
+    let s = fetch_int_value('s');
+    let t = fetch_int_value('t');
+    let wound_mod = fetch_int_value('wound_mod');
+    let wound_reroll = fetch_value('wound_reroll');
+    let wound_dev = is_checked('wound_dev');
+    let wound_crit = fetch_int_value('wound_crit') || 6;
+    let wound_of_6 = fetch_value('wound_of_6');
+    let save_stat = fetch_int_value('save');
+    let invuln_stat = fetch_int_value('invulnerable');
+    let ap_val = fetch_int_value('ap');
+    let save_mod = fetch_int_value('save_mod');
+    let cover = is_checked('cover');
+    let save_reroll = fetch_value('save_reroll');
+    let damage_val = fetch_value('d');
+    let wound_val = fetch_int_value('wounds');
+    let fnp = fetch_int_value('fnp');
+
+    let page_inputs = {
+        "hit_dice": hit_dice,
+        "hit_stat": hit_stat,
+        "hit_mod": hit_mod,
+        "hit_reroll": hit_reroll,
+        "hit_leth": hit_leth,
+        "hit_sus": hit_sus,
+        "hit_crit": hit_crit,
+        "hit_of_6": hit_of_6,
+        "s": s,
+        "t": t,
+        "wound_mod": wound_mod,
+        "wound_reroll": wound_reroll,
+        "wound_dev": wound_dev,
+        "wound_crit": wound_crit,
+        "wound_of_6": wound_of_6,
+        "save_stat": save_stat,
+        "invuln_stat": invuln_stat,
+        "ap_val": ap_val,
+        "save_mod": save_mod,
+        "cover": cover,
+        "save_reroll": save_reroll,
+        "damage_val": damage_val,
+        "wound_val": wound_val,
+        "fnp": fnp
+    }
+
+    let profile_map = {}
+
+    // Get the input value
+    var newItemText = document.getElementById("newItemInput").value;
+
+    // Clear the input field
+    document.getElementById("newItemInput").value = '';
+
+    // Create a new list item element
+    var li = document.createElement("li");
+    
+    // Create a text node for the item text
+    var itemText = document.createTextNode(newItemText);
+    
+    // Append the text node to the list item
+    li.appendChild(itemText);
+
+    // Append newItemText and inputs to profile map
+    profile_map[newItemText] = page_inputs
+
+    // Create a button element
+    var remove_button = document.createElement("button");
+    remove_button.textContent = "Remove";
+    remove_button.onclick = function() {
+        // Remove the list item when the button is clicked
+        li.remove();
+    };
+
+    var roll_button = document.createElement("button");
+    roll_button.textContent = "Roll";
+    roll_button.onclick = function() {
+        let page_inputs = profile_map[newItemText]
+        console.log("calling roll_40k function with page_inputs: " + JSON.stringify(page_inputs))
+        roll_40k(true, page_inputs)
+    };
+    // Append the button to the list item
+    li.appendChild(remove_button);
+    li.appendChild(roll_button);
+
+    // Append the new list item to the list
+    document.getElementById("dynamic-list").appendChild(li);
+}
+
+function roll_40k(from_profile=false, page_inputs={}) {
+    console.log("called roll 40k")
+
+    if (!from_profile) {
+        console.log("getting inputs from browser")
+        var hit_dice = fetch_value('attacks');
+        var hit_stat = fetch_int_value('bs');
+        var hit_mod = fetch_int_value('hit_mod');
+        var hit_reroll = fetch_value('hit_reroll');
+        var hit_leth = is_checked('hit_leth');
+        var hit_sus = fetch_value('hit_sus');
+        var hit_crit = fetch_int_value('hit_crit') || 6;
+        var hit_of_6 = fetch_value('hit_of_6');
+        var s = fetch_int_value('s');
+        var t = fetch_int_value('t');
+        var wound_mod = fetch_int_value('wound_mod');
+        var wound_reroll = fetch_value('wound_reroll');
+        var wound_dev = is_checked('wound_dev');
+        var wound_crit = fetch_int_value('wound_crit') || 6;
+        var wound_of_6 = fetch_value('wound_of_6');
+        var save_stat = fetch_int_value('save');
+        var invuln_stat = fetch_int_value('invulnerable');
+        var ap_val = fetch_int_value('ap');
+        var save_mod = fetch_int_value('save_mod');
+        var cover = is_checked('cover');
+        var save_reroll = fetch_value('save_reroll');
+        var damage_val = fetch_value('d');
+        var wound_val = fetch_int_value('wounds');
+        var fnp = fetch_int_value('fnp');
+    } else {
+        console.log("getting inputs from json")
+        var hit_dice = page_inputs["hit_dice"]
+        var hit_stat = page_inputs["hit_stat"]
+        var hit_mod = page_inputs["hit_mod"]
+        var hit_reroll = page_inputs["hit_reroll"]
+        var hit_leth = page_inputs["hit_leth"]
+        var hit_sus = page_inputs["hit_sus"]
+        var hit_crit = page_inputs["hit_crit"]
+        var hit_of_6 = page_inputs["hit_of_6"]
+        var s = page_inputs["s"]
+        var t = page_inputs["t"]
+        var wound_mod = page_inputs["wound_mod"]
+        var wound_reroll = page_inputs["wound_reroll"]
+        var wound_dev = page_inputs["wound_dev"]
+        var wound_crit = page_inputs["wound_crit"]
+        var wound_of_6 = page_inputs["wound_of_6"]
+        var save_stat = page_inputs["save_stat"]
+        var invuln_stat = page_inputs["invuln_stat"]
+        var ap_val = page_inputs["ap_val"]
+        var save_mod = page_inputs["save_mod"]
+        var cover = page_inputs["cover"]
+        var save_reroll = page_inputs["save_reroll"]
+        var damage_val = page_inputs["damage_val"]
+        var wound_val = page_inputs["wound_val"]
+        var fnp = page_inputs["fnp"]
+    }
 
     var damage_prob = parse_dice_prob_array(damage_val).normal;
 

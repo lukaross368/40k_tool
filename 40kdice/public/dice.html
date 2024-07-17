@@ -142,8 +142,19 @@
         <p><label>Feel No Pain: <input type="text" id="fnp"></label>
         <span class="description">Ex: 4, 6</span>
         </p>
+        <h2>Saved Profiles</h2>
+        <div id="list-container">
+            <ul id="dynamic-list">
+                <!-- Dynamic list items will be added here -->
+            </ul>
+        </div>
     </div>
-    <p><button onclick="roll_40k()">Roll</button></p>
+
+    <p>
+        <button onclick="roll_40k()">Roll</button>
+        <input type="text" id="newItemInput" placeholder="Enter new item">
+        <button onclick="save_profile()">Save Profile</button>
+    </p>
 
     <div class="output">
         <div class="chart">
