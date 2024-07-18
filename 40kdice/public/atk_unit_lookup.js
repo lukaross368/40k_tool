@@ -42,9 +42,12 @@ document.addEventListener("DOMContentLoaded", function() {
       const parser = new DOMParser();
       atk_xmlDoc = parser.parseFromString(fileContent, "application/xml"); // Assign atk_xmlDoc here
       console.log('Parsed XML Document:', atk_xmlDoc); // Log the parsed XML document
-      const profiles = atk_xmlDoc.querySelectorAll('profile');
+      // const profiles = atk_xmlDoc.querySelectorAll('profile');
+      const profiles = atk_xmlDoc.querySelectorAll(':is(selectionEntry[type="unit"], selectionEntry[type="model"])');
+      console.log('all_units: ', profiles);
       const modelNames = Array.from(profiles)
-        .filter(profile => profile.querySelector('characteristic[name="T"]') && profile.querySelector('characteristic[name="SV"]') && profile.querySelector('characteristic[name="W"]'))
+        .filter(profile => profile.querySelectorAll('characteristic[name="T"]') && profile.querySelector('characteristic[name="SV"]') && profile.querySelector('characteristic[name="W"]'))
+        // .filter(profile => profile.querySelector(':is([type="unit"], [type="model"])'));
         .map(profile => profile.getAttribute('name'));
       console.log('Model names:', modelNames); // Log model names
       atk_populateModelList(modelNames);
