@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
         throw new Error('XML document not initialized');
       }
   
-      const modelEntries = atk_xmlDoc.querySelectorAll('selectionEntry[type="unit"]');
+      const modelEntries = atk_xmlDoc.querySelectorAll(':is([type="unit"], [type="model"])');
       console.log('Model Entries:', modelEntries);
   
       let selectedModelEntry = null;
@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
       // Find the selected model entry
       modelEntries.forEach(entry => {
         const entryName = entry.getAttribute('name');
+        console.log('entryName: ', entryName);
         if (entryName.toLowerCase() === modelName.toLowerCase()) {
           selectedModelEntry = entry;
         }
