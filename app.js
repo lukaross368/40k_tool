@@ -26,6 +26,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(publicPath, 'dice.html')
 
 
+
+
+    
 );
 });
 
