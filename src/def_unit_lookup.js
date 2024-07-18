@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
         throw new Error('Failed to fetch');
       }
       const files = await response.json();
-      const catFiles = files.filter(file => file.endsWith('.cat'));
-      const fileNames = catFiles.map(file => file.replace('.cat', ''));
+      const catFiles = files.filter((file) => file.endsWith('.cat'));
+      const fileNames = catFiles.map((file) => file.replace('.cat', ''));
       console.log(fileNames);
       populateFileList(fileNames);
     } catch (error) {
