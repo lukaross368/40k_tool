@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function() {
               armourpenInput.value = numericalValue;
               break;
             case 'D':
-              damageInput.value = numericalValue;
+              damageInput.value = value;
               break;
             default:
               break;
