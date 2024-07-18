@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const files = await response.json();
       const catFiles = files.filter(file => file.endsWith('.cat'));
       const fileNames = catFiles.map(file => file.replace('.cat', ''));
+      console.log(fileNames);
       populateFileList(fileNames);
     } catch (error) {
       console.error('Error fetching files:', error);
