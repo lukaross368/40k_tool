@@ -634,8 +634,8 @@ function do_killed_aos(damage, wound_val) {
 }
 
 function save_profile() {
-    console.log("called save profile")
-    // Get page inputs 
+    console.log("called save profile");
+    // Fetching all required values (assuming these functions exist)
     let hit_dice = fetch_value('attacks');
     let hit_stat = fetch_int_value('bs');
     let hit_mod = fetch_int_value('hit_mod');
@@ -686,9 +686,7 @@ function save_profile() {
         "damage_val": damage_val,
         "wound_val": wound_val,
         "fnp": fnp
-    }
-
-    let profile_map = {}
+    };
 
     // Get the input value
     var newItemText = document.getElementById("newItemInput").value;
@@ -698,15 +696,19 @@ function save_profile() {
 
     // Create a new list item element
     var li = document.createElement("li");
-    
+
     // Create a text node for the item text
     var itemText = document.createTextNode(newItemText);
-    
+
     // Append the text node to the list item
     li.appendChild(itemText);
 
     // Append newItemText and inputs to profile map
-    profile_map[newItemText] = page_inputs
+    let profile_map = JSON.parse(localStorage.getItem('profile_map')) || {};
+    profile_map[newItemText] = page_inputs;
+
+    // Save the updated profile_map to localStorage
+    localStorage.setItem('profile_map', JSON.stringify(profile_map));
 
     // Create a button element
     var remove_button = document.createElement("button");
@@ -714,21 +716,57 @@ function save_profile() {
     remove_button.onclick = function() {
         // Remove the list item when the button is clicked
         li.remove();
+        delete profile_map[newItemText];
+        localStorage.setItem('profile_map', JSON.stringify(profile_map));
     };
 
     var roll_button = document.createElement("button");
     roll_button.textContent = "Roll";
     roll_button.onclick = function() {
-        let page_inputs = profile_map[newItemText]
-        console.log("calling roll_40k function with page_inputs: " + JSON.stringify(page_inputs))
-        roll_40k(true, page_inputs)
+        let page_inputs = profile_map[newItemText];
+        console.log("calling roll_40k function with page_inputs: " + JSON.stringify(page_inputs));
+        roll_40k(true, page_inputs);
     };
+
     // Append the button to the list item
     li.appendChild(remove_button);
     li.appendChild(roll_button);
 
     // Append the new list item to the list
     document.getElementById("dynamic-list").appendChild(li);
+}
+
+// Function to load profiles from localStorage and populate the list
+function load_profiles() {
+    let profile_map = JSON.parse(localStorage.getItem('profile_map')) || {};
+    let dynamicList = document.getElementById("dynamic-list");
+
+    for (let profile in profile_map) {
+        var li = document.createElement("li");
+        var itemText = document.createTextNode(profile);
+        li.appendChild(itemText);
+
+        var remove_button = document.createElement("button");
+        remove_button.textContent = "Remove";
+        remove_button.onclick = function() {
+            li.remove();
+            delete profile_map[profile];
+            localStorage.setItem('profile_map', JSON.stringify(profile_map));
+        };
+
+        var roll_button = document.createElement("button");
+        roll_button.textContent = "Roll";
+        roll_button.onclick = function() {
+            let page_inputs = profile_map[profile];
+            console.log("calling roll_40k function with page_inputs: " + JSON.stringify(page_inputs));
+            roll_40k(true, page_inputs);
+        };
+
+        li.appendChild(remove_button);
+        li.appendChild(roll_button);
+
+        dynamicList.appendChild(li);
+    }
 }
 
 function roll_40k(from_profile=false, page_inputs={}) {
@@ -1369,6 +1407,9 @@ var fields_40k = ['attacks', 'bs', 'ap', 's', 'd', 't', 'save', 'hit_mod', 'hit_
 var checkboxes_40k = ['cover', 'hit_leth', 'wound_dev'];
 var selects_40k = ['hit_of_6', 'hit_reroll', 'wound_of_6', 'wound_reroll', 'save_reroll'];
 function init_40k() {
+
+    load_profiles()
+    
     charts['attack'] = init_chart('attack_chart', 'attacks');
     charts['hit'] = init_chart('hit_chart', 'hits');
     charts['wound'] = init_chart('wound_chart', 'wounds');
