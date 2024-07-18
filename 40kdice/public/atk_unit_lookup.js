@@ -96,18 +96,38 @@ document.addEventListener("DOMContentLoaded", function() {
   
       const weaponNames = new Set();
   
-      // Extract weapons from the selected model entry
-      const profiles = selectedModelEntry.querySelectorAll('profile');
-      profiles.forEach(profile => {
-        const profileTypeName = profile.getAttribute('typeName');
-        // Assuming profileTypeName contains 'weapon' as part of the name or type
-        if (profileTypeName.toLowerCase().includes('weapon')) {
-          const profileName = profile.getAttribute('name');
-          console.log('Weapon Profile Name:', profileName);
-          weaponNames.add(profileName);
+      const childElements = selectedModelEntry.querySelectorAll('*');
+
+      console.log('childElements: ', childElements);
+
+      childElements.forEach(child => {
+        console.log('child.tagname:', child.tagName);
+        if (child.tagName === 'profile') {
+          const profileTypeName = child.getAttribute('typeName');
+          console.log('profileTypeName: ', profileTypeName);
+          if (profileTypeName && profileTypeName.toLowerCase().includes('weapon')) {
+            const profileName = child.getAttribute('name');
+            console.log('Weapon Profile Name:', profileName);
+            weaponNames.add(profileName);
+          }
+        } else if (child.tagName === 'entryLink') {
+          const targetId = child.getAttribute('targetId');
+          const targetElements = atk_xmlDoc.querySelectorAll(`selectionEntry[id="${targetId}"]`);
+      
+          targetElements.forEach(target => {
+            const targetProfiles = target.querySelectorAll('profile');
+            targetProfiles.forEach(profile => {
+              const profileTypeName = profile.getAttribute('typeName');
+              if (profileTypeName && profileTypeName.toLowerCase().includes('weapon')) {
+                const profileName = profile.getAttribute('name');
+                console.log('Weapon Profile Name from EntryLink:', profileName);
+                weaponNames.add(profileName);
+              }
+            });
+          });
         }
       });
-  
+      
       atk_populateWeaponsList(Array.from(weaponNames));
   
     } catch (error) {
