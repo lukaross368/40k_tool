@@ -618,6 +618,7 @@ function do_killed_40k(damage_prob, fnp, unsaved, wound_val) {
 
 
 function save_profile() {
+    console.log("called save profile");
     // Fetching all required values (assuming these functions exist)
     let hit_dice = fetch_value('attacks');
     let hit_stat = fetch_int_value('bs');
@@ -707,6 +708,7 @@ function save_profile() {
     roll_button.textContent = "Roll";
     roll_button.onclick = function() {
         let page_inputs = profile_map[newItemText];
+        console.log("calling roll_40k function with page_inputs: " + JSON.stringify(page_inputs));
         roll_40k(true, page_inputs);
     };
 
@@ -740,6 +742,7 @@ function load_profiles() {
         roll_button.textContent = "Roll";
         roll_button.onclick = function() {
             let page_inputs = profile_map[profile];
+            console.log("calling roll_40k function with page_inputs: " + JSON.stringify(page_inputs));
             roll_40k(true, page_inputs);
         };
 
@@ -751,8 +754,10 @@ function load_profiles() {
 }
 
 function roll_40k(from_profile=false, page_inputs={}) {
+    console.log("called roll 40k")
 
     if (!from_profile) {
+        console.log("getting inputs from browser")
         var hit_dice = fetch_value('attacks');
         var hit_stat = fetch_int_value('bs');
         var hit_mod = fetch_int_value('hit_mod');
@@ -778,6 +783,7 @@ function roll_40k(from_profile=false, page_inputs={}) {
         var wound_val = fetch_int_value('wounds');
         var fnp = fetch_int_value('fnp');
     } else {
+        console.log("getting inputs from json")
         var hit_dice = page_inputs["hit_dice"]
         var hit_stat = page_inputs["hit_stat"]
         var hit_mod = page_inputs["hit_mod"]
@@ -1113,6 +1119,7 @@ function log_prob_array(label, prob) {
         return;
     }
 
+    console.log('--- ' + label + ' ---');
     if (prob.mortal && prob.normal.length != prob.mortal.length) {
         console.error('Mismatched lengths: ' + prob.normal.length + ' != ' + prob.mortal.length);
     }
