@@ -1,5 +1,17 @@
 # 40k_tool
 
+### setup
+
+#### dependencies
+
+run the following commands once you have node and npm installed
+
+```
+npm install 
+npm init -y 
+node app.js
+```
+
 ### todo list:
 
 - profile pr (up for review)
@@ -12,6 +24,7 @@
 - write terraform module for deploying calculator to s3 with dns and networking (backlog) 
 - write actions pipeline to deploy terraform and application on merge (backlog)
 - graph improvements (nth percentiles for different levels of condidence) (idea)
+
 
 
 - given a defense profile -> what what are some general attack profiles would be required to kill the whole unit with 95 percent confidence (high level idea)

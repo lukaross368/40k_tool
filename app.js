@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 
 const directoryPath = path.join(__dirname, 'wh40k-10e');
-const publicPath = path.join(__dirname, 'public');
+const publicPath = path.join(__dirname, 'src');
 
 // Serve static files from the 'public' directory
 app.use(express.static(publicPath));
