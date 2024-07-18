@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", function() {
   const atk_modelListContainer = document.getElementById('atk_model-list-container');
   const atk_weaponsFilter = document.getElementById('atk_weapons-filter');
   const atk_weaponsListContainer = document.getElementById('atk_weapons-list-container');
+  const factionInput = document.getElementById('atk_file-filter');
+  const modelInput = document.getElementById('atk_model-filter');
+  const weaponInput = document.getElementById('atk_weapons-filter');
+
   let atk_xmlDoc; // Declare atk_xmlDoc variable to hold the parsed XML document
 
   async function atk_fetchFileNames() {
@@ -166,6 +170,20 @@ document.addEventListener("DOMContentLoaded", function() {
     const selectedFile = atk_fileFilter.value;
     console.log('Selected file:', selectedFile);
     atk_fetchModelNames(selectedFile);
+  });
+
+  // Clear model and weapon input boxes when faction input changes
+  factionInput.addEventListener('change', function() {
+    modelInput.value = '';
+    weaponInput.value = '';
+    atk_modelListContainer.innerHTML = '';
+    atk_weaponsListContainer.innerHTML = '';
+  });
+
+  // Clear weapon input box when model input changes
+  modelInput.addEventListener('change', function() {
+    weaponInput.value = '';
+    atk_weaponsListContainer.innerHTML = '';
   });
 
 });
