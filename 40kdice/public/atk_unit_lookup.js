@@ -3,11 +3,15 @@ document.addEventListener("DOMContentLoaded", function() {
   const atk_fileListContainer = document.getElementById('atk_file-list-container');
   const atk_modelFilter = document.getElementById('atk_model-filter');
   const atk_modelListContainer = document.getElementById('atk_model-list-container');
-  const atk_weaponsFilter = document.getElementById('atk_weapons-filter');
   const atk_weaponsListContainer = document.getElementById('atk_weapons-list-container');
   const factionInput = document.getElementById('atk_file-filter');
   const modelInput = document.getElementById('atk_model-filter');
   const weaponInput = document.getElementById('atk_weapons-filter');
+  const attacksInput = document.getElementById('attacks');
+  const tohitInput = document.getElementById('bs');
+  const strengthInput = document.getElementById('s');
+  const armourpenInput = document.getElementById('ap');
+  const damageInput = document.getElementById('d');
 
   let atk_xmlDoc; // Declare atk_xmlDoc variable to hold the parsed XML document
 
@@ -45,13 +49,10 @@ document.addEventListener("DOMContentLoaded", function() {
       const fileContent = await response.text();
       const parser = new DOMParser();
       atk_xmlDoc = parser.parseFromString(fileContent, "application/xml"); // Assign atk_xmlDoc here
-      console.log('Parsed XML Document:', atk_xmlDoc); // Log the parsed XML document
       const profiles = atk_xmlDoc.querySelectorAll(':is(selectionEntry[type="unit"], selectionEntry[type="model"])');
-      console.log('all_units: ', profiles);
       const modelNames = Array.from(profiles)
         .filter(profile => profile.querySelectorAll('characteristic[name="T"]') && profile.querySelector('characteristic[name="SV"]') && profile.querySelector('characteristic[name="W"]'))
         .map(profile => profile.getAttribute('name'));
-      console.log('Model names:', modelNames); // Log model names
       atk_populateModelList(modelNames);
     } catch (error) {
       console.error('Error fetching models:', error);
@@ -69,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     atk_modelFilter.addEventListener('change', function() {
       const selectedModel = atk_modelFilter.value;
-      console.log('Selected model:', selectedModel);
       atk_fetchWeapons(selectedModel);
     });
   }
@@ -79,41 +79,32 @@ document.addEventListener("DOMContentLoaded", function() {
       if (!atk_xmlDoc) {
         throw new Error('XML document not initialized');
       }
-  
+
       const modelEntries = atk_xmlDoc.querySelectorAll(':is([type="unit"], [type="model"])');
-      console.log('Model Entries:', modelEntries);
-  
+
       let selectedModelEntry = null;
-  
+
       // Find the selected model entry
       modelEntries.forEach(entry => {
         const entryName = entry.getAttribute('name');
-        console.log('entryName: ', entryName);
         if (entryName.toLowerCase() === modelName.toLowerCase()) {
           selectedModelEntry = entry;
         }
       });
-  
+
       if (!selectedModelEntry) {
         throw new Error(`Model entry for ${modelName} not found`);
       }
-  
-      console.log('Selected Model Entry:', selectedModelEntry);
-  
+
       const weaponNames = new Set();
-  
+
       const childElements = selectedModelEntry.querySelectorAll('*');
 
-      console.log('childElements: ', childElements);
-
       childElements.forEach(child => {
-        console.log('child.tagname:', child.tagName);
         if (child.tagName === 'profile') {
           const profileTypeName = child.getAttribute('typeName');
-          console.log('profileTypeName: ', profileTypeName);
           if (profileTypeName && profileTypeName.toLowerCase().includes('weapon')) {
             const profileName = child.getAttribute('name');
-            console.log('Weapon Profile Name:', profileName);
             weaponNames.add(profileName);
           }
         } else if (child.tagName === 'entryLink') {
@@ -126,14 +117,13 @@ document.addEventListener("DOMContentLoaded", function() {
               const profileTypeName = profile.getAttribute('typeName');
               if (profileTypeName && profileTypeName.toLowerCase().includes('weapon')) {
                 const profileName = profile.getAttribute('name');
-                console.log('Weapon Profile Name from EntryLink:', profileName);
                 weaponNames.add(profileName);
               }
             });
           });
         }
       });
-      
+
       atk_populateWeaponsList(Array.from(weaponNames));
   
     } catch (error) {
@@ -156,6 +146,62 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
+  function extractNumericalValue(text) {
+    const match = text.match(/\d+/);
+    return match ? match[0] : '';
+  }
+
+  function populateWeaponCharacteristics(weaponName) {
+    if (!atk_xmlDoc) {
+      console.error('XML document not initialized');
+      return;
+    }
+
+    const weaponProfiles = atk_xmlDoc.querySelectorAll(`profile[name="${weaponName}"]`);
+    weaponProfiles.forEach(profile => {
+      const profileTypeName = profile.getAttribute('typeName');
+      if (profileTypeName && profileTypeName.toLowerCase().includes('weapon')) {
+        const characteristics = profile.querySelectorAll('characteristic');
+        characteristics.forEach(characteristic => {
+          const name = characteristic.getAttribute('name');
+          const value = characteristic.textContent;
+
+          const numericalValue = extractNumericalValue(value);
+
+          switch (name) {
+            case 'A':
+              attacksInput.value = value;
+              break;
+            case 'WS':
+            case 'BS':
+              if (value !== 'N/A') {
+                tohitInput.value = numericalValue;
+              }
+              break;
+            case 'S':
+              strengthInput.value = numericalValue;
+              break;
+            case 'AP':
+              armourpenInput.value = numericalValue;
+              break;
+            case 'D':
+              damageInput.value = numericalValue;
+              break;
+            default:
+              break;
+          }
+        });
+      }
+    });
+  }
+
+  // Add event listener for weapon selection change once
+  weaponInput.addEventListener('change', function() {
+    const selectedWeapon = weaponInput.value;
+    console.log('Selected Weapon:', selectedWeapon);
+    populateWeaponCharacteristics(selectedWeapon);
+  });
+
   atk_fetchFileNames();
 
   atk_fileFilter.addEventListener('input', function() {
@@ -168,7 +214,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   atk_fileFilter.addEventListener('change', function() {
     const selectedFile = atk_fileFilter.value;
-    console.log('Selected file:', selectedFile);
     atk_fetchModelNames(selectedFile);
   });
 
