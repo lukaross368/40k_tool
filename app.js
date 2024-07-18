@@ -23,7 +23,10 @@ app.get('/wh40k-10e', async (req, res) => {
 
 // Route to serve 'dice.html'
 app.get('/', (req, res) => {
-    res.sendFile(path.join(publicPath, 'dice.html'));
+    res.sendFile(path.join(publicPath, 'dice.html')
+
+
+);
 });
 
 // Route to fetch file content
