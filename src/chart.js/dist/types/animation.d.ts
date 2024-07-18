@@ -1,5 +1,5 @@
-import {Chart} from './index.js';
-import {AnyObject} from './basic.js';
+import { Chart } from './index.js';
+import { AnyObject } from './basic.js';
 
 export declare class Animation {
   constructor(cfg: AnyObject, target: AnyObject, prop: string, to?: unknown);
@@ -18,7 +18,11 @@ export interface AnimationEvent {
 }
 
 export declare class Animator {
-  listen(chart: Chart, event: 'complete' | 'progress', cb: (event: AnimationEvent) => void): void;
+  listen(
+    chart: Chart,
+    event: 'complete' | 'progress',
+    cb: (event: AnimationEvent) => void,
+  ): void;
   add(chart: Chart, items: readonly Animation[]): void;
   has(chart: Chart): boolean;
   start(chart: Chart): void;

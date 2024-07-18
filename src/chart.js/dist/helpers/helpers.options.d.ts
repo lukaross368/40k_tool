@@ -12,13 +12,22 @@ import type { TRBL, TRBLCorners } from '../types/geometric.js';
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/line-height
  * @since 2.7.0
  */
-export declare function toLineHeight(value: number | string, size: number): number;
+export declare function toLineHeight(
+  value: number | string,
+  size: number,
+): number;
 /**
  * @param value
  * @param props
  */
-export declare function _readValueToProps<K extends string>(value: number | Record<K, number>, props: K[]): Record<K, number>;
-export declare function _readValueToProps<K extends string, T extends string>(value: number | Record<K & T, number>, props: Record<T, K>): Record<T, number>;
+export declare function _readValueToProps<K extends string>(
+  value: number | Record<K, number>,
+  props: K[],
+): Record<K, number>;
+export declare function _readValueToProps<K extends string, T extends string>(
+  value: number | Record<K & T, number>,
+  props: Record<T, K>,
+): Record<T, number>;
 /**
  * Converts the given value into a TRBL object.
  * @param value - If a number, set the value to all TRBL component,
@@ -27,7 +36,9 @@ export declare function _readValueToProps<K extends string, T extends string>(va
  * @returns The padding values (top, right, bottom, left)
  * @since 3.0.0
  */
-export declare function toTRBL(value: number | TRBL | Point): Record<"left" | "top" | "bottom" | "right", number>;
+export declare function toTRBL(
+  value: number | TRBL | Point,
+): Record<'left' | 'top' | 'bottom' | 'right', number>;
 /**
  * Converts the given value into a TRBL corners object (similar with css border-radius).
  * @param value - If a number, set the value to all TRBL corner components,
@@ -35,7 +46,9 @@ export declare function toTRBL(value: number | TRBL | Point): Record<"left" | "t
  * @returns The TRBL corner values (topLeft, topRight, bottomLeft, bottomRight)
  * @since 3.0.0
  */
-export declare function toTRBLCorners(value: number | TRBLCorners): Record<"topLeft" | "topRight" | "bottomLeft" | "bottomRight", number>;
+export declare function toTRBLCorners(
+  value: number | TRBLCorners,
+): Record<'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight', number>;
 /**
  * Converts the given value into a padding object with pre-computed width/height.
  * @param value - If a number, set the value to all TRBL component,
@@ -52,13 +65,16 @@ export declare function toPadding(value?: number | TRBL): ChartArea;
  * @return The font object.
  * @private
  */
-export declare function toFont(options: Partial<FontSpec>, fallback?: Partial<FontSpec>): {
-    family: string;
-    lineHeight: number;
-    size: number;
-    style: "normal" | "inherit" | "italic" | "oblique" | "initial";
-    weight: number | "bold" | "normal" | "lighter" | "bolder";
-    string: string;
+export declare function toFont(
+  options: Partial<FontSpec>,
+  fallback?: Partial<FontSpec>,
+): {
+  family: string;
+  lineHeight: number;
+  size: number;
+  style: 'normal' | 'inherit' | 'italic' | 'oblique' | 'initial';
+  weight: number | 'bold' | 'normal' | 'lighter' | 'bolder';
+  string: string;
 };
 /**
  * Evaluates the given `inputs` sequentially and returns the first defined value.
@@ -71,21 +87,30 @@ export declare function toFont(options: Partial<FontSpec>, fallback?: Partial<Fo
  * @param info.cacheable - Will be set to `false` if option is not cacheable.
  * @since 2.7.0
  */
-export declare function resolve(inputs: Array<unknown>, context?: object, index?: number, info?: {
+export declare function resolve(
+  inputs: Array<unknown>,
+  context?: object,
+  index?: number,
+  info?: {
     cacheable: boolean;
-}): unknown;
+  },
+): unknown;
 /**
  * @param minmax
  * @param grace
  * @param beginAtZero
  * @private
  */
-export declare function _addGrace(minmax: {
+export declare function _addGrace(
+  minmax: {
     min: number;
     max: number;
-}, grace: number | string, beginAtZero: boolean): {
-    min: number;
-    max: number;
+  },
+  grace: number | string,
+  beginAtZero: boolean,
+): {
+  min: number;
+  max: number;
 };
 /**
  * Create a context inheriting parentContext
@@ -93,5 +118,11 @@ export declare function _addGrace(minmax: {
  * @param context
  * @returns
  */
-export declare function createContext<T extends object>(parentContext: null, context: T): T;
-export declare function createContext<T extends object, P extends T>(parentContext: P, context: T): P & T;
+export declare function createContext<T extends object>(
+  parentContext: null,
+  context: T,
+): T;
+export declare function createContext<T extends object, P extends T>(
+  parentContext: P,
+  context: T,
+): P & T;

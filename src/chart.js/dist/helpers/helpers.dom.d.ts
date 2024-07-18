@@ -14,7 +14,9 @@ export declare function _isDomSupported(): boolean;
 /**
  * @private
  */
-export declare function _getParentNode(domNode: HTMLCanvasElement): HTMLCanvasElement;
+export declare function _getParentNode(
+  domNode: HTMLCanvasElement,
+): HTMLCanvasElement;
 export declare function getStyle(el: HTMLElement, property: string): string;
 /**
  * Gets an event's x, y coordinates, relative to the chart area
@@ -22,13 +24,21 @@ export declare function getStyle(el: HTMLElement, property: string): string;
  * @param chart
  * @returns x and y coordinates of the event
  */
-export declare function getRelativePosition(event: Event | ChartEvent | TouchEvent | MouseEvent, chart: Chart): {
-    x: number;
-    y: number;
+export declare function getRelativePosition(
+  event: Event | ChartEvent | TouchEvent | MouseEvent,
+  chart: Chart,
+): {
+  x: number;
+  y: number;
 };
-export declare function getMaximumSize(canvas: HTMLCanvasElement, bbWidth?: number, bbHeight?: number, aspectRatio?: number): {
-    width: number;
-    height: number;
+export declare function getMaximumSize(
+  canvas: HTMLCanvasElement,
+  bbWidth?: number,
+  bbHeight?: number,
+  aspectRatio?: number,
+): {
+  width: number;
+  height: number;
 };
 /**
  * @param chart
@@ -36,7 +46,11 @@ export declare function getMaximumSize(canvas: HTMLCanvasElement, bbWidth?: numb
  * @param forceStyle
  * @returns True if the canvas context size or transformation has changed.
  */
-export declare function retinaScale(chart: Chart, forceRatio: number, forceStyle?: boolean): boolean | void;
+export declare function retinaScale(
+  chart: Chart,
+  forceRatio: number,
+  forceStyle?: boolean,
+): boolean | void;
 /**
  * Detects support for options object argument in addEventListener.
  * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Safely_detecting_option_support
@@ -52,4 +66,7 @@ export declare const supportsEventListenerOptions: boolean;
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/used_value
  * @returns Size in pixels or undefined if unknown.
  */
-export declare function readUsedSize(element: HTMLElement, property: 'width' | 'height'): number | undefined;
+export declare function readUsedSize(
+  element: HTMLElement,
+  property: 'width' | 'height',
+): number | undefined;
