@@ -14,9 +14,11 @@ node app.js
 
 ### todo list:
 
-- profile pr (up for review)
-- defense drop down pulling from bs data pr (in progress)
-- attacker drop down pulling from bs data pr (backlog)
+#### Prioritised
+
+- attacker drop down pulling from bs data pr (in dev)
+- attacking weapon profile selection (in dev)
+- Split saved profiles into att prof, def profile, and paired profiles (backlog)
 - impliment local browser storage for saving profiles between sessions (backlog)
 - clean up repo and remove aos logic and unused files (backlog)
 - remove bs data from repo (use github as source of truth) (backlog)
