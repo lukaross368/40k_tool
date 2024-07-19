@@ -1,24 +1,94 @@
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>40K Visual Dice Calculator (10th Ed)</title>
-        <link href="dice.css" rel="stylesheet" type="text/css">
-        <script type="text/javascript" src="dice-TOKEN.js"></script>
-        <script type="text/javascript" src="chart.js/dist/chart.umd.js"></script>
-        <script src="atk_unit_lookup.js"></script>
-        <script src="def_unit_lookup.js"></script>
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ghostlords.com/favicon-144.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://ghostlords.com/favicon-152.png" />
-        <link rel="icon" type="image/png" href="http://ghostlords.com/favicon-32.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="http://ghostlords.com/favicon-16.png" sizes="16x16" />
-    </head>
-    <body onload="init_40k()">
+<head>
+    <meta charset="UTF-8">
+    <title>40K Visual Dice Calculator (10th Ed)</title>
+    <link href="dice.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="dice-TOKEN.js"></script>
+    <script type="text/javascript" src="chart.js/dist/chart.umd.js"></script>
+    <script src="atk_unit_lookup.js"></script>
+    <script src="def_unit_lookup.js"></script>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ghostlords.com/favicon-144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://ghostlords.com/favicon-152.png" />
+    <link rel="icon" type="image/png" href="http://ghostlords.com/favicon-32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="http://ghostlords.com/favicon-16.png" sizes="16x16" />
+    <style>
+      .keywords-container {
+          position: relative;
+          display: inline-block;
+          margin-left: 10px; /* Space between label and input */
+      }
+  
+      .keywords-input {
+          display: inline-block;
+          width: 200px; /* Adjust width as needed */
+          padding: 6px 10px; /* Adjust padding for a compact look */
+          border: 1px solid #ccc;
+          box-sizing: border-box;
+          cursor: pointer;
+          font-size: 14px; /* Ensure text size is consistent */
+          line-height: 1.4; /* Adjust line height for vertical alignment */
+          box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); /* Maintain the input field appearance */
+          color: #999; /* Placeholder color */
+      }
+  
+      .keywords-input::before {
+          content: attr(data-placeholder);
+          color: #999; /* Placeholder color */
+          position: absolute;
+          top: 50%;
+          left: 10px;
+          transform: translateY(-50%);
+          pointer-events: none;
+      }
+  
+      .keywords-input:not(:empty)::before {
+          content: "";
+      }
+  
+      .keywords-options {
+          display: none;
+          position: absolute;
+          border: 1px solid #ccc;
+          border-top: none;
+          background-color: #fff;
+          max-height: 150px; /* Compact dropdown height */
+          overflow-y: auto;
+          z-index: 1000;
+          width: 100%; /* Match width to .keywords-input */
+          box-sizing: border-box;
+          font-size: 14px; /* Ensure text size matches .keywords-input */
+      }
+  
+      .keywords-options .option {
+          padding: 6px 10px; /* Adjust padding for consistency */
+          cursor: pointer;
+      }
+  
+      .keywords-options .option:hover {
+          background-color: #f0f0f0; /* Highlight on hover */
+      }
+  
+      .keywords-options .option.selected {
+          background-color: #007bff;
+          color: #fff;
+      }
+  
+      .keywords-label {
+          font-size: 14px; /* Match font size with other labels */
+          line-height: 1.4; /* Align vertically with input */
+          display: inline-block; /* Keep it inline with the input */
+          margin-right: 10px; /* Space between label and input */
+          vertical-align: middle; /* Align vertically with the input field */
+      }
+  </style>
+  
+</head>
+<body onload="init_40k()">
     <h1>40K Visual Dice Calculator (10th Ed)</h1>
     <p>The update to 10th Edition is new and there may still be bugs. However, I've also fixed a number
     of existing bugs and limitations while adding support for new rules and abilities. As always, any
-    feedback or bug reports are welcome.
-    </p>
+    feedback or bug reports are welcome.</p>
 
     <div>
         <h2>Attack Stats</h2>
@@ -39,34 +109,35 @@
         <datalist id="atk_weapons-list-container">
           <!-- Weapons will be populated dynamically -->
         </datalist>
+        <div>
+          <label for="keywords-input" class="keywords-label">Select Keywords:</label>
+          <div class="keywords-container">
+              <div id="keywords-input" class="keywords-input" tabindex="0" data-placeholder="Select Keywords"></div>
+              <div id="keywords-options" class="keywords-options">
+                  <!-- Options will be dynamically populated here -->
+              </div>
+          </div>
+      </div>
+      
+        <!-- Keywords will be populated dynamically -->
         <p><label>Attacks: <input type="text" id="attacks"></label>
-        <span class="description">Ex: 4, 2d3, d6+1</span>
-        </p>
+        <span class="description">Ex: 4, 2d3, d6+1</span></p>
         <p><label>BS/WS: <input type="text" id="bs"></label>
-        <span class="description">Ex: 4, leave blank to auto-hit</span>
-        </p>
+        <span class="description">Ex: 4, leave blank to auto-hit</span></p>
         <p><label>S: <input type="text" id="s"></label>
-        <span class="description">Ex: 4, leave blank to auto-wound</span>
-        </p>
+        <span class="description">Ex: 4, leave blank to auto-wound</span></p>
         <p><label>AP: <input type="text" id="ap"></label>
-        <span class="description">Ex: -1, 2 (sign is ignored)</span>
-        </p>
+        <span class="description">Ex: -1, 2 (sign is ignored)</span></p>
         <p><label>D: <input type="text" id="d" value="1"></label>
-        <span class="description">Ex: 4, 2d3, d6+1</span>
-        </p>
+        <span class="description">Ex: 4, 2d3, d6+1</span></p>
         <hr>
         <p><label>Hit Modifier: <input type="text" id="hit_mod"></label>
-        <span class="description">Ex: 1, -2</span>
-        </p>
-        <p>
-        <label><input type="checkbox" id="hit_leth" value="1">Lethal Hits</label>
-        </p>
+        <span class="description">Ex: 1, -2</span></p>
+        <p><label><input type="checkbox" id="hit_leth" value="1">Lethal Hits</label></p>
         <p><label>Sustained Hits: <input type="text" id="hit_sus"></label>
-        <span class="description">Ex: 1, 2</span>
-        </p>
+        <span class="description">Ex: 1, 2</span></p>
         <p><label>Critical Hit: <input type="text" id="hit_crit"></label>
-        <span class="description">Ex: 2, 4</span>
-        </p>
+        <span class="description">Ex: 2, 4</span></p>
         <p>
         Critical hit rolls:
         <select id="hit_of_6">
@@ -85,14 +156,10 @@
         </p>
         <hr>
         <p><label>Wound Modifier: <input type="text" id="wound_mod"></label>
-        <span class="description">Ex: 1, -2</span>
-        </p>
-        <p>
-        <label><input type="checkbox" id="wound_dev" value="1">Devastating Wounds</label>
-        </p>
+        <span class="description">Ex: 1, -2</span></p>
+        <p><label><input type="checkbox" id="wound_dev" value="1">Devastating Wounds</label></p>
         <p><label>Critical Wound (Anti-X): <input type="text" id="wound_crit"></label>
-        <span class="description">Ex: 2, 4</span>
-        </p>
+        <span class="description">Ex: 2, 4</span></p>
         <p>
         Critical wound rolls:
         <select id="wound_of_6">
@@ -130,20 +197,16 @@
         </div>
         <!-- End here-->
         <p><label>T: <input type="text" id="t"></label>
-        <span class="description">Ex: 4, leave blank to auto-wound</span>
-        </p>
+        <span class="description">Ex: 4, leave blank to auto-wound</span></p>
         <p><label>Save: <input type="text" id="save"></label>
-        <span class="description">Ex: 4</span>
-        </p>
+        <span class="description">Ex: 4</span></p>
         <p><label>Save Modifier: <input type="text" id="save_mod"></label>
-        <span class="description">Ex: 1, -2</span>
-        </p>
+        <span class="description">Ex: 1, -2</span></p>
         <p>
         <label><input type="checkbox" id="cover" value="1">Cover</label>
         </p>
         <p><label>Invulnerable Save: <input type="text" id="invulnerable"></label>
-        <span class="description">Ex: 4</span>
-        </p>
+        <span class="description">Ex: 4</span></p>
         <p>
         Reroll: <select id="save_reroll">
             <option value="">No save rolls</option>
@@ -154,11 +217,9 @@
         </select>
         </p>
         <p><label>Wounds per model: <input type="text" id="wounds"></label>
-        <span class="description">Ex: 1, 13, leave blank if you don't care</span>
-        </p>
+        <span class="description">Ex: 1, 13, leave blank if you don't care</span></p>
         <p><label>Feel No Pain: <input type="text" id="fnp"></label>
-        <span class="description">Ex: 4, 6</span>
-        </p>
+        <span class="description">Ex: 4, 6</span></p>
         <h2>Saved Profiles</h2>
         <div id="list-container">
             <ul id="dynamic-list">
@@ -216,5 +277,35 @@
     Bug reports are welcome on <a href="https://github.com/toadchild/40kdice/issues">Github</a>.<br>
     <a href="https://www.games-workshop.com/Warhammer-40-000">Warhammer 40000</a> is &copy; Games Workshop Limited.<br>
     </p>
-    </body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const keywordsInput = document.getElementById('keywords-input');
+            const keywordsOptions = document.getElementById('keywords-options');
+
+            // Sample keywords for demonstration; replace with your own logic
+            const keywords = ['Keyword1', 'Keyword2', 'Keyword3'];
+
+            keywords.forEach(keyword => {
+                const option = document.createElement('div');
+                option.className = 'option';
+                option.textContent = keyword;
+                option.addEventListener('click', function () {
+                    option.classList.toggle('selected');
+                });
+                keywordsOptions.appendChild(option);
+            });
+
+            keywordsInput.addEventListener('click', function () {
+                keywordsOptions.style.display = keywordsOptions.style.display === 'block' ? 'none' : 'block';
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!keywordsContainer.contains(e.target)) {
+                    keywordsOptions.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
 </html>

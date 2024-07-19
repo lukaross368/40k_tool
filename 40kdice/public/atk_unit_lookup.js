@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function() {
   const strengthInput = document.getElementById('s');
   const armourpenInput = document.getElementById('ap');
   const damageInput = document.getElementById('d');
+  const keywordsOptions = document.getElementById('keywords-options');
+  const keywordsInput = document.getElementById('keywords-input');
 
   let atk_xmlDoc; // Declare atk_xmlDoc variable to hold the parsed XML document
 
@@ -187,6 +189,12 @@ document.addEventListener("DOMContentLoaded", function() {
             case 'D':
               damageInput.value = value;
               break;
+            case 'Keywords':
+              if (value !== '-') {
+                  const keywords = value.split(',').map(keyword => keyword.trim());
+                  populateKeywordsSelect(keywords);
+              }
+              break;
             default:
               break;
           }
@@ -195,7 +203,45 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Add event listener for weapon selection change once
+  // Function to populate the keywords options
+  function populateKeywordsSelect(keywords) {
+    if (!keywordsOptions) {
+      console.error('Keywords options container not found');
+      return;
+    }
+
+    const keywordsSet = new Set();
+    keywords.forEach(keyword => keywordsSet.add(keyword));
+    const keywordsArray = Array.from(keywordsSet);
+
+    keywordsOptions.innerHTML = ''; // Clear existing options
+
+    // Add the unique keywords as options
+    keywordsArray.forEach(keyword => {
+      const option = document.createElement('div');
+      option.className = 'option';
+      option.textContent = keyword;
+      option.addEventListener('click', () => {
+          option.classList.toggle('selected');
+          updateKeywordsInput();
+      });
+      keywordsOptions.appendChild(option);
+    });
+  }
+
+  // Function to update the keywords input box
+  function updateKeywordsInput() {
+    const selectedOptions = document.querySelectorAll('#keywords-options .option.selected');
+    const selectedKeywords = Array.from(selectedOptions).map(option => option.textContent);
+    keywordsInput.value = selectedKeywords.join(', ');
+  }
+
+  // Toggle options container visibility
+  keywordsInput.addEventListener('click', () => {
+    keywordsOptions.classList.toggle('active');
+  });
+
+  // Add event listener for weapon selection change
   weaponInput.addEventListener('change', function() {
     const selectedWeapon = weaponInput.value;
     console.log('Selected Weapon:', selectedWeapon);
