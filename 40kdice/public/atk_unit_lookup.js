@@ -178,6 +178,8 @@ document.addEventListener("DOMContentLoaded", function() {
             case 'BS':
               if (value !== 'N/A') {
                 tohitInput.value = numericalValue;
+              } else {
+                tohitInput.value = '';
               }
               break;
             case 'S':
