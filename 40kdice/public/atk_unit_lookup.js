@@ -15,20 +15,21 @@ document.addEventListener("DOMContentLoaded", function() {
   const keywordsOptions = document.getElementById('keywords-options');
   const keywordsInput = document.getElementById('keywords-input');
 
-  let atk_xmlDoc; // Declare atk_xmlDoc variable to hold the parsed XML document
+  let atk_xmlDoc; // Variable to hold the parsed XML document
+  let currentWeapon = ''; // Track the current weapon
 
   async function atk_fetchFileNames() {
     try {
       const response = await fetch('http://localhost:3000/wh40k-10e');
       if (!response.ok) {
-        throw new Error('Failed to fetch');
+        throw new Error('Failed to fetch file names');
       }
       const files = await response.json();
       const catFiles = files.filter(file => file.endsWith('.cat'));
       const fileNames = catFiles.map(file => file.replace('.cat', ''));
       atk_populateFileList(fileNames);
     } catch (error) {
-      console.error('Error fetching files:', error);
+      // Handle error appropriately
     }
   }
 
@@ -46,18 +47,20 @@ document.addEventListener("DOMContentLoaded", function() {
     try {
       const response = await fetch(`http://localhost:3000/wh40k-10e/${encodeURIComponent(fileName)}.cat`);
       if (!response.ok) {
-        throw new Error('Failed to fetch');
+        throw new Error('Failed to fetch model names');
       }
       const fileContent = await response.text();
       const parser = new DOMParser();
-      atk_xmlDoc = parser.parseFromString(fileContent, "application/xml"); // Assign atk_xmlDoc here
+      atk_xmlDoc = parser.parseFromString(fileContent, "application/xml");
       const profiles = atk_xmlDoc.querySelectorAll(':is(selectionEntry[type="unit"], selectionEntry[type="model"])');
       const modelNames = Array.from(profiles)
-        .filter(profile => profile.querySelectorAll('characteristic[name="T"]') && profile.querySelector('characteristic[name="SV"]') && profile.querySelector('characteristic[name="W"]'))
+        .filter(profile => profile.querySelectorAll('characteristic[name="T"]') &&
+          profile.querySelector('characteristic[name="SV"]') &&
+          profile.querySelector('characteristic[name="W"]'))
         .map(profile => profile.getAttribute('name'));
       atk_populateModelList(modelNames);
     } catch (error) {
-      console.error('Error fetching models:', error);
+      // Handle error appropriately
     }
   }
 
@@ -83,10 +86,8 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       const modelEntries = atk_xmlDoc.querySelectorAll(':is([type="unit"], [type="model"])');
-
       let selectedModelEntry = null;
 
-      // Find the selected model entry
       modelEntries.forEach(entry => {
         const entryName = entry.getAttribute('name');
         if (entryName.toLowerCase() === modelName.toLowerCase()) {
@@ -99,7 +100,6 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       const weaponNames = new Set();
-
       const childElements = selectedModelEntry.querySelectorAll('*');
 
       childElements.forEach(child => {
@@ -129,17 +129,15 @@ document.addEventListener("DOMContentLoaded", function() {
       atk_populateWeaponsList(Array.from(weaponNames));
   
     } catch (error) {
-      console.error('Error fetching weapons:', error);
+      // Handle error appropriately
     }
   }
 
   function atk_populateWeaponsList(weaponsArray) {
     const uniqueWeapons = [...new Set(weaponsArray)]; // Get unique elements using Set
   
-    // Assuming atk_weaponsListContainer is a <select> element
     atk_weaponsListContainer.innerHTML = ''; // Clear existing options
   
-    // Create and append new options
     uniqueWeapons.forEach(weapon => {
       const option = document.createElement('option');
       option.value = weapon;
@@ -155,83 +153,119 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function populateWeaponCharacteristics(weaponName) {
     if (!atk_xmlDoc) {
-      console.error('XML document not initialized');
       return;
     }
+
+    if (currentWeapon === weaponName) {
+      return;
+    }
+    currentWeapon = weaponName;
 
     const weaponProfiles = atk_xmlDoc.querySelectorAll(`profile[name="${weaponName}"]`);
-    weaponProfiles.forEach(profile => {
-      const profileTypeName = profile.getAttribute('typeName');
-      if (profileTypeName && profileTypeName.toLowerCase().includes('weapon')) {
-        const characteristics = profile.querySelectorAll('characteristic');
-        characteristics.forEach(characteristic => {
-          const name = characteristic.getAttribute('name');
-          const value = characteristic.textContent;
 
-          const numericalValue = extractNumericalValue(value);
+    // Use the first profile if there are multiple
+    const selectedProfile = weaponProfiles.length > 0 ? weaponProfiles[0] : null;
 
-          switch (name) {
-            case 'A':
-              attacksInput.value = value;
-              break;
-            case 'WS':
-            case 'BS':
-              if (value !== 'N/A') {
-                tohitInput.value = numericalValue;
-              } else {
-                tohitInput.value = '';
-              }
-              break;
-            case 'S':
-              strengthInput.value = numericalValue;
-              break;
-            case 'AP':
-              armourpenInput.value = numericalValue;
-              break;
-            case 'D':
-              damageInput.value = value;
-              break;
-            case 'Keywords':
-              if (value !== '-') {
-                  const keywords = value.split(',').map(keyword => keyword.trim());
-                  populateKeywordsSelect(keywords);
-              }
-              break;
-            default:
-              break;
-          }
-        });
-      }
-    });
-  }
-
-  // Function to populate the keywords options
-  function populateKeywordsSelect(keywords) {
-    if (!keywordsOptions) {
-      console.error('Keywords options container not found');
+    if (!selectedProfile) {
       return;
     }
 
+    let keywords = [];
+
+    const profileTypeName = selectedProfile.getAttribute('typeName');
+    if (profileTypeName && profileTypeName.toLowerCase().includes('weapon')) {
+      const characteristics = selectedProfile.querySelectorAll('characteristic');
+      characteristics.forEach(characteristic => {
+        const name = characteristic.getAttribute('name');
+        const value = characteristic.textContent;
+
+        const numericalValue = extractNumericalValue(value);
+
+        switch (name) {
+          case 'A':
+            attacksInput.value = value;
+            break;
+          case 'WS':
+          case 'BS':
+            tohitInput.value = value !== 'N/A' ? numericalValue : '';
+            break;
+          case 'S':
+            strengthInput.value = numericalValue;
+            break;
+          case 'AP':
+            armourpenInput.value = numericalValue;
+            break;
+          case 'D':
+            damageInput.value = value;
+            break;
+          case 'Keywords':
+            if (value !== '-') {
+              keywords = value.split(',').map(keyword => keyword.trim());
+            }
+            break;
+          default:
+            break;
+        }
+      });
+    }
+    
+    if (keywords.length > 0) {
+      populateKeywordsSelect(keywords);
+    }
+  }
+
+  const predefinedKeywords = [
+    "rapid fire",
+    "ignores cover",
+    "twin-linked",
+    "lethal hits",
+    "lance",
+    "indirect fire",
+    "melta",
+    "heavy",
+    "devastating wounds",
+    "sustained hits",
+    "anti"
+  ];
+  
+  function populateKeywordsSelect(keywords) {
+    if (!keywordsOptions) {
+      return;
+    }
+  
     keywordsOptions.innerHTML = ''; // Clear existing options
-
+  
     const keywordsSet = new Set();
-    keywords.forEach(keyword => keywordsSet.add(keyword));
-    const keywordsArray = Array.from(keywordsSet);
-
+  
+    keywords.forEach(keyword => {
+      const trimmedKeyword = keyword.trim(); // Trim leading and trailing whitespace
+      const lowerKeyword = trimmedKeyword.toLowerCase(); // Convert to lowercase
+  
+      predefinedKeywords.forEach(predefinedKeyword => {
+        const trimmedPredefinedKeyword = predefinedKeyword.trim(); // Trim leading and trailing whitespace
+        const lowerPredefinedKeyword = trimmedPredefinedKeyword.toLowerCase(); // Convert to lowercase
+  
+        if (lowerKeyword.includes(lowerPredefinedKeyword)) {
+          keywordsSet.add(trimmedKeyword); // Add the keyword to the set if it matches
+        }
+      });
+    });
+  
+    const keywordsArray = Array.from(keywordsSet); // Convert set to array
+  
     // Add the unique keywords as options
     keywordsArray.forEach(keyword => {
       const option = document.createElement('div');
       option.className = 'option';
       option.textContent = keyword;
       option.addEventListener('click', () => {
-          option.classList.toggle('selected');
-          updateKeywordsInput();
+        option.classList.toggle('selected');
+        updateKeywordsInput();
       });
       keywordsOptions.appendChild(option);
     });
   }
 
-  // Function to update the keywords input box
   function updateKeywordsInput() {
     const selectedOptions = document.querySelectorAll('#keywords-options .option.selected');
     const selectedKeywords = Array.from(selectedOptions).map(option => option.textContent);
@@ -246,7 +280,6 @@ document.addEventListener("DOMContentLoaded", function() {
   // Add event listener for weapon selection change
   weaponInput.addEventListener('change', function() {
     const selectedWeapon = weaponInput.value;
-    console.log('Selected Weapon:', selectedWeapon);
     populateWeaponCharacteristics(selectedWeapon);
   });
 
@@ -265,7 +298,6 @@ document.addEventListener("DOMContentLoaded", function() {
     atk_fetchModelNames(selectedFile);
   });
 
-  // Clear model and weapon input boxes when faction input changes
   factionInput.addEventListener('change', function() {
     modelInput.value = '';
     weaponInput.value = '';
@@ -273,7 +305,6 @@ document.addEventListener("DOMContentLoaded", function() {
     atk_weaponsListContainer.innerHTML = '';
   });
 
-  // Clear weapon input box when model input changes
   modelInput.addEventListener('change', function() {
     weaponInput.value = '';
     atk_weaponsListContainer.innerHTML = '';
