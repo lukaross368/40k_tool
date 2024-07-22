@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>40K Visual Dice Calculator (10th Ed)</title>
-    <link href="dice.css" rel="stylesheet" type="text/css">
+    <link href="styles.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="dice-TOKEN.js"></script>
     <script type="text/javascript" src="chart.js/dist/chart.umd.js"></script>
     <script src="atk_unit_lookup.js"></script>
@@ -12,79 +12,6 @@
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://ghostlords.com/favicon-152.png" />
     <link rel="icon" type="image/png" href="http://ghostlords.com/favicon-32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="http://ghostlords.com/favicon-16.png" sizes="16x16" />
-    <style>
-      .keywords-container {
-          position: relative;
-          display: inline-block;
-          margin-left: 10px; /* Space between label and input */
-          vertical-align: middle; /* Aligns with other inline elements */
-      }
-  
-      .keywords-label {
-          font-size: 16px; /* Increase font size for the label */
-          line-height: 1.5; /* Align vertically with input */
-          display: inline-block; /* Keep it inline with the input */
-          margin-right: 10px; /* Space between label and input */
-          vertical-align: middle; /* Aligns with the input field */
-      }
-  
-      .keywords-input {
-          display: inline-block;
-          width: 200px; /* Adjust width as needed */
-          padding: 8px 12px; /* Adjust padding for height consistency */
-          border: 1px solid #ccc;
-          box-sizing: border-box;
-          cursor: pointer;
-          font-size: 16px; /* Ensure text size is consistent with the label */
-          line-height: 1.5; /* Ensure vertical alignment */
-          box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); /* Maintain the input field appearance */
-          color: #333; /* Text color inside the input */
-          position: relative; /* For positioning the placeholder text */
-      }
-  
-      .keywords-input::before {
-          content: attr(data-placeholder);
-          color: #999; /* Placeholder color */
-          position: absolute;
-          top: 50%;
-          left: 10px;
-          transform: translateY(-50%);
-          pointer-events: none;
-          font-size: 16px; /* Match font size with input text */
-      }
-  
-      .keywords-input:not(:empty)::before {
-          content: "";
-      }
-  
-      .keywords-options {
-          display: none;
-          position: absolute;
-          border: 1px solid #ccc;
-          border-top: none;
-          background-color: #fff;
-          max-height: 200px; /* Increase height to make it taller */
-          overflow-y: auto;
-          z-index: 1000;
-          width: 100%; /* Match width to .keywords-input */
-          box-sizing: border-box;
-          font-size: 16px; /* Ensure font size matches .keywords-input */
-      }
-  
-      .keywords-options .option {
-          padding: 8px 12px; /* Adjust padding for consistent appearance */
-          cursor: pointer;
-      }
-  
-      .keywords-options .option:hover {
-          background-color: #f0f0f0; /* Highlight on hover */
-      }
-  
-      .keywords-options .option.selected {
-          background-color: #007bff;
-          color: #fff;
-      }
-  </style>
 </head>
 <body onload="init_40k()">
     <h1>40K Visual Dice Calculator (10th Ed)</h1>
@@ -112,16 +39,16 @@
           <!-- Weapons will be populated dynamically -->
         </datalist>
         <div>
-          <label for="keywords-input" class="keywords-label">Select Keywords:</label>
+          <label for="keywords-input" class="keywords-label">Select Active Keywords:</label>
           <div class="keywords-container">
-              <div id="keywords-input" class="keywords-input" tabindex="0" data-placeholder="Select Keywords"></div>
+              <div id="keywords-input" class="keywords-input" tabindex="0" data-placeholder="Keywords"></div>
               <div id="keywords-options" class="keywords-options">
                   <!-- Options will be dynamically populated here -->
               </div>
           </div>
       </div>
-      
         <!-- Keywords will be populated dynamically -->
+        
         <p><label>Attacks: <input type="text" id="attacks"></label>
         <span class="description">Ex: 4, 2d3, d6+1</span></p>
         <p><label>BS/WS: <input type="text" id="bs"></label>
