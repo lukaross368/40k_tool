@@ -212,11 +212,11 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
 
+    keywordsOptions.innerHTML = ''; // Clear existing options
+
     const keywordsSet = new Set();
     keywords.forEach(keyword => keywordsSet.add(keyword));
     const keywordsArray = Array.from(keywordsSet);
-
-    keywordsOptions.innerHTML = ''; // Clear existing options
 
     // Add the unique keywords as options
     keywordsArray.forEach(keyword => {
@@ -277,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function() {
   modelInput.addEventListener('change', function() {
     weaponInput.value = '';
     atk_weaponsListContainer.innerHTML = '';
+    keywordsOptions.innerHTML = ''; // Clears the keywords dropdown
+    keywordsInput.value = ''; // Clears the keywords input field
   });
-
 });
