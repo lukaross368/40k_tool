@@ -12,13 +12,13 @@ document.addEventListener("DOMContentLoaded", function() {
   const strengthInput = document.getElementById('s');
   const armourpenInput = document.getElementById('ap');
   const damageInput = document.getElementById('d');
+  const coverInput= document.getElementById('cover');
   const keywordsOptions = document.getElementById('keywords-options');
   const keywordsInput = document.getElementById('keywords-input');
 
   let atk_xmlDoc; // Variable to hold the parsed XML document
   let currentWeapon = ''; // Track the current weapon
-  let initialStates = {}; // Track initial states of all fields
-  let elementStates = {}; // Track states of individual elements for keywords
+  const elementStates = {}; // Declare elementStates object to track states
 
   async function atk_fetchFileNames() {
     try {
@@ -163,7 +163,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Save the current state before changing
-    saveInitialState();
     currentWeapon = weaponName;
 
     const weaponProfiles = atk_xmlDoc.querySelectorAll(`profile[name="${weaponName}"]`);
@@ -174,9 +173,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!selectedProfile) {
       return;
     }
-
-    // Reset fields before populating new values
-    resetFields();
 
     let keywords = [];
 
@@ -264,9 +260,19 @@ document.addEventListener("DOMContentLoaded", function() {
             option.textContent = trimmedKeyword;
             option.addEventListener('click', function() {
               this.classList.toggle('selected');
-              handleKeywordSelection(trimmedKeyword); // Handle keyword selection
-              updateKeywordsInput();
-            });
+              if (this.classList.contains('selected')) {
+                console.log("Keyword selected")
+                handleKeywordSelection(trimmedKeyword);
+              } else {
+                console.log("Keyword deselected")
+                revertElementState(trimmedKeyword);
+              }
+
+              // this.classList.toggle('selected');
+              // handleKeywordSelection(trimmedKeyword); // Handle keyword selection
+              // updateKeywordsInput();
+            
+          });
             keywordsOptions.appendChild(option);
           }
         }
@@ -277,56 +283,59 @@ document.addEventListener("DOMContentLoaded", function() {
     keywordsInput.addEventListener('click', function () {
       keywordsOptions.style.display = keywordsOptions.style.display === 'block' ? 'none' : 'block';
     });
-  
-    // Event listener to hide the dropdown when clicking outside
-    document.addEventListener('click', function (e) {
-      if (!keywordsContainer.contains(e.target)) {
-        keywordsOptions.style.display = 'none';
-      }
-    });
   }
   
   
-  function updateKeywordsInput() {
-    const selectedOptions = document.querySelectorAll('#keywords-options .option.selected');
-    const selectedKeywords = Array.from(selectedOptions).map(option => option.textContent);
-    keywordsInput.value = selectedKeywords.join(', ');
-  }
-  
-  function saveInitialState() {
-    initialStates = {
-      attacks: attacksInput.value,
-      bs: tohitInput.value,
-      strength: strengthInput.value,
-      armourPen: armourpenInput.value,
-      damage: damageInput.value,
-      hitModifier: document.getElementById('hit_mod').value,
-      hitLethal: document.getElementById('hit_leth').checked,
-      sustainedHits: document.getElementById('hit_sus').value,
-      criticalHit: document.getElementById('hit_crit').value,
-      criticalHitRolls: document.getElementById('hit_of_6').value,
-      rerollHit: document.getElementById('hit_reroll').value,
-      woundModifier: document.getElementById('wound_mod').value,
-      woundDevastating: document.getElementById('wound_dev').checked,
-      criticalWound: document.getElementById('wound_crit').value,
-      criticalWoundRolls: document.getElementById('wound_of_6').value,
-      rerollWound: document.getElementById('wound_reroll').value,
-    };
-  }
-
+  // function updateKeywordsInput() {
+  //   const selectedOptions = document.querySelectorAll('#keywords-options .option.selected');
+  //   const selectedKeywords = Array.from(selectedOptions).map(option => option.textContent);
+  //   keywordsInput.value = selectedKeywords.join(', ');
+  // }
   function saveElementState(element) {
     elementStates[element.id] = element.value || element.checked;
+    console.log('Saved elementStates[element.id]: ', elementStates[element.id]);
   }
 
-  function revertElementState(element) {
-    if (elementStates.hasOwnProperty(element.id)) {
-      if (element.type === 'checkbox') {
-        element.checked = elementStates[element.id];
+  // function revertElementState(element) {
+  //   if (elementStates.hasOwnProperty(element.id)) {
+  //     if (element.type === 'checkbox') {
+  //       element.checked = elementStates[element.id];
+  //     } else {
+  //       element.value = elementStates[element.id];
+  //       console.log('Reverted elementStates[element.id]: ', elementStates[element.id]);
+  //     }
+  //   }
+  // }
+
+  function revertElementState(keyword) {
+    const keywordLower = keyword.toLowerCase();
+  
+    if (keywordLower.includes("rapid fire")) {
+      // Assuming that attacksInput is the element we are reverting for this example
+      if (elementStates[attacksInput.id] !== undefined) {
+        attacksInput.value = elementStates[attacksInput.id];
       } else {
-        element.value = elementStates[element.id];
+        console.warn('No saved state found for', attacksInput.id);
+      }
+    } 
+    else if (keywordLower.includes("ignores cover")) {
+      if (elementStates[coverInput.id] !== undefined) {
+        coverInput.checked = elementStates[coverInput.id];
+      } else {
+        console.warn('No saved state found for', coverInput.id);
       }
     }
   }
+
+
+    // if (elementStates.hasOwnProperty(keyword.id)) {
+    //   if (keyword.type === 'checkbox') {
+    //     keyword.checked = elementStates[keyword.id];
+    //   } else {
+    //     keyword.value = elementStates[keyword.id];
+    //     console.log('Reverted elementStates[element.id]: ', elementStates[keyword.id]);
+    //   }
+    // }
 
   function handleKeywordSelection(keyword) {
     const keywordLower = keyword.toLowerCase();
@@ -340,8 +349,6 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
           attacksInput.value += `+${number}`;
         }
-      } else {
-        revertElementState(attacksInput);
       }
     } else if (keywordLower.includes("ignores cover")) {
       saveElementState(document.getElementById('cover'));
@@ -396,42 +403,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
 
-    updateKeywordsInput(); // Update the input value after keyword handling
-  }
-
-  function resetFields() {
-    attacksInput.value = ''; // Default value if any
-    document.getElementById('cover').checked = false;
-    document.getElementById('wound_reroll').value = '';
-    document.getElementById('hit_leth').checked = false;
-    document.getElementById('wound_mod').value = '';
-    document.getElementById('bs').value = '';
-    document.getElementById('d').value = '';
-    document.getElementById('hit_mod').value = '';
-    document.getElementById('wound_dev').checked = false;
-    document.getElementById('hit_sus').value = '';
-    document.getElementById('wound_crit').value = '';
-  }
-
-  function revertToInitialState() {
-    if (initialStates) {
-      attacksInput.value = initialStates.attacks;
-      tohitInput.value = initialStates.bs;
-      strengthInput.value = initialStates.strength;
-      armourpenInput.value = initialStates.armourPen;
-      damageInput.value = initialStates.damage;
-      document.getElementById('hit_mod').value = initialStates.hitModifier;
-      document.getElementById('hit_leth').checked = initialStates.hitLethal;
-      document.getElementById('hit_sus').value = initialStates.sustainedHits;
-      document.getElementById('hit_crit').value = initialStates.criticalHit;
-      document.getElementById('hit_of_6').value = initialStates.criticalHitRolls;
-      document.getElementById('hit_reroll').value = initialStates.rerollHit;
-      document.getElementById('wound_mod').value = initialStates.woundModifier;
-      document.getElementById('wound_dev').checked = initialStates.woundDevastating;
-      document.getElementById('wound_crit').value = initialStates.criticalWound;
-      document.getElementById('wound_of_6').value = initialStates.criticalWoundRolls;
-      document.getElementById('wound_reroll').value = initialStates.rerollWound;
-    }
+    // updateKeywordsInput(); // Update the input value after keyword handling
   }
 
   // Toggle options container visibility
@@ -442,9 +414,6 @@ document.addEventListener("DOMContentLoaded", function() {
   // Add event listener for weapon selection change
   weaponInput.addEventListener('change', function() {
     const selectedWeapon = weaponInput.value;
-    if (currentWeapon) {
-      revertToInitialState(); // Revert to initial state if any
-    }
     populateWeaponCharacteristics(selectedWeapon);
   });
 
@@ -468,8 +437,7 @@ document.addEventListener("DOMContentLoaded", function() {
     weaponInput.value = '';
     atk_modelListContainer.innerHTML = '';
     atk_weaponsListContainer.innerHTML = '';
-    resetFields(); // Reset fields when faction changes
-    initialStates = {}; // Clear initial states
+    keywordsOptions.innerHTML = '';
   });
 
   modelInput.addEventListener('change', function() {
@@ -477,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function() {
     atk_weaponsListContainer.innerHTML = '';
     keywordsOptions.innerHTML = ''; // Clears the keywords dropdown
     keywordsInput.value = ''; // Clears the keywords input field
-    resetFields(); // Reset fields when model changes
-    initialStates = {}; // Clear initial states
+    keywordsOptions.innerHTML = '';
+
   });
 });
