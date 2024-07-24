@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const armourpenInput = document.getElementById('ap');
   const damageInput = document.getElementById('d');
   const coverInput= document.getElementById('cover');
+  const woundrerollInput= document.getElementById('hit_of_6');
   const keywordsOptions = document.getElementById('keywords-options');
   const keywordsInput = document.getElementById('keywords-input');
 
@@ -267,10 +268,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log("Keyword deselected")
                 revertElementState(trimmedKeyword);
               }
-
-              // this.classList.toggle('selected');
-              // handleKeywordSelection(trimmedKeyword); // Handle keyword selection
-              // updateKeywordsInput();
             
           });
             keywordsOptions.appendChild(option);
@@ -285,27 +282,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
   
-  
-  // function updateKeywordsInput() {
-  //   const selectedOptions = document.querySelectorAll('#keywords-options .option.selected');
-  //   const selectedKeywords = Array.from(selectedOptions).map(option => option.textContent);
-  //   keywordsInput.value = selectedKeywords.join(', ');
-  // }
   function saveElementState(element) {
+    console.log('Saved element', element);
     elementStates[element.id] = element.value || element.checked;
-    console.log('Saved elementStates[element.id]: ', elementStates[element.id]);
   }
 
-  // function revertElementState(element) {
-  //   if (elementStates.hasOwnProperty(element.id)) {
-  //     if (element.type === 'checkbox') {
-  //       element.checked = elementStates[element.id];
-  //     } else {
-  //       element.value = elementStates[element.id];
-  //       console.log('Reverted elementStates[element.id]: ', elementStates[element.id]);
-  //     }
-  //   }
-  // }
 
   function revertElementState(keyword) {
     const keywordLower = keyword.toLowerCase();
@@ -323,6 +304,13 @@ document.addEventListener("DOMContentLoaded", function() {
         coverInput.checked = elementStates[coverInput.id];
       } else {
         console.warn('No saved state found for', coverInput.id);
+      }
+    }
+    else if (keywordLower.includes("twin-linked")) {
+      if (elementStates[woundrerollInput.id] !== undefined) {
+        woundrerollInput.value = elementStates[woundrerollInput.id];
+      } else {
+        console.warn('No saved state found for', woundrerollInput.id);
       }
     }
   }
@@ -354,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function() {
       saveElementState(document.getElementById('cover'));
       document.getElementById('cover').checked = false;
     } else if (keywordLower.includes("twin-linked")) {
-      saveElementState(document.getElementById('wound_reroll'));
+      saveElementState(woundrerollInput);
       document.getElementById('wound_reroll').value = "fail";
     } else if (keywordLower.includes("lethal hits")) {
       saveElementState(document.getElementById('hit_leth'));
