@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   let atk_xmlDoc; // Variable to hold the parsed XML document
   let currentWeapon = ''; // Track the current weapon
-  let previousStates = {}; // Track previous states of the fields
+  let initialStates = {}; // Track initial states of all fields
+  let elementStates = {}; // Track states of individual elements for keywords
 
   async function atk_fetchFileNames() {
     try {
@@ -162,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Save the current state before changing
-    previousStates[currentWeapon] = getCurrentState();
+    saveInitialState();
     currentWeapon = weaponName;
 
     const weaponProfiles = atk_xmlDoc.querySelectorAll(`profile[name="${weaponName}"]`);
@@ -248,41 +249,52 @@ document.addEventListener("DOMContentLoaded", function() {
       const trimmedKeyword = keyword.trim(); // Trim leading and trailing whitespace
       const lowerKeyword = trimmedKeyword.toLowerCase(); // Convert to lowercase
   
+      // Check if the keyword matches any predefined keywords
       predefinedKeywords.forEach(predefinedKeyword => {
         const trimmedPredefinedKeyword = predefinedKeyword.trim(); // Trim leading and trailing whitespace
         const lowerPredefinedKeyword = trimmedPredefinedKeyword.toLowerCase(); // Convert to lowercase
   
         if (lowerKeyword.includes(lowerPredefinedKeyword)) {
-          keywordsSet.add(trimmedKeyword); // Add the keyword to the set if it matches
+          if (!keywordsSet.has(trimmedKeyword)) { // Check if the keyword is already added
+            keywordsSet.add(trimmedKeyword); // Add the keyword to the set if it matches
+  
+            // Create and append the option element
+            const option = document.createElement('div');
+            option.classList.add('option');
+            option.textContent = trimmedKeyword;
+            option.addEventListener('click', function() {
+              this.classList.toggle('selected');
+              handleKeywordSelection(trimmedKeyword); // Handle keyword selection
+              updateKeywordsInput();
+            });
+            keywordsOptions.appendChild(option);
+          }
         }
       });
     });
   
-    const keywordsArray = Array.from(keywordsSet); // Convert set to array
+    // Event listener to toggle the dropdown display
+    keywordsInput.addEventListener('click', function () {
+      keywordsOptions.style.display = keywordsOptions.style.display === 'block' ? 'none' : 'block';
+    });
   
-    // Add the unique keywords as options
-    keywordsArray.forEach(keyword => {
-      const option = document.createElement('div');
-      option.className = 'option';
-      option.textContent = keyword;
-      option.addEventListener('click', () => {
-        option.classList.toggle('selected');
-        updateKeywordsInput();
-        applyKeywordEffects();
-      });
-      keywordsOptions.appendChild(option);
+    // Event listener to hide the dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!keywordsContainer.contains(e.target)) {
+        keywordsOptions.style.display = 'none';
+      }
     });
   }
-
+  
+  
   function updateKeywordsInput() {
     const selectedOptions = document.querySelectorAll('#keywords-options .option.selected');
     const selectedKeywords = Array.from(selectedOptions).map(option => option.textContent);
     keywordsInput.value = selectedKeywords.join(', ');
   }
-
-  function getCurrentState() {
-    // Capture the state of input fields
-    const state = {
+  
+  function saveInitialState() {
+    initialStates = {
       attacks: attacksInput.value,
       bs: tohitInput.value,
       strength: strengthInput.value,
@@ -299,62 +311,92 @@ document.addEventListener("DOMContentLoaded", function() {
       criticalWound: document.getElementById('wound_crit').value,
       criticalWoundRolls: document.getElementById('wound_of_6').value,
       rerollWound: document.getElementById('wound_reroll').value,
-      keywordsInput: keywordsInput.value
     };
-  
-    return state;
   }
 
-  function applyKeywordEffects() {
-    const selectedKeywords = Array.from(document.querySelectorAll('#keywords-options .option.selected')).map(option => option.textContent.toLowerCase());
+  function saveElementState(element) {
+    elementStates[element.id] = element.value || element.checked;
+  }
 
-    if (selectedKeywords.includes("rapid fire")) {
-      const number = extractNumericalValue(attacksInput.value);
-      if (number) {
-        attacksInput.value = `+${number}`;
+  function revertElementState(element) {
+    if (elementStates.hasOwnProperty(element.id)) {
+      if (element.type === 'checkbox') {
+        element.checked = elementStates[element.id];
+      } else {
+        element.value = elementStates[element.id];
       }
     }
-    if (selectedKeywords.includes("ignores cover")) {
+  }
+
+  function handleKeywordSelection(keyword) {
+    const keywordLower = keyword.toLowerCase();
+
+    if (keywordLower.includes("rapid fire")) {
+      saveElementState(attacksInput);
+      const number = extractNumericalValue(keyword);
+      if (number) {
+        if (attacksInput.value.includes('+')) {
+          attacksInput.value = attacksInput.value.replace(/\+\d+$/, `+${number}`);
+        } else {
+          attacksInput.value += `+${number}`;
+        }
+      } else {
+        revertElementState(attacksInput);
+      }
+    } else if (keywordLower.includes("ignores cover")) {
+      saveElementState(document.getElementById('cover'));
       document.getElementById('cover').checked = false;
-    }
-    if (selectedKeywords.includes("twin-linked")) {
+    } else if (keywordLower.includes("twin-linked")) {
+      saveElementState(document.getElementById('wound_reroll'));
       document.getElementById('wound_reroll').value = "fail";
-    }
-    if (selectedKeywords.includes("lethal hits")) {
+    } else if (keywordLower.includes("lethal hits")) {
+      saveElementState(document.getElementById('hit_leth'));
       document.getElementById('hit_leth').checked = true;
-    }
-    if (selectedKeywords.includes("lance")) {
+    } else if (keywordLower.includes("lance")) {
+      saveElementState(document.getElementById('wound_mod'));
       const currentMod = parseInt(document.getElementById('wound_mod').value) || 0;
       document.getElementById('wound_mod').value = currentMod + 1;
-    }
-    if (selectedKeywords.includes("indirect fire")) {
+    } else if (keywordLower.includes("indirect fire")) {
+      saveElementState(document.getElementById('bs'));
       document.getElementById('bs').value = "4+";
-    }
-    if (selectedKeywords.includes("melta")) {
-      const number = extractNumericalValue(damageInput.value);
+    } else if (keywordLower.includes("melta")) {
+      saveElementState(damageInput);
+      const number = extractNumericalValue(keyword);
       if (number) {
-        damageInput.value = `+${number}`;
+        if (damageInput.value.includes('+')) {
+          damageInput.value = damageInput.value.replace(/\+\d+$/, `+${number}`);
+        } else {
+          damageInput.value += `+${number}`;
+        }
+      } else {
+        revertElementState(damageInput);
       }
-    }
-    if (selectedKeywords.includes("heavy")) {
+    } else if (keywordLower.includes("heavy")) {
+      saveElementState(document.getElementById('hit_mod'));
       const currentMod = parseInt(document.getElementById('hit_mod').value) || 0;
       document.getElementById('hit_mod').value = `${currentMod + 1}`;
-    }
-    if (selectedKeywords.includes("devastating wounds")) {
+    } else if (keywordLower.includes("devastating wounds")) {
+      saveElementState(document.getElementById('wound_dev'));
       document.getElementById('wound_dev').checked = true;
-    }
-    if (selectedKeywords.includes("sustained hits")) {
-      const number = extractNumericalValue(keywordsInput.value);
+    } else if (keywordLower.includes("sustained hits")) {
+      saveElementState(document.getElementById('hit_sus'));
+      const number = extractNumericalValue(keyword);
       if (number) {
         document.getElementById('hit_sus').value = number;
+      } else {
+        revertElementState(document.getElementById('hit_sus'));
       }
-    }
-    if (selectedKeywords.includes("anti")) {
-      const number = extractNumericalValue(keywordsInput.value);
+    } else if (keywordLower.includes("anti")) {
+      saveElementState(document.getElementById('wound_crit'));
+      const number = extractNumericalValue(keyword);
       if (number) {
         document.getElementById('wound_crit').value = number;
+      } else {
+        revertElementState(document.getElementById('wound_crit'));
       }
     }
+
+    updateKeywordsInput(); // Update the input value after keyword handling
   }
 
   function resetFields() {
@@ -371,26 +413,24 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('wound_crit').value = '';
   }
 
-  function revertToPreviousState() {
-    if (previousStates[currentWeapon]) {
-      const state = previousStates[currentWeapon];
-      attacksInput.value = state.attacks;
-      tohitInput.value = state.bs;
-      strengthInput.value = state.strength;
-      armourpenInput.value = state.armourPen;
-      damageInput.value = state.damage;
-      document.getElementById('hit_mod').value = state.hitModifier;
-      document.getElementById('hit_leth').checked = state.hitLethal;
-      document.getElementById('hit_sus').value = state.sustainedHits;
-      document.getElementById('hit_crit').value = state.criticalHit;
-      document.getElementById('hit_of_6').value = state.criticalHitRolls;
-      document.getElementById('hit_reroll').value = state.rerollHit;
-      document.getElementById('wound_mod').value = state.woundModifier;
-      document.getElementById('wound_dev').checked = state.woundDevastating;
-      document.getElementById('wound_crit').value = state.criticalWound;
-      document.getElementById('wound_of_6').value = state.criticalWoundRolls;
-      document.getElementById('wound_reroll').value = state.rerollWound;
-      keywordsInput.value = state.keywordsInput;
+  function revertToInitialState() {
+    if (initialStates) {
+      attacksInput.value = initialStates.attacks;
+      tohitInput.value = initialStates.bs;
+      strengthInput.value = initialStates.strength;
+      armourpenInput.value = initialStates.armourPen;
+      damageInput.value = initialStates.damage;
+      document.getElementById('hit_mod').value = initialStates.hitModifier;
+      document.getElementById('hit_leth').checked = initialStates.hitLethal;
+      document.getElementById('hit_sus').value = initialStates.sustainedHits;
+      document.getElementById('hit_crit').value = initialStates.criticalHit;
+      document.getElementById('hit_of_6').value = initialStates.criticalHitRolls;
+      document.getElementById('hit_reroll').value = initialStates.rerollHit;
+      document.getElementById('wound_mod').value = initialStates.woundModifier;
+      document.getElementById('wound_dev').checked = initialStates.woundDevastating;
+      document.getElementById('wound_crit').value = initialStates.criticalWound;
+      document.getElementById('wound_of_6').value = initialStates.criticalWoundRolls;
+      document.getElementById('wound_reroll').value = initialStates.rerollWound;
     }
   }
 
@@ -403,7 +443,7 @@ document.addEventListener("DOMContentLoaded", function() {
   weaponInput.addEventListener('change', function() {
     const selectedWeapon = weaponInput.value;
     if (currentWeapon) {
-      revertToPreviousState(); // Revert to previous state if any
+      revertToInitialState(); // Revert to initial state if any
     }
     populateWeaponCharacteristics(selectedWeapon);
   });
@@ -429,7 +469,7 @@ document.addEventListener("DOMContentLoaded", function() {
     atk_modelListContainer.innerHTML = '';
     atk_weaponsListContainer.innerHTML = '';
     resetFields(); // Reset fields when faction changes
-    previousStates = {}; // Clear previous states
+    initialStates = {}; // Clear initial states
   });
 
   modelInput.addEventListener('change', function() {
@@ -438,6 +478,6 @@ document.addEventListener("DOMContentLoaded", function() {
     keywordsOptions.innerHTML = ''; // Clears the keywords dropdown
     keywordsInput.value = ''; // Clears the keywords input field
     resetFields(); // Reset fields when model changes
-    previousStates = {}; // Clear previous states
+    initialStates = {}; // Clear initial states
   });
 });

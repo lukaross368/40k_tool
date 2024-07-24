@@ -206,35 +206,5 @@
     Bug reports are welcome on <a href="https://github.com/toadchild/40kdice/issues">Github</a>.<br>
     <a href="https://www.games-workshop.com/Warhammer-40-000">Warhammer 40000</a> is &copy; Games Workshop Limited.<br>
     </p>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const keywordsInput = document.getElementById('keywords-input');
-            const keywordsOptions = document.getElementById('keywords-options');
-
-            // Sample keywords for demonstration; replace with your own logic
-            const keywords = [];
-
-            keywords.forEach(keyword => {
-                const option = document.createElement('div');
-                option.className = 'option';
-                option.textContent = keyword;
-                option.addEventListener('click', function () {
-                    option.classList.toggle('selected');
-                });
-                keywordsOptions.appendChild(option);
-            });
-
-            keywordsInput.addEventListener('click', function () {
-                keywordsOptions.style.display = keywordsOptions.style.display === 'block' ? 'none' : 'block';
-            });
-
-            document.addEventListener('click', function (e) {
-                if (!keywordsContainer.contains(e.target)) {
-                    keywordsOptions.style.display = 'none';
-                }
-            });
-        });
-    </script>
 </body>
 </html>
