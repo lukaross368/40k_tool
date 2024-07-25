@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const weaponNames = new Set();
     const childElements = selectedModelEntry.querySelectorAll('*');
+    console.log('childElements: ', childElements);
 
     childElements.forEach((child) => {
       if (child.tagName === 'profile') {
@@ -125,12 +126,10 @@ document.addEventListener('DOMContentLoaded', function () {
           profileTypeName.toLowerCase().includes('weapon')
         ) {
           const profileName = child.getAttribute('name');
+
           weaponNames.add(profileName);
         }
       } else if (child.tagName === 'entryLink') {
-        console.log('child:', child);
-
-        
         const targetId = child.getAttribute('targetId');
         const targetElements = atk_xmlDoc.querySelectorAll(
           `selectionEntry[id="${targetId}"]`,
