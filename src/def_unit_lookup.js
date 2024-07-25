@@ -157,6 +157,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const options = fileListContainer.querySelectorAll('option');
     options.forEach(option => {
       option.style.display = option.value.toLowerCase().includes(searchText) ? 'block' : 'none';
+    
+    
+    
     });
   });
 
