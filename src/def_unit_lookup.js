@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!response.ok) {
         throw new Error('Failed to fetch');
       }
-
       const files = await response.json();
       const catFiles = files.filter((file) => file.endsWith('.cat'));
       const fileNames = catFiles.map((file) => file.replace('.cat', ''));
