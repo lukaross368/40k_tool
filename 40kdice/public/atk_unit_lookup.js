@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const elementStates = {}; // Declare elementStates object to track states
 
   async function atk_fetchFileNames() {
-    try {
       const response = await fetch('http://localhost:3000/wh40k-10e');
       if (!response.ok) {
         throw new Error('Failed to fetch file names');
@@ -37,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function() {
       const catFiles = files.filter(file => file.endsWith('.cat'));
       const fileNames = catFiles.map(file => file.replace('.cat', ''));
       atk_populateFileList(fileNames);
-    }
   }
 
   function atk_populateFileList(fileArray) {
@@ -51,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   async function atk_fetchModelNames(fileName) {
-    try {
       const response = await fetch(`http://localhost:3000/wh40k-10e/${encodeURIComponent(fileName)}.cat`);
       if (!response.ok) {
         throw new Error('Failed to fetch model names');
@@ -66,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function() {
           profile.querySelector('characteristic[name="W"]'))
         .map(profile => profile.getAttribute('name'));
       atk_populateModelList(modelNames);
-    }
   }
 
   function atk_populateModelList(modelArray) {
@@ -85,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   async function atk_fetchWeapons(modelName) {
-    try {
       if (!atk_xmlDoc) {
         throw new Error('XML document not initialized');
       }
@@ -132,8 +127,6 @@ document.addEventListener("DOMContentLoaded", function() {
       });
 
       atk_populateWeaponsList(Array.from(weaponNames));
-  
-    }
   }
 
   function atk_populateWeaponsList(weaponsArray) {
