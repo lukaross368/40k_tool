@@ -4,21 +4,7 @@
 
 #### dependencies
 
-#### Husky Pre-Commit
-
 First time setup steps
-
-```
-npm install 
-mkdir -p .husky
-touch .husky/pre-commit
-chmod +x .husky/pre-commit
-echo -e "#!/bin/sh\nnpx lint-staged" > .husky/pre-commit
-npm init -y
-node app.js
-```
-
-from then on project workflow is as follows
 
 ```
 npm install
