@@ -145,8 +145,67 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           });
         });
+      } else if (child.tagName.includes('categoryLink')) {
+        const categoryName = child.getAttribute('name');
+        console.log('categoryName: ', categoryName);
+
+        // Find all selectionEntryGroup elements
+        const selectionEntryGroups = atk_xmlDoc.querySelectorAll(
+          'selectionEntryGroup',
+        );
+
+        // Iterate through each selectionEntryGroup to find the comment element
+        selectionEntryGroups.forEach((group) => {
+          const commentElement = group.querySelector('comment');
+          if (
+            commentElement &&
+            commentElement.textContent.trim() === categoryName
+          ) {
+            console.log('Matching selectionEntryGroup: ', group);
+
+            // Iterate through each child element of the matching group
+            const childElements = group.querySelectorAll('*');
+            childElements.forEach((child) => {
+              const nameAttribute = child.getAttribute('name');
+              if (nameAttribute) {
+                console.log('Child element name attribute: ', nameAttribute);
+
+                // Now, search for profiles with matching names
+                const weaponNameElements = atk_xmlDoc.querySelectorAll(
+                  `profile[name="${nameAttribute}"]`,
+                );
+
+                weaponNameElements.forEach((nameElement) => {
+                  const nameCharacteristics =
+                    nameElement.getElementsByTagName('characteristic');
+                  const characteristicNames = Array.from(
+                    nameCharacteristics,
+                  ).map((characteristic) =>
+                    characteristic.getAttribute('name'),
+                  );
+
+                  const hasAllRequiredCharacteristics = [
+                    'A',
+                    'S',
+                    'AP',
+                    'D',
+                  ].every((requiredName) =>
+                    characteristicNames.includes(requiredName),
+                  );
+
+                  if (hasAllRequiredCharacteristics) {
+                    const profileName = nameElement.getAttribute('name');
+                    weaponNames.add(profileName);
+                    console.log('Added weapon profile name: ', profileName);
+                  }
+                });
+              }
+            });
+          }
+        });
       }
       const name = child.getAttribute('name');
+
       const weaponNameElement = atk_xmlDoc.querySelectorAll(
         `profile[name="${name}"]`,
       );
