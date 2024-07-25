@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function () {
   const fileFilter = document.getElementById('file-filter');
   const fileListContainer = document.getElementById('file-list-container');
   const modelFilter = document.getElementById('model-filter');
@@ -16,16 +16,15 @@ document.addEventListener("DOMContentLoaded", function() {
         throw new Error('Failed to fetch');
       }
       const files = await response.json();
-      const catFiles = files.filter(file => file.endsWith('.cat'));
-      const fileNames = catFiles.map(file => file.replace('.cat', ''));
+      const catFiles = files.filter((file) => file.endsWith('.cat'));
+      const fileNames = catFiles.map((file) => file.replace('.cat', ''));
       populateFileList(fileNames);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   function populateFileList(fileArray) {
     fileListContainer.innerHTML = '';
-    fileArray.forEach(file => {
+    fileArray.forEach((file) => {
       const option = document.createElement('option');
       option.value = file;
       fileListContainer.appendChild(option);
@@ -34,55 +33,63 @@ document.addEventListener("DOMContentLoaded", function() {
 
   async function fetchModelNames(fileName) {
     try {
-      const response = await fetch(`http://localhost:3000/wh40k-10e/${encodeURIComponent(fileName)}.cat`);
+      const response = await fetch(
+        `http://localhost:3000/wh40k-10e/${encodeURIComponent(fileName)}.cat`,
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch');
       }
       const fileContent = await response.text();
       const parser = new DOMParser();
-      xmlDoc = parser.parseFromString(fileContent, "application/xml"); // Assign xmlDoc here
+      xmlDoc = parser.parseFromString(fileContent, 'application/xml'); // Assign xmlDoc here
       const profiles = xmlDoc.querySelectorAll('profile');
       const modelNames = Array.from(profiles)
-        .filter(profile => profile.querySelector('characteristic[name="T"]') && profile.querySelector('characteristic[name="SV"]') && profile.querySelector('characteristic[name="W"]'))
-        .map(profile => profile.getAttribute('name'));
+        .filter(
+          (profile) =>
+            profile.querySelector('characteristic[name="T"]') &&
+            profile.querySelector('characteristic[name="SV"]') &&
+            profile.querySelector('characteristic[name="W"]'),
+        )
+        .map((profile) => profile.getAttribute('name'));
       populateModelList(modelNames);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   function populateModelList(modelArray) {
     modelListContainer.innerHTML = '';
-    modelArray.forEach(model => {
+    modelArray.forEach((model) => {
       const option = document.createElement('option');
       option.value = model;
       modelListContainer.appendChild(option);
     });
 
-    modelFilter.addEventListener('change', function() {
+    modelFilter.addEventListener('change', function () {
       const selectedModel = modelFilter.value;
       displayCharacteristics(selectedModel);
     });
   }
 
   function displayCharacteristics(modelName) {
-
     // Find the selectionEntry for the model
-    const selectionEntry = Array.from(xmlDoc.querySelectorAll('selectionEntry')).find(entry => entry.querySelector(`profile[name="${modelName}"]`));
+    const selectionEntry = Array.from(
+      xmlDoc.querySelectorAll('selectionEntry'),
+    ).find((entry) => entry.querySelector(`profile[name="${modelName}"]`));
 
     if (selectionEntry) {
       // Find the profile within the selectionEntry
-      const profile = selectionEntry.querySelector(`profile[name="${modelName}"]`);
+      const profile = selectionEntry.querySelector(
+        `profile[name="${modelName}"]`,
+      );
 
       if (profile) {
         const characteristics = profile.querySelectorAll('characteristic');
         const characteristicsMap = {};
 
-        characteristics.forEach(characteristic => {
+        characteristics.forEach((characteristic) => {
           const name = characteristic.getAttribute('name');
           const value = characteristic.textContent;
           characteristicsMap[name] = value;
         });
-
 
         const T = characteristicsMap['T'];
         const SV = characteristicsMap['SV'];
@@ -90,11 +97,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Extract and display invulnerable save value
         const invulnerableSaveValue = getInvulnerableSaveValue(selectionEntry);
-        
+
         // Set input values
         tInput.value = T || '';
         saveInput.value = SV || '';
-        invulnerableInput.value = invulnerableSaveValue !== 'N/A' ? invulnerableSaveValue : '';
+        invulnerableInput.value =
+          invulnerableSaveValue !== 'N/A' ? invulnerableSaveValue : '';
         woundsInput.value = W || '';
       } else {
         clearInputValues();
@@ -108,10 +116,16 @@ document.addEventListener("DOMContentLoaded", function() {
     let invulnerableSaveValue = 'N/A';
 
     // Check if there's a profile with the exact name "Invulnerable Save"
-    const invulnerableSaveProfile = Array.from(selectionEntry.querySelectorAll('profile')).find(profile => profile.getAttribute('name').includes('Invulnerable Save'));
+    const invulnerableSaveProfile = Array.from(
+      selectionEntry.querySelectorAll('profile'),
+    ).find((profile) =>
+      profile.getAttribute('name').includes('Invulnerable Save'),
+    );
 
     if (invulnerableSaveProfile) {
-      const characteristic = invulnerableSaveProfile.querySelector('characteristic[name="Description"]');
+      const characteristic = invulnerableSaveProfile.querySelector(
+        'characteristic[name="Description"]',
+      );
       if (characteristic) {
         const invulnerableSaveText = characteristic.textContent.trim();
         const regex = /(\d+\+)/;
@@ -120,17 +134,25 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     } else {
       // If not found directly, fallback to the infoLink method
-      const invulnerableSaveInfoLink = Array.from(selectionEntry.querySelectorAll('infoLink')).find(infoLink => infoLink.getAttribute('name').includes('Invulnerable Save'));
+      const invulnerableSaveInfoLink = Array.from(
+        selectionEntry.querySelectorAll('infoLink'),
+      ).find((infoLink) =>
+        infoLink.getAttribute('name').includes('Invulnerable Save'),
+      );
 
       if (invulnerableSaveInfoLink) {
         const targetId = invulnerableSaveInfoLink.getAttribute('targetId');
-        const invulnerableSaveProfile = xmlDoc.querySelector(`profile[id="${targetId}"]`);
+        const invulnerableSaveProfile = xmlDoc.querySelector(
+          `profile[id="${targetId}"]`,
+        );
 
         if (invulnerableSaveProfile) {
-          const invulnerableSaveComment = invulnerableSaveProfile.querySelector('comment');
+          const invulnerableSaveComment =
+            invulnerableSaveProfile.querySelector('comment');
 
           if (invulnerableSaveComment) {
-            const invulnerableSaveText = invulnerableSaveComment.textContent.trim();
+            const invulnerableSaveText =
+              invulnerableSaveComment.textContent.trim();
             // Extract the number followed by '+'
             const regex = /(\d+\+)/;
             const match = invulnerableSaveText.match(regex);
@@ -152,18 +174,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
   fetchFileNames();
 
-  fileFilter.addEventListener('input', function() {
+  fileFilter.addEventListener('input', function () {
     const searchText = fileFilter.value.toLowerCase();
     const options = fileListContainer.querySelectorAll('option');
-    options.forEach(option => {
-      option.style.display = option.value.toLowerCase().includes(searchText) ? 'block' : 'none';
-    
-    
-    
+    options.forEach((option) => {
+      option.style.display = option.value.toLowerCase().includes(searchText)
+        ? 'block'
+        : 'none';
     });
   });
 
-  fileFilter.addEventListener('change', function() {
+  fileFilter.addEventListener('change', function () {
     const selectedFile = fileFilter.value;
     fetchModelNames(selectedFile);
   });
