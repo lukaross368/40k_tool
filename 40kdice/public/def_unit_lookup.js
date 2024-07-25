@@ -18,10 +18,8 @@ document.addEventListener("DOMContentLoaded", function() {
       const files = await response.json();
       const catFiles = files.filter(file => file.endsWith('.cat'));
       const fileNames = catFiles.map(file => file.replace('.cat', ''));
-      console.log(fileNames);
       populateFileList(fileNames);
     } catch (error) {
-      console.error('Error fetching files:', error);
     }
   }
 
@@ -47,10 +45,8 @@ document.addEventListener("DOMContentLoaded", function() {
       const modelNames = Array.from(profiles)
         .filter(profile => profile.querySelector('characteristic[name="T"]') && profile.querySelector('characteristic[name="SV"]') && profile.querySelector('characteristic[name="W"]'))
         .map(profile => profile.getAttribute('name'));
-      console.log('Model Names:', modelNames);  // Log model names
       populateModelList(modelNames);
     } catch (error) {
-      console.error('Error fetching models:', error);
     }
   }
 
@@ -69,16 +65,13 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function displayCharacteristics(modelName) {
-    console.log('Selected Model:', modelName);  // Log selected model
 
     // Find the selectionEntry for the model
     const selectionEntry = Array.from(xmlDoc.querySelectorAll('selectionEntry')).find(entry => entry.querySelector(`profile[name="${modelName}"]`));
-    console.log('Selection Entry:', selectionEntry);  // Log selection entry
 
     if (selectionEntry) {
       // Find the profile within the selectionEntry
       const profile = selectionEntry.querySelector(`profile[name="${modelName}"]`);
-      console.log('Profile:', profile);  // Log profile
 
       if (profile) {
         const characteristics = profile.querySelectorAll('characteristic');
@@ -90,7 +83,6 @@ document.addEventListener("DOMContentLoaded", function() {
           characteristicsMap[name] = value;
         });
 
-        console.log('Characteristics Map:', characteristicsMap);  // Log characteristics map
 
         const T = characteristicsMap['T'];
         const SV = characteristicsMap['SV'];
@@ -117,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Check if there's a profile with the exact name "Invulnerable Save"
     const invulnerableSaveProfile = Array.from(selectionEntry.querySelectorAll('profile')).find(profile => profile.getAttribute('name').includes('Invulnerable Save'));
-    console.log('Invulnerable Save Profile:', invulnerableSaveProfile);  // Log invulnerable save profile
 
     if (invulnerableSaveProfile) {
       const characteristic = invulnerableSaveProfile.querySelector('characteristic[name="Description"]');
@@ -126,25 +117,20 @@ document.addEventListener("DOMContentLoaded", function() {
         const regex = /(\d+\+)/;
         const match = invulnerableSaveText.match(regex);
         invulnerableSaveValue = match ? match[0] : 'N/A';
-        console.log('Direct Invulnerable Save Text:', invulnerableSaveValue);  // Log invulnerable savje text
       }
     } else {
       // If not found directly, fallback to the infoLink method
       const invulnerableSaveInfoLink = Array.from(selectionEntry.querySelectorAll('infoLink')).find(infoLink => infoLink.getAttribute('name').includes('Invulnerable Save'));
-      console.log('Invulnerable Save InfoLink:', invulnerableSaveInfoLink);  // Log infoLink
 
       if (invulnerableSaveInfoLink) {
         const targetId = invulnerableSaveInfoLink.getAttribute('targetId');
         const invulnerableSaveProfile = xmlDoc.querySelector(`profile[id="${targetId}"]`);
-        console.log('Invulnerable Save Profile:', invulnerableSaveProfile);  // Log invulnerable save profile
 
         if (invulnerableSaveProfile) {
           const invulnerableSaveComment = invulnerableSaveProfile.querySelector('comment');
-          console.log('Invulnerable Save Comment:', invulnerableSaveComment);  // Log invulnerable save comment
 
           if (invulnerableSaveComment) {
             const invulnerableSaveText = invulnerableSaveComment.textContent.trim();
-            console.log('Invulnerable Save Text:', invulnerableSaveText);  // Log invulnerable save text
             // Extract the number followed by '+'
             const regex = /(\d+\+)/;
             const match = invulnerableSaveText.match(regex);

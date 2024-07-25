@@ -37,8 +37,6 @@ document.addEventListener("DOMContentLoaded", function() {
       const catFiles = files.filter(file => file.endsWith('.cat'));
       const fileNames = catFiles.map(file => file.replace('.cat', ''));
       atk_populateFileList(fileNames);
-    } catch (error) {
-      console.error(error);
     }
   }
 
@@ -68,8 +66,6 @@ document.addEventListener("DOMContentLoaded", function() {
           profile.querySelector('characteristic[name="W"]'))
         .map(profile => profile.getAttribute('name'));
       atk_populateModelList(modelNames);
-    } catch (error) {
-      console.error(error);
     }
   }
 
@@ -137,8 +133,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
       atk_populateWeaponsList(Array.from(weaponNames));
   
-    } catch (error) {
-      console.error(error);
     }
   }
 
@@ -303,84 +297,62 @@ document.addEventListener("DOMContentLoaded", function() {
       // Assuming that attacksInput is the element we are reverting for this example
       if (elementStates[attacksInput.id] !== undefined) {
         attacksInput.value = elementStates[attacksInput.id];
-      } else {
-        console.warn('No saved state found for', attacksInput.id);
-      }
+      } 
     } 
     else if (keywordLower.includes("ignores cover")) {
       if (elementStates[coverInput.id] !== undefined) {
         coverInput.checked = elementStates[coverInput.id];
-      } else {
-        console.warn('No saved state found for', coverInput.id);
       }
     }
     else if (keywordLower.includes("twin-linked")) {
       if (elementStates[woundrerollInput.id] !== undefined) {
         woundrerollInput.value = elementStates[woundrerollInput.id];
-      } else {
-        console.warn('No saved state found for', woundrerollInput.id);
-      }
+      } 
     }
     else if (keywordLower.includes("lethal hits")) {
       if (elementStates[lethalInput.id] !== undefined) {
         lethalInput.checked = elementStates[lethalInput.id];
-      } else {
-        console.warn('No saved state found for', lethalInput.id);
-      }
+      } 
     }
     else if (keywordLower.includes("lance")) {
       // Assuming that attacksInput is the element we are reverting for this example
       if (elementStates[lanceInput.id] !== undefined) {
         lanceInput.value = elementStates[lanceInput.id];
-      } else {
-        console.warn('No saved state found for', lanceInput.id);
       }
     }
     else if (keywordLower.includes("indirect fire")) {
       // Assuming that attacksInput is the element we are reverting for this example
       if (elementStates[tohitInput.id] !== undefined) {
         tohitInput.value = elementStates[tohitInput.id];
-      } else {
-        console.warn('No saved state found for', tohitInput.id);
       }
     }
     else if (keywordLower.includes("melta")) {
       // Assuming that attacksInput is the element we are reverting for this example
       if (elementStates[damageInput.id] !== undefined) {
         damageInput.value = elementStates[damageInput.id];
-      } else {
-        console.warn('No saved state found for', damageInput.id);
       }
     }
     else if (keywordLower.includes("heavy")) {
       // Assuming that attacksInput is the element we are reverting for this example
       if (elementStates[heavyInput.id] !== undefined) {
         heavyInput.value = elementStates[heavyInput.id];
-      } else {
-        console.warn('No saved state found for', heavyInput.id);
       }
     }
     else if (keywordLower.includes("devastating wounds")) {
       if (elementStates[devwoundsInput.id] !== undefined) {
         devwoundsInput.checked = elementStates[devwoundsInput.id];
-      } else {
-        console.warn('No saved state found for', devwoundsInput.id);
       }
     }
     else if (keywordLower.includes("sustained hits")) {
       // Assuming that attacksInput is the element we are reverting for this example
       if (elementStates[sustainedInput.id] !== undefined) {
         sustainedInput.value = elementStates[sustainedInput.id];
-      } else {
-        console.warn('No saved state found for', sustainedInput.id);
       }
     }
     else if (keywordLower.includes("anti")) {
       // Assuming that attacksInput is the element we are reverting for this example
       if (elementStates[antiInput.id] !== undefined) {
         antiInput.value = elementStates[antiInput.id];
-      } else {
-        console.warn('No saved state found for', antiInput.id);
       }
     } 
   }
