@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const fileListContainer = document.getElementById('file-list-container');
   const modelFilter = document.getElementById('model-filter');
   const modelListContainer = document.getElementById('model-list-container');
-  const characteristicsDisplay = document.getElementById('characteristics-display');
   const tInput = document.getElementById('t');
   const saveInput = document.getElementById('save');
   const invulnerableInput = document.getElementById('invulnerable');

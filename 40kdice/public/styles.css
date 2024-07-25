@@ -1,0 +1,104 @@
+/* Container for the keywords input field and options dropdown */
+.keywords-container {
+  position: relative; /* Positions children absolutely within this container */
+  padding: 5px; /* Adds padding inside the container */
+  display: inline-block; /* Makes the container fit its contents and be inline */
+  vertical-align: middle; /* Aligns the container vertically in the middle */
+}
+
+/* Label for the keywords input */
+.keywords-label {
+  font-size: 16px; /* Sets the font size to 16px */
+  left: 1px; /* Positions the label slightly to the right (1px from the left) */
+  line-height: 1.5; /* Sets the line height to 1.5 times the font size */
+  display: inline-block; /* Makes the label fit its contents and be inline */
+  vertical-align: middle; /* Aligns the label vertically in the middle */
+}
+
+/* Input field for keywords */
+.keywords-input {
+  display: inline-block; /* Makes the input fit its contents and be inline */
+  width: 200px; /* Sets the width to 200px */
+  height: 20px; /* Sets the height to 20px */
+  padding: 8px 12px; /* Sets the padding: 8px top/bottom, 12px left/right */
+  border: 1px solid gray; /* Sets a gray border with 1px width */
+  font-family: Arial; /* Uses Arial as the font family */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+  border-radius: 3px; /* Rounds the corners with a 3px radius */
+  cursor: pointer; /* Changes the cursor to a pointer when hovering over */
+  font-size: 16px; /* Sets the font size to 16px */
+  line-height: 1.5; /* Sets the line height to 1.5 times the font size */
+  color: #333; /* Sets the text color to dark grey */
+  position: relative; /* Positions pseudo-elements absolutely within this input */
+  vertical-align: middle; /* Aligns the input vertically in the middle */
+}
+
+/* Placeholder text for the keywords input */
+.keywords-input::before {
+  content: attr(data-placeholder); /* Uses the data-placeholder attribute as content */
+  font-family: Arial; /* Uses Arial as the font family for placeholder text */
+  color: #757575; /* Sets the placeholder text color to light grey */
+  position: absolute; /* Positions the placeholder text absolutely within the input */
+  top: 50%; /* Centers the text vertically */
+  left: 2px; /* Positions the text 2px from the left */
+  transform: translateY(-50%); /* Adjusts the text to be perfectly centered vertically */
+  pointer-events: none; /* Makes the placeholder text not interactable */
+  font-size: 13px; /* Sets the font size to 13px for the placeholder text */
+}
+
+/* Removes the placeholder text when the input is not empty */
+.keywords-input:not(:empty)::before {
+  content: ""; /* Sets the content to an empty string to hide the placeholder */
+}
+
+/* Dropdown options container */
+.keywords-options {
+  display: none; /* Hides the dropdown by default */
+  position: absolute; /* Positions the dropdown absolutely within its container */
+  border: 1px solid #ccc; /* Sets a light grey border with 1px width */
+  border-top: none; /* Removes the top border to blend with the input */
+  font-family: Arial; /* Uses Arial as the font family for dropdown text */
+  background-color: #fff; /* Sets the background color to white */
+  max-height: 200px; /* Sets the maximum height to 200px */
+  overflow-y: auto; /* Adds a vertical scrollbar if the content overflows */
+  z-index: 1000; /* Ensures the dropdown appears above other elements */
+  width: 100%; /* Sets the width to 100% of the container */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+  font-size: 16px; /* Sets the font size to 16px for dropdown text */
+}
+
+/* Individual options within the dropdown */
+.keywords-options .option {
+  padding: 8px 12px; /* Sets the padding: 8px top/bottom, 12px left/right */
+  cursor: pointer; /* Changes the cursor to a pointer when hovering over */
+}
+
+/* Hover state for individual options */
+.keywords-options .option:hover {
+  background-color: #f0f0f0; /* Changes the background color to light grey on hover */
+}
+
+/* Selected state for individual options */
+.keywords-options .option.selected {
+  background-color: #007bff; /* Changes the background color to blue when selected */
+  color: #fff; /* Changes the text color to white when selected */
+}
+
+.output {
+  float: left;
+}
+
+.chart {
+  width: 200px;
+  height: 200px;
+}
+
+.endnote {
+  clear: both;
+  font-size: 75%;
+}
+
+.description {
+  color: grey;
+  font-style: italic;
+}
