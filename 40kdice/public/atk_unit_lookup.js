@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", function() {
   const armourpenInput = document.getElementById('ap');
   const damageInput = document.getElementById('d');
   const coverInput= document.getElementById('cover');
-  const woundrerollInput= document.getElementById('hit_of_6');
+  const woundrerollInput= document.getElementById('wound_reroll');
+  const lethalInput = document.getElementById('hit_leth');
+  const lanceInput = document.getElementById('wound_mod');
   const keywordsOptions = document.getElementById('keywords-options');
   const keywordsInput = document.getElementById('keywords-input');
 
@@ -262,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function() {
             option.addEventListener('click', function() {
               this.classList.toggle('selected');
               if (this.classList.contains('selected')) {
-                console.log("Keyword selected")
+                console.log("Keyword selected: ", trimmedKeyword);
                 handleKeywordSelection(trimmedKeyword);
               } else {
                 console.log("Keyword deselected")
@@ -283,8 +285,16 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   
   function saveElementState(element) {
-    console.log('Saved element', element);
-    elementStates[element.id] = element.value || element.checked;
+    // console.log('Saved element', element);
+    if (element.type === 'checkbox') {
+      elementStates[element.id] = element.checked;
+    } else {
+      elementStates[element.id] = element.value 
+    }
+    
+    console.log('Saved element state', elementStates[element.id]);
+
+    return elementStates[element.id]
   }
 
 
@@ -313,6 +323,21 @@ document.addEventListener("DOMContentLoaded", function() {
         console.warn('No saved state found for', woundrerollInput.id);
       }
     }
+    else if (keywordLower.includes("lethal hits")) {
+      if (elementStates[lethalInput.id] !== undefined) {
+        lethalInput.checked = elementStates[lethalInput.id];
+      } else {
+        console.warn('No saved state found for', lethalInput.id);
+      }
+    }
+    else if (keywordLower.includes("lance")) {
+      // Assuming that attacksInput is the element we are reverting for this example
+      if (elementStates[lanceInput.id] !== undefined) {
+        lanceInput.value = elementStates[lanceInput.id];
+      } else {
+        console.warn('No saved state found for', lanceInput.id);
+      }
+    } 
   }
 
 
@@ -325,7 +350,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //   }
     // }
 
-  function handleKeywordSelection(keyword) {
+  function handleKeywordSelection(keyword) { 
     const keywordLower = keyword.toLowerCase();
 
     if (keywordLower.includes("rapid fire")) {
@@ -339,24 +364,27 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       }
     } else if (keywordLower.includes("ignores cover")) {
-      saveElementState(document.getElementById('cover'));
-      document.getElementById('cover').checked = false;
+        saveElementState(document.getElementById('cover'));
+        document.getElementById('cover').checked = false;
     } else if (keywordLower.includes("twin-linked")) {
-      saveElementState(woundrerollInput);
-      document.getElementById('wound_reroll').value = "fail";
+        saveElementState(woundrerollInput);
+        woundrerollInput.value = "fail";
     } else if (keywordLower.includes("lethal hits")) {
-      saveElementState(document.getElementById('hit_leth'));
-      document.getElementById('hit_leth').checked = true;
+        saveElementState(lethalInput);
+        lethalInput.checked = true;
     } else if (keywordLower.includes("lance")) {
-      saveElementState(document.getElementById('wound_mod'));
-      const currentMod = parseInt(document.getElementById('wound_mod').value) || 0;
-      document.getElementById('wound_mod').value = currentMod + 1;
+        const save_state = saveElementState(lanceInput);
+        if (save_state) {
+          lanceInput.value += `+1`;
+        } else {
+            lanceInput.value = +1;
+      }
     } else if (keywordLower.includes("indirect fire")) {
-      saveElementState(document.getElementById('bs'));
-      document.getElementById('bs').value = "4+";
+        saveElementState(document.getElementById('bs'));
+        document.getElementById('bs').value = "4+";
     } else if (keywordLower.includes("melta")) {
-      saveElementState(damageInput);
-      const number = extractNumericalValue(keyword);
+        saveElementState(damageInput);
+        const number = extractNumericalValue(keyword);
       if (number) {
         if (damageInput.value.includes('+')) {
           damageInput.value = damageInput.value.replace(/\+\d+$/, `+${number}`);
