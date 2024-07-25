@@ -128,11 +128,17 @@ document.addEventListener('DOMContentLoaded', function () {
           weaponNames.add(profileName);
         }
       } else if (child.tagName === 'entryLink') {
+        console.log('child:', child);
+
+        
         const targetId = child.getAttribute('targetId');
         const targetElements = atk_xmlDoc.querySelectorAll(
           `selectionEntry[id="${targetId}"]`,
         );
-
+        const name = child.getAttribute('name');
+        const weaponNames = atk_xmlDoc.querySelectorAll(
+          `profile[name="${name}"]`,
+        );
         targetElements.forEach((target) => {
           const targetProfiles = target.querySelectorAll('profile');
           targetProfiles.forEach((profile) => {
