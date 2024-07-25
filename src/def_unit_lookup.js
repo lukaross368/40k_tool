@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const invulnerableSaveText = characteristic.textContent.trim();
         const regex = /(\d+\+)/;
         const match = invulnerableSaveText.match(regex);
+
         invulnerableSaveValue = match ? match[0] : 'N/A';
       }
     } else {

@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const option = document.createElement('option');
       option.value = weapon;
       option.textContent = weapon;
+
       atk_weaponsListContainer.appendChild(option);
     });
   }
