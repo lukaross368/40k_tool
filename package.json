@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Statistical analysis tool for Warhammer 40,000 and Age of Sigmar",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "prepare": "husky install"
+  },
   "lint-staged": {
     "*.js": [
       "prettier --write"

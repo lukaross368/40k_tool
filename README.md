@@ -12,16 +12,13 @@ First time setup steps
 npm install 
 ```
 ```
-mkdir -p .husky
+
 ```
 ```
-touch .husky/pre-commit
+chmod +x .husky/_/pre-commit
 ```
 ```
-chmod +x .husky/pre-commit
-```
-```
-cat << 'EOF' > .husky/pre-commit
+cat << 'EOF' > .husky/_/pre-commit
 #!/bin/sh
 npx lint-staged
 EOF
