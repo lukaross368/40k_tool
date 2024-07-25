@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const weaponNames = new Set();
     const childElements = selectedModelEntry.querySelectorAll('*');
-    console.log('childElements: ', childElements);
 
     childElements.forEach((child) => {
       if (child.tagName === 'profile') {
@@ -128,14 +127,10 @@ document.addEventListener('DOMContentLoaded', function () {
           const profileName = child.getAttribute('name');
           weaponNames.add(profileName);
         }
-      } else if (child.tagName === 'entryLink') {
+      } else if (child.tagName.includes('entryLink')) {
         const targetId = child.getAttribute('targetId');
         const targetElements = atk_xmlDoc.querySelectorAll(
           `selectionEntry[id="${targetId}"]`,
-        );
-        const name = child.getAttribute('name');
-        const weaponNames = atk_xmlDoc.querySelectorAll(
-          `profile[name="${name}"]`,
         );
         targetElements.forEach((target) => {
           const targetProfiles = target.querySelectorAll('profile');
@@ -151,6 +146,27 @@ document.addEventListener('DOMContentLoaded', function () {
           });
         });
       }
+      const name = child.getAttribute('name');
+      const weaponNameElement = atk_xmlDoc.querySelectorAll(
+        `profile[name="${name}"]`,
+      );
+
+      weaponNameElement.forEach((nameElement) => {
+        const nameCharacteristics =
+          nameElement.getElementsByTagName('characteristic');
+        const characteristicNames = Array.from(nameCharacteristics).map(
+          (characteristic) => characteristic.getAttribute('name'),
+        );
+
+        const hasAllRequiredCharacteristics = ['A', 'S', 'AP', 'D'].every(
+          (requiredName) => characteristicNames.includes(requiredName),
+        );
+
+        if (hasAllRequiredCharacteristics) {
+          const profileName = nameElement.getAttribute('name'); // Retrieve the profile name from the element
+          weaponNames.add(profileName); // Add the profile name to the set
+        }
+      });
     });
 
     atk_populateWeaponsList(Array.from(weaponNames));
