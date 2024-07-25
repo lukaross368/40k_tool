@@ -10,11 +10,26 @@ First time setup steps
 
 ```
 npm install 
+```
+```
 mkdir -p .husky
+```
+```
 touch .husky/pre-commit
+```
+```
 chmod +x .husky/pre-commit
-echo -e "#!/bin/sh\nnpx lint-staged" > .husky/pre-commit
+```
+```
+cat << 'EOF' > .husky/pre-commit
+#!/bin/sh
+npx lint-staged
+EOF
+```
+```
 npm init -y
+```
+```
 node app.js
 ```
 
