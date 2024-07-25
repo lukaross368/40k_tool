@@ -126,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function () {
           profileTypeName.toLowerCase().includes('weapon')
         ) {
           const profileName = child.getAttribute('name');
-
           weaponNames.add(profileName);
         }
       } else if (child.tagName === 'entryLink') {
