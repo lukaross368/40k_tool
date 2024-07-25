@@ -268,10 +268,8 @@ document.addEventListener("DOMContentLoaded", function() {
             option.addEventListener('click', function() {
               this.classList.toggle('selected');
               if (this.classList.contains('selected')) {
-                console.log("Keyword selected: ", trimmedKeyword);
                 handleKeywordSelection(trimmedKeyword);
               } else {
-                console.log("Keyword deselected")
                 revertElementState(trimmedKeyword);
               }
             
@@ -289,15 +287,11 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   
   function saveElementState(element) {
-    // console.log('Saved element', element);
     if (element.type === 'checkbox') {
       elementStates[element.id] = element.checked;
     } else {
       elementStates[element.id] = element.value 
     }
-    
-    console.log('Saved element state', elementStates[element.id]);
-
     return elementStates[element.id]
   }
 
@@ -390,16 +384,6 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     } 
   }
-
-
-    // if (elementStates.hasOwnProperty(keyword.id)) {
-    //   if (keyword.type === 'checkbox') {
-    //     keyword.checked = elementStates[keyword.id];
-    //   } else {
-    //     keyword.value = elementStates[keyword.id];
-    //     console.log('Reverted elementStates[element.id]: ', elementStates[keyword.id]);
-    //   }
-    // }
 
   function handleKeywordSelection(keyword) { 
     const keywordLower = keyword.toLowerCase();
