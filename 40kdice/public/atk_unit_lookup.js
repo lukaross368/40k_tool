@@ -15,7 +15,11 @@ document.addEventListener("DOMContentLoaded", function() {
   const coverInput= document.getElementById('cover');
   const woundrerollInput= document.getElementById('wound_reroll');
   const lethalInput = document.getElementById('hit_leth');
+  const heavyInput = document.getElementById('hit_mod');
   const lanceInput = document.getElementById('wound_mod');
+  const devwoundsInput = document.getElementById('wound_dev');
+  const sustainedInput = document.getElementById('hit_sus');
+  const antiInput = document.getElementById('wound_crit');
   const keywordsOptions = document.getElementById('keywords-options');
   const keywordsInput = document.getElementById('keywords-input');
 
@@ -337,6 +341,53 @@ document.addEventListener("DOMContentLoaded", function() {
       } else {
         console.warn('No saved state found for', lanceInput.id);
       }
+    }
+    else if (keywordLower.includes("indirect fire")) {
+      // Assuming that attacksInput is the element we are reverting for this example
+      if (elementStates[tohitInput.id] !== undefined) {
+        tohitInput.value = elementStates[tohitInput.id];
+      } else {
+        console.warn('No saved state found for', tohitInput.id);
+      }
+    }
+    else if (keywordLower.includes("melta")) {
+      // Assuming that attacksInput is the element we are reverting for this example
+      if (elementStates[damageInput.id] !== undefined) {
+        damageInput.value = elementStates[damageInput.id];
+      } else {
+        console.warn('No saved state found for', damageInput.id);
+      }
+    }
+    else if (keywordLower.includes("heavy")) {
+      // Assuming that attacksInput is the element we are reverting for this example
+      if (elementStates[heavyInput.id] !== undefined) {
+        heavyInput.value = elementStates[heavyInput.id];
+      } else {
+        console.warn('No saved state found for', heavyInput.id);
+      }
+    }
+    else if (keywordLower.includes("devastating wounds")) {
+      if (elementStates[devwoundsInput.id] !== undefined) {
+        devwoundsInput.checked = elementStates[devwoundsInput.id];
+      } else {
+        console.warn('No saved state found for', devwoundsInput.id);
+      }
+    }
+    else if (keywordLower.includes("sustained hits")) {
+      // Assuming that attacksInput is the element we are reverting for this example
+      if (elementStates[sustainedInput.id] !== undefined) {
+        sustainedInput.value = elementStates[sustainedInput.id];
+      } else {
+        console.warn('No saved state found for', sustainedInput.id);
+      }
+    }
+    else if (keywordLower.includes("anti")) {
+      // Assuming that attacksInput is the element we are reverting for this example
+      if (elementStates[antiInput.id] !== undefined) {
+        antiInput.value = elementStates[antiInput.id];
+      } else {
+        console.warn('No saved state found for', antiInput.id);
+      }
     } 
   }
 
@@ -380,8 +431,8 @@ document.addEventListener("DOMContentLoaded", function() {
             lanceInput.value = +1;
       }
     } else if (keywordLower.includes("indirect fire")) {
-        saveElementState(document.getElementById('bs'));
-        document.getElementById('bs').value = "4+";
+        saveElementState(tohitInput);
+        tohitInput.value = "4";
     } else if (keywordLower.includes("melta")) {
         saveElementState(damageInput);
         const number = extractNumericalValue(keyword);
@@ -391,35 +442,32 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
           damageInput.value += `+${number}`;
         }
-      } else {
-        revertElementState(damageInput);
       }
     } else if (keywordLower.includes("heavy")) {
-      saveElementState(document.getElementById('hit_mod'));
-      const currentMod = parseInt(document.getElementById('hit_mod').value) || 0;
-      document.getElementById('hit_mod').value = `${currentMod + 1}`;
+        const save_state = saveElementState(heavyInput);
+        if (save_state) {
+          heavyInput.value += `+1`;
+        } else {
+          heavyInput.value = +1;
+      }
     } else if (keywordLower.includes("devastating wounds")) {
-      saveElementState(document.getElementById('wound_dev'));
-      document.getElementById('wound_dev').checked = true;
+        saveElementState(devwoundsInput);
+        devwoundsInput.checked = true;
     } else if (keywordLower.includes("sustained hits")) {
-      saveElementState(document.getElementById('hit_sus'));
+      save_state = saveElementState(sustainedInput);
       const number = extractNumericalValue(keyword);
-      if (number) {
-        document.getElementById('hit_sus').value = number;
-      } else {
-        revertElementState(document.getElementById('hit_sus'));
-      }
+      if (save_state) {
+          sustainedInput.value += `+${number}`;
+        } else {
+          sustainedInput.value = number;
+        }
     } else if (keywordLower.includes("anti")) {
-      saveElementState(document.getElementById('wound_crit'));
-      const number = extractNumericalValue(keyword);
-      if (number) {
-        document.getElementById('wound_crit').value = number;
-      } else {
-        revertElementState(document.getElementById('wound_crit'));
+        save_state = saveElementState(antiInput);
+        const number = extractNumericalValue(keyword);
+        if (number < save_state || save_state === "") {
+          antiInput.value = number;
+        } 
       }
-    }
-
-    // updateKeywordsInput(); // Update the input value after keyword handling
   }
 
   // Toggle options container visibility
