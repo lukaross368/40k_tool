@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
   async function atk_fetchFileNames() {
     const response = await fetch('http://localhost:3000/wh40k-10e');
     if (!response.ok) {
+
+
+      
       throw new Error('Failed to fetch file names');
     }
     const files = await response.json();
