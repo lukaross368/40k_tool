@@ -117,6 +117,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const weaponNames = new Set();
     const childElements = selectedModelEntry.querySelectorAll('*');
 
+    function verifyWeapon(weaponNameElements) {
+      weaponNameElements.forEach((nameElement) => {
+        const nameCharacteristics =
+          nameElement.getElementsByTagName('characteristic');
+        const characteristicNames = Array.from(nameCharacteristics).map(
+          (characteristic) => characteristic.getAttribute('name'),
+        );
+
+        const hasAllRequiredCharacteristics = ['A', 'S', 'AP', 'D'].every(
+          (requiredName) => characteristicNames.includes(requiredName),
+        );
+
+        if (hasAllRequiredCharacteristics) {
+          const profileName = nameElement.getAttribute('name');
+          weaponNames.add(profileName);
+          console.log('Added weapon profile name: ', profileName);
+        }
+      });
+    }
+
     childElements.forEach((child) => {
       if (child.tagName === 'profile') {
         const profileTypeName = child.getAttribute('typeName');
@@ -175,30 +195,32 @@ document.addEventListener('DOMContentLoaded', function () {
                   `profile[name="${nameAttribute}"]`,
                 );
 
-                weaponNameElements.forEach((nameElement) => {
-                  const nameCharacteristics =
-                    nameElement.getElementsByTagName('characteristic');
-                  const characteristicNames = Array.from(
-                    nameCharacteristics,
-                  ).map((characteristic) =>
-                    characteristic.getAttribute('name'),
-                  );
+                verifyWeapon(weaponNameElements);
 
-                  const hasAllRequiredCharacteristics = [
-                    'A',
-                    'S',
-                    'AP',
-                    'D',
-                  ].every((requiredName) =>
-                    characteristicNames.includes(requiredName),
-                  );
+                // weaponNameElements.forEach((nameElement) => {
+                //   const nameCharacteristics =
+                //     nameElement.getElementsByTagName('characteristic');
+                //   const characteristicNames = Array.from(
+                //     nameCharacteristics,
+                //   ).map((characteristic) =>
+                //     characteristic.getAttribute('name'),
+                //   );
 
-                  if (hasAllRequiredCharacteristics) {
-                    const profileName = nameElement.getAttribute('name');
-                    weaponNames.add(profileName);
-                    console.log('Added weapon profile name: ', profileName);
-                  }
-                });
+                //   const hasAllRequiredCharacteristics = [
+                //     'A',
+                //     'S',
+                //     'AP',
+                //     'D',
+                //   ].every((requiredName) =>
+                //     characteristicNames.includes(requiredName),
+                //   );
+
+                //   if (hasAllRequiredCharacteristics) {
+                //     const profileName = nameElement.getAttribute('name');
+                //     weaponNames.add(profileName);
+                //     console.log('Added weapon profile name: ', profileName);
+                //   }
+                // });
               }
             });
           }
@@ -206,26 +228,11 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       const name = child.getAttribute('name');
 
-      const weaponNameElement = atk_xmlDoc.querySelectorAll(
+      const weaponNameElements = atk_xmlDoc.querySelectorAll(
         `profile[name="${name}"]`,
       );
 
-      weaponNameElement.forEach((nameElement) => {
-        const nameCharacteristics =
-          nameElement.getElementsByTagName('characteristic');
-        const characteristicNames = Array.from(nameCharacteristics).map(
-          (characteristic) => characteristic.getAttribute('name'),
-        );
-
-        const hasAllRequiredCharacteristics = ['A', 'S', 'AP', 'D'].every(
-          (requiredName) => characteristicNames.includes(requiredName),
-        );
-
-        if (hasAllRequiredCharacteristics) {
-          const profileName = nameElement.getAttribute('name'); // Retrieve the profile name from the element
-          weaponNames.add(profileName); // Add the profile name to the set
-        }
-      });
+      verifyWeapon(weaponNameElements);
     });
 
     atk_populateWeaponsList(Array.from(weaponNames));
