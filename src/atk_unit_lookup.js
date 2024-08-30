@@ -196,31 +196,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
 
                 verifyWeapon(weaponNameElements);
-
-                // weaponNameElements.forEach((nameElement) => {
-                //   const nameCharacteristics =
-                //     nameElement.getElementsByTagName('characteristic');
-                //   const characteristicNames = Array.from(
-                //     nameCharacteristics,
-                //   ).map((characteristic) =>
-                //     characteristic.getAttribute('name'),
-                //   );
-
-                //   const hasAllRequiredCharacteristics = [
-                //     'A',
-                //     'S',
-                //     'AP',
-                //     'D',
-                //   ].every((requiredName) =>
-                //     characteristicNames.includes(requiredName),
-                //   );
-
-                //   if (hasAllRequiredCharacteristics) {
-                //     const profileName = nameElement.getAttribute('name');
-                //     weaponNames.add(profileName);
-                //     console.log('Added weapon profile name: ', profileName);
-                //   }
-                // });
               }
             });
           }
