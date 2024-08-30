@@ -165,9 +165,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           });
         });
+
+        const sharedtargetElements = atk_xmlDoc.querySelectorAll(
+          `selectionEntryGroup[id="${targetId}"]`,
+        );
+        sharedtargetElements.forEach((sharedTarget) => {
+          const names = [...sharedTarget.querySelectorAll('[name]')].map((el) =>
+            el.getAttribute('name'),
+          );
+          names.forEach((name) => {
+            console.log('name: ', name);
+            const weaponNameElements = atk_xmlDoc.querySelectorAll(
+              `profile[name="${name}"]`,
+            );
+            verifyWeapon(weaponNameElements);
+          });
+        });
       } else if (child.tagName.includes('categoryLink')) {
         const categoryName = child.getAttribute('name');
-        console.log('categoryName: ', categoryName);
 
         // Find all selectionEntryGroup elements
         const selectionEntryGroups = atk_xmlDoc.querySelectorAll(
@@ -181,15 +196,11 @@ document.addEventListener('DOMContentLoaded', function () {
             commentElement &&
             commentElement.textContent.trim() === categoryName
           ) {
-            console.log('Matching selectionEntryGroup: ', group);
-
             // Iterate through each child element of the matching group
             const childElements = group.querySelectorAll('*');
             childElements.forEach((child) => {
               const nameAttribute = child.getAttribute('name');
               if (nameAttribute) {
-                console.log('Child element name attribute: ', nameAttribute);
-
                 // Now, search for profiles with matching names
                 const weaponNameElements = atk_xmlDoc.querySelectorAll(
                   `profile[name="${nameAttribute}"]`,
@@ -201,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
       }
+
       const name = child.getAttribute('name');
 
       const weaponNameElements = atk_xmlDoc.querySelectorAll(
