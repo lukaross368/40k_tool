@@ -117,109 +117,142 @@ document.addEventListener('DOMContentLoaded', function () {
     const weaponNames = new Set();
     const childElements = selectedModelEntry.querySelectorAll('*');
 
-    function verifyWeapon(weaponNameElements) {
-      weaponNameElements.forEach((nameElement) => {
-        const nameCharacteristics =
-          nameElement.getElementsByTagName('characteristic');
-        const characteristicNames = Array.from(nameCharacteristics).map(
-          (characteristic) => characteristic.getAttribute('name'),
-        );
+    function verifyWeapon(weaponElement) {
+      const characteristicsElement =
+        weaponElement.querySelector('characteristics');
 
-        const hasAllRequiredCharacteristics = ['A', 'S', 'AP', 'D'].every(
-          (requiredName) => characteristicNames.includes(requiredName),
-        );
+      if (!characteristicsElement) {
+        return;
+      }
 
-        if (hasAllRequiredCharacteristics) {
-          const profileName = nameElement.getAttribute('name');
-          weaponNames.add(profileName);
-          console.log('Added weapon profile name: ', profileName);
-        }
-      });
+      // Get all <characteristic> child elements
+      const characteristics = Array.from(
+        characteristicsElement.querySelectorAll('characteristic'),
+      );
+
+      // Extract the 'name' attribute from each <characteristic>
+      const characteristicNames = characteristics.map((characteristic) =>
+        characteristic.getAttribute('name'),
+      );
+
+      // Check if all required characteristics exist
+      const hasAllRequiredCharacteristics = ['A', 'S', 'AP', 'D'].every(
+        (requiredName) => characteristicNames.includes(requiredName),
+      );
+
+      // If all required characteristics are present, log the profile name and characteristics
+      if (hasAllRequiredCharacteristics) {
+        return weaponElement;
+      }
     }
 
     childElements.forEach((child) => {
+      // Search for weapons using <profile> within model profile
       if (child.tagName === 'profile') {
-        const profileTypeName = child.getAttribute('typeName');
-        if (
-          profileTypeName &&
-          profileTypeName.toLowerCase().includes('weapon')
-        ) {
-          const profileName = child.getAttribute('name');
-          weaponNames.add(profileName);
+        verifiedWeapon = verifyWeapon(child);
+        if (verifiedWeapon) {
+          console.log('verifiedWeapon: ', verifiedWeapon);
         }
       } else if (child.tagName.includes('entryLink')) {
-        const targetId = child.getAttribute('targetId');
+        // Search for weapons using entryLink
+        const targetId = child.getAttribute('targetId'); // Takes targetId of entryLink
         const targetElements = atk_xmlDoc.querySelectorAll(
-          `selectionEntry[id="${targetId}"]`,
+          // Searches entire xml for an element with matching Id
+          `*[id="${targetId}"]`,
         );
         targetElements.forEach((target) => {
-          const targetProfiles = target.querySelectorAll('profile');
-          targetProfiles.forEach((profile) => {
-            const profileTypeName = profile.getAttribute('typeName');
-            if (
-              profileTypeName &&
-              profileTypeName.toLowerCase().includes('weapon')
-            ) {
-              const profileName = profile.getAttribute('name');
-              weaponNames.add(profileName);
-            }
-          });
+          // const targetProfiles = target.querySelectorAll('profile'); // Selects only elements of element <profile>
+          verifiedWeapon = verifyWeapon(target); // Verifies them as weapons
+          if (verifiedWeapon) {
+            console.log('verifiedWeapon: ', verifiedWeapon);
+          }
+          // targetProfiles.forEach((profile) => {
+          //   const profileTypeName = profile.getAttribute('typeName');
+          //   if (
+          //     profileTypeName &&
+          //     profileTypeName.toLowerCase().includes('weapon')
+          //   ) {
+          //     const profileName = profile.getAttribute('name');
+          //     weaponNames.add(profileName);
+          //   }
+          // });
         });
 
         const sharedtargetElements = atk_xmlDoc.querySelectorAll(
-          `selectionEntryGroup[id="${targetId}"]`,
+          // Searches entire xml for an element with matching targetId
+          `*[id="${targetId}"]`,
         );
+
         sharedtargetElements.forEach((sharedTarget) => {
-          const names = [...sharedTarget.querySelectorAll('[name]')].map((el) =>
-            el.getAttribute('name'),
-          );
-          names.forEach((name) => {
-            console.log('name: ', name);
-            const weaponNameElements = atk_xmlDoc.querySelectorAll(
-              `profile[name="${name}"]`,
+          // Gather all elements with a targetId attribute inside the sharedTarget
+          const targetIds = [
+            ...sharedTarget.querySelectorAll('[targetId]'),
+          ].map((el) => el.getAttribute('targetId'));
+
+          // For each targetId, search for elements with that id in the document
+          targetIds.forEach((targetId) => {
+            const relatedElements = atk_xmlDoc.querySelectorAll(
+              `*[id="${targetId}"]`,
             );
-            verifyWeapon(weaponNameElements);
+
+            relatedElements.forEach((relatedElement) => {
+              verifiedWeapon = verifyWeapon(relatedElement); // Verifies them as weapons
+              if (verifiedWeapon) {
+                console.log('verifiedWeapon: ', verifiedWeapon);
+              }
+              // const weaponProfiles = relatedElement.querySelectorAll('profile');
+              // weaponProfiles.forEach((profile) => {
+              //   const profileTypeName = profile.getAttribute('typeName');
+              //   if (
+              //     profileTypeName &&
+              //     profileTypeName.toLowerCase().includes('weapon')
+              //   ) {
+              //     const profileName = profile.getAttribute('name');
+              //     weaponNames.add(profileName);
+              //   }
+              // });
+            });
           });
         });
-      } else if (child.tagName.includes('categoryLink')) {
-        const categoryName = child.getAttribute('name');
+
+        // } else if (child.tagName.includes('categoryLink')) {
+        // const categoryName = child.getAttribute('name');
 
         // Find all selectionEntryGroup elements
-        const selectionEntryGroups = atk_xmlDoc.querySelectorAll(
-          'selectionEntryGroup',
-        );
+        // const selectionEntryGroups = atk_xmlDoc.querySelectorAll(
+        //   'selectionEntryGroup',
+        // );
+        // // Iterate through each selectionEntryGroup to find the comment element
+        // selectionEntryGroups.forEach((group) => {
+        //   const commentElement = group.querySelector('comment');
+        //   if (
+        //     commentElement &&
+        //     commentElement.textContent.trim() === categoryName
+        //   ) {
+        //     // Iterate through each child element of the matching group
+        //     const childElements = group.querySelectorAll('*');
+        //     childElements.forEach((child) => {
+        //       const nameAttribute = child.getAttribute('name');
+        //       if (nameAttribute) {
+        //         // Now, search for profiles with matching names
+        //         const weaponNameElements = atk_xmlDoc.querySelectorAll(
+        //           `profile[name="${nameAttribute}"]`,
+        //         );
 
-        // Iterate through each selectionEntryGroup to find the comment element
-        selectionEntryGroups.forEach((group) => {
-          const commentElement = group.querySelector('comment');
-          if (
-            commentElement &&
-            commentElement.textContent.trim() === categoryName
-          ) {
-            // Iterate through each child element of the matching group
-            const childElements = group.querySelectorAll('*');
-            childElements.forEach((child) => {
-              const nameAttribute = child.getAttribute('name');
-              if (nameAttribute) {
-                // Now, search for profiles with matching names
-                const weaponNameElements = atk_xmlDoc.querySelectorAll(
-                  `profile[name="${nameAttribute}"]`,
-                );
-
-                verifyWeapon(weaponNameElements);
-              }
-            });
-          }
-        });
+        //         verifyWeapon(weaponNameElements);
+        //       }
+        //     });
+        //   }
+        // });
       }
 
-      const name = child.getAttribute('name');
+      // const name = child.getAttribute('name');
 
-      const weaponNameElements = atk_xmlDoc.querySelectorAll(
-        `profile[name="${name}"]`,
-      );
+      // const weaponNameElements = atk_xmlDoc.querySelectorAll(
+      //   `profile[name="${name}"]`,
+      // );
 
-      verifyWeapon(weaponNameElements);
+      // verifiedWeapon = verifyWeapon(weaponNameElements);
     });
 
     atk_populateWeaponsList(Array.from(weaponNames));
@@ -255,17 +288,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Save the current state before changing
     currentWeapon = weaponName;
 
-    const weaponProfiles = atk_xmlDoc.querySelectorAll(
-      `profile[name="${weaponName}"]`,
-    );
+    // const weaponProfiles = atk_xmlDoc.querySelectorAll(
+    //   `profile[name="${weaponName}"]`,
+    // );
 
-    // Use the first profile if there are multiple
-    const selectedProfile =
-      weaponProfiles.length > 0 ? weaponProfiles[0] : null;
+    // // Use the first profile if there are multiple
+    // const selectedProfile =
+    //   weaponProfiles.length > 0 ? weaponProfiles[0] : null;
 
-    if (!selectedProfile) {
-      return;
-    }
+    // if (!selectedProfile) {
+    //   return;
+    // }
 
     let keywords = [];
 
@@ -320,7 +353,6 @@ document.addEventListener('DOMContentLoaded', function () {
     'lance',
     'indirect fire',
     'melta',
-
     'heavy',
     'devastating wounds',
     'sustained hits',

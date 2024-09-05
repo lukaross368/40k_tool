@@ -13,7 +13,7 @@ Until the end of the phase:
 - Each time a model in a Guided unit makes an attack that does not target their Spotted unit, worsen the Ballistic Skill characteristic of the attack by 1.</description>
     </rule>
   </rules>
-  ca
+  <sharedSelectionEntries>
     <selectionEntry type="upgrade" import="true" name="Warlord" id="179c-d88a-d49b-48b9">
       <categoryLinks>
         <categoryLink targetId="5c0e-4c31-d51b-e470" id="8e65-68-7465-a544" primary="false" name="Warlord"/>
