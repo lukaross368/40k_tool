@@ -114,9 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
       throw new Error(`Model entry for ${modelName} not found`);
     }
 
-    const weaponNames = new Set();
-    const childElements = selectedModelEntry.querySelectorAll('*');
-
     function verifyWeapon(weaponElement) {
       const characteristicsElement =
         weaponElement.querySelector('characteristics');
@@ -131,27 +128,36 @@ document.addEventListener('DOMContentLoaded', function () {
       );
 
       // Extract the 'name' attribute from each <characteristic>
-      const characteristicNames = characteristics.map((characteristic) =>
-        characteristic.getAttribute('name'),
-      );
+      const characteristicData = characteristics.map((characteristic) => ({
+        name: characteristic.getAttribute('name'),
+        value: characteristic.textContent.trim(), // Assuming you want the value inside <characteristic>
+      }));
 
       // Check if all required characteristics exist
       const hasAllRequiredCharacteristics = ['A', 'S', 'AP', 'D'].every(
-        (requiredName) => characteristicNames.includes(requiredName),
+        (requiredName) =>
+          characteristicData.some((c) => c.name === requiredName),
       );
 
-      // If all required characteristics are present, log the profile name and characteristics
+      // If all required characteristics are present, return an object with the name and characteristics
       if (hasAllRequiredCharacteristics) {
-        return weaponElement;
+        const profileName = weaponElement.getAttribute('name');
+        return {
+          name: profileName,
+          characteristics: characteristicData, // Array of {name, value} for each characteristic
+        };
       }
     }
+
+    const verifiedWeaponSet = new Set();
+    const childElements = selectedModelEntry.querySelectorAll('*');
 
     childElements.forEach((child) => {
       // Search for weapons using <profile> within model profile
       if (child.tagName === 'profile') {
         verifiedWeapon = verifyWeapon(child);
         if (verifiedWeapon) {
-          console.log('verifiedWeapon: ', verifiedWeapon);
+          verifiedWeaponSet.add(verifiedWeapon);
         }
       } else if (child.tagName.includes('entryLink')) {
         // Search for weapons using entryLink
@@ -164,18 +170,8 @@ document.addEventListener('DOMContentLoaded', function () {
           // const targetProfiles = target.querySelectorAll('profile'); // Selects only elements of element <profile>
           verifiedWeapon = verifyWeapon(target); // Verifies them as weapons
           if (verifiedWeapon) {
-            console.log('verifiedWeapon: ', verifiedWeapon);
+            verifiedWeaponSet.add(verifiedWeapon);
           }
-          // targetProfiles.forEach((profile) => {
-          //   const profileTypeName = profile.getAttribute('typeName');
-          //   if (
-          //     profileTypeName &&
-          //     profileTypeName.toLowerCase().includes('weapon')
-          //   ) {
-          //     const profileName = profile.getAttribute('name');
-          //     weaponNames.add(profileName);
-          //   }
-          // });
         });
 
         const sharedtargetElements = atk_xmlDoc.querySelectorAll(
@@ -198,77 +194,40 @@ document.addEventListener('DOMContentLoaded', function () {
             relatedElements.forEach((relatedElement) => {
               verifiedWeapon = verifyWeapon(relatedElement); // Verifies them as weapons
               if (verifiedWeapon) {
-                console.log('verifiedWeapon: ', verifiedWeapon);
+                verifiedWeaponSet.add(verifiedWeapon);
               }
-              // const weaponProfiles = relatedElement.querySelectorAll('profile');
-              // weaponProfiles.forEach((profile) => {
-              //   const profileTypeName = profile.getAttribute('typeName');
-              //   if (
-              //     profileTypeName &&
-              //     profileTypeName.toLowerCase().includes('weapon')
-              //   ) {
-              //     const profileName = profile.getAttribute('name');
-              //     weaponNames.add(profileName);
-              //   }
-              // });
             });
           });
         });
-
-        // } else if (child.tagName.includes('categoryLink')) {
-        // const categoryName = child.getAttribute('name');
-
-        // Find all selectionEntryGroup elements
-        // const selectionEntryGroups = atk_xmlDoc.querySelectorAll(
-        //   'selectionEntryGroup',
-        // );
-        // // Iterate through each selectionEntryGroup to find the comment element
-        // selectionEntryGroups.forEach((group) => {
-        //   const commentElement = group.querySelector('comment');
-        //   if (
-        //     commentElement &&
-        //     commentElement.textContent.trim() === categoryName
-        //   ) {
-        //     // Iterate through each child element of the matching group
-        //     const childElements = group.querySelectorAll('*');
-        //     childElements.forEach((child) => {
-        //       const nameAttribute = child.getAttribute('name');
-        //       if (nameAttribute) {
-        //         // Now, search for profiles with matching names
-        //         const weaponNameElements = atk_xmlDoc.querySelectorAll(
-        //           `profile[name="${nameAttribute}"]`,
-        //         );
-
-        //         verifyWeapon(weaponNameElements);
-        //       }
-        //     });
-        //   }
-        // });
       }
-
-      // const name = child.getAttribute('name');
-
-      // const weaponNameElements = atk_xmlDoc.querySelectorAll(
-      //   `profile[name="${name}"]`,
-      // );
-
-      // verifiedWeapon = verifyWeapon(weaponNameElements);
     });
 
-    atk_populateWeaponsList(Array.from(weaponNames));
+    uniqueWeapons = atk_populateWeaponsList(Array.from(verifiedWeaponSet));
   }
 
-  function atk_populateWeaponsList(weaponsArray) {
-    const uniqueWeapons = [...new Set(weaponsArray)]; // Get unique elements using Set
+  function atk_populateWeaponsList(verifiedWeaponSet) {
+    const uniqueWeapons = Array.from(
+      new Map(
+        verifiedWeaponSet.map((obj) => [
+          `${obj.name}-${JSON.stringify(obj.characteristics)}`,
+          obj,
+        ]),
+      ).values(),
+    );
 
     atk_weaponsListContainer.innerHTML = ''; // Clear existing options
 
     uniqueWeapons.forEach((weapon) => {
       const option = document.createElement('option');
-      option.value = weapon;
-      option.textContent = weapon;
+
+      // Assuming weapon is an object with a 'name' property
+      option.value = weapon.name;
+      option.textContent = weapon.name;
+
       atk_weaponsListContainer.appendChild(option);
     });
+
+    return uniqueWeapons;
   }
 
   function extractNumericalValue(text) {
@@ -276,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return match ? match[0] : '';
   }
 
-  function populateWeaponCharacteristics(weaponName) {
+  function populateWeaponCharacteristics(weaponName, uniqueWeapons) {
     if (!atk_xmlDoc) {
       return;
     }
@@ -288,57 +247,46 @@ document.addEventListener('DOMContentLoaded', function () {
     // Save the current state before changing
     currentWeapon = weaponName;
 
-    // const weaponProfiles = atk_xmlDoc.querySelectorAll(
-    //   `profile[name="${weaponName}"]`,
-    // );
-
-    // // Use the first profile if there are multiple
-    // const selectedProfile =
-    //   weaponProfiles.length > 0 ? weaponProfiles[0] : null;
-
-    // if (!selectedProfile) {
-    //   return;
-    // }
-
     let keywords = [];
 
-    const profileTypeName = selectedProfile.getAttribute('typeName');
-    if (profileTypeName && profileTypeName.toLowerCase().includes('weapon')) {
-      const characteristics =
-        selectedProfile.querySelectorAll('characteristic');
-      characteristics.forEach((characteristic) => {
-        const name = characteristic.getAttribute('name');
-        const value = characteristic.textContent;
+    // Extract characteristics from array that matches current weapon
+    const characteristics =
+      (uniqueWeapons.find((weapon) => weapon.name === currentWeapon) || {})
+        .characteristics || [];
 
-        const numericalValue = extractNumericalValue(value);
+    characteristics.forEach((characteristic) => {
+      console.log('characteristic: ', characteristic);
+      const name = characteristic.name;
+      const value = characteristic.value;
 
-        switch (name) {
-          case 'A':
-            attacksInput.value = value;
-            break;
-          case 'WS':
-          case 'BS':
-            tohitInput.value = value !== 'N/A' ? numericalValue : '';
-            break;
-          case 'S':
-            strengthInput.value = numericalValue;
-            break;
-          case 'AP':
-            armourpenInput.value = numericalValue;
-            break;
-          case 'D':
-            damageInput.value = value;
-            break;
-          case 'Keywords':
-            if (value !== '-') {
-              keywords = value.split(',').map((keyword) => keyword.trim());
-            }
-            break;
-          default:
-            break;
-        }
-      });
-    }
+      const numericalValue = extractNumericalValue(value);
+
+      switch (name) {
+        case 'A':
+          attacksInput.value = value;
+          break;
+        case 'WS':
+        case 'BS':
+          tohitInput.value = value !== 'N/A' ? numericalValue : '';
+          break;
+        case 'S':
+          strengthInput.value = numericalValue;
+          break;
+        case 'AP':
+          armourpenInput.value = numericalValue;
+          break;
+        case 'D':
+          damageInput.value = value;
+          break;
+        case 'Keywords':
+          if (value !== '-') {
+            keywords = value.split(',').map((keyword) => keyword.trim());
+          }
+          break;
+        default:
+          break;
+      }
+    });
 
     if (keywords.length > 0) {
       populateKeywordsSelect(keywords);
@@ -553,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Add event listener for weapon selection change
   weaponInput.addEventListener('change', function () {
     const selectedWeapon = weaponInput.value;
-    populateWeaponCharacteristics(selectedWeapon);
+    populateWeaponCharacteristics(selectedWeapon, uniqueWeapons);
   });
 
   atk_fetchFileNames();
