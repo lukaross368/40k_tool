@@ -287,9 +287,9 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    if (keywords.length > 0) {
-      populateKeywordsSelect(keywords);
-    }
+    // if (keywords.length > 0) {
+    populateKeywordsSelect(keywords);
+    // }
   }
 
   const predefinedKeywords = [
@@ -307,10 +307,14 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   function populateKeywordsSelect(keywords) {
+    console.log('Running function');
+
     if (!keywordsOptions || !keywordsInput) {
+      console.log('Skipped');
       return;
     }
 
+    console.log('Continuing');
     keywordsOptions.innerHTML = ''; // Clear existing options
 
     const keywordsSet = new Set(); // To ensure unique keywords
@@ -487,22 +491,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Toggle options container visibility
-  keywordsInput.addEventListener('click', () => {
-    keywordsOptions.classList.toggle('active');
-  });
-
-  // Add event listener for weapon selection change
-  weaponInput.addEventListener('change', function () {
-    const selectedWeapon = weaponInput.value;
-    populateWeaponCharacteristics(selectedWeapon, uniqueWeapons);
-    woundrerollInput.value = '0';
-    lethalInput.checked = elementStates[lethalInput.id];
-    heavyInput.value = '';
-    lanceInput.value = '';
-    devwoundsInput.checked = elementStates[devwoundsInput.id];
-    sustainedInput.value = '';
-    antiInput.value = '';
-  });
+  // keywordsInput.addEventListener('click', () => {
+  //   keywordsOptions.classList.toggle('active');
+  // });
 
   atk_fetchFileNames();
 
@@ -541,7 +532,19 @@ document.addEventListener('DOMContentLoaded', function () {
     atk_weaponsListContainer.innerHTML = '';
     keywordsOptions.innerHTML = ''; // Clears the keywords dropdown
     keywordsInput.value = ''; // Clears the keywords input field
-    keywordsOptions.innerHTML = '';
+    woundrerollInput.value = '0';
+    lethalInput.checked = elementStates[lethalInput.id];
+    heavyInput.value = '';
+    lanceInput.value = '';
+    devwoundsInput.checked = elementStates[devwoundsInput.id];
+    sustainedInput.value = '';
+    antiInput.value = '';
+  });
+
+  // Add event listener for weapon selection change
+  weaponInput.addEventListener('change', function () {
+    const selectedWeapon = weaponInput.value;
+    populateWeaponCharacteristics(selectedWeapon, uniqueWeapons);
     woundrerollInput.value = '0';
     lethalInput.checked = elementStates[lethalInput.id];
     heavyInput.value = '';
@@ -573,12 +576,3 @@ document.addEventListener('DOMContentLoaded', function () {
   // Add event listener to close dropdown when clicking outside
   document.addEventListener('click', closeDropdown);
 });
-
-// const coverInput = document.getElementById('cover');
-//   const woundrerollInput = document.getElementById('wound_reroll');
-//   const lethalInput = document.getElementById('hit_leth');
-//   const heavyInput = document.getElementById('hit_mod');
-//   const lanceInput = document.getElementById('wound_mod');
-//   const devwoundsInput = document.getElementById('wound_dev');
-// const sustainedInput = document.getElementById('hit_sus');
-// const antiInput = document.getElementById('wound_crit');
