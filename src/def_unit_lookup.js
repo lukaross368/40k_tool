@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const invulnerableInput = document.getElementById('invulnerable');
   const woundsInput = document.getElementById('wounds');
   let xmlDoc; // Declare xmlDoc variable to hold the parsed XML document
+  let marine_xmlDoc;
 
   async function fetchFileNames() {
     try {
@@ -55,6 +56,64 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {}
   }
 
+  async function handleImperiumData(
+    invulnerableSaveValue,
+    fileFilter,
+    targetId,
+  ) {
+    // Check if the condition to fetch and parse data is met
+    if (
+      invulnerableSaveValue === 'N/A' &&
+      fileFilter.value.includes('Imperium')
+    ) {
+      try {
+        // Fetch the XML file
+        const marine_response = await fetch(
+          `http://localhost:3000/wh40k-10e/Imperium - Space Marines.cat`,
+        );
+
+        if (!marine_response.ok) {
+          throw new Error('Failed to fetch');
+        }
+
+        // Get the file content as text
+        const marine_fileContent = await marine_response.text();
+        const marine_parser = new DOMParser();
+        const marine_xmlDoc = marine_parser.parseFromString(
+          marine_fileContent,
+          'application/xml',
+        );
+
+        // Query the XML document
+        const invulnerableSaveProfile = marine_xmlDoc.querySelector(
+          `profile[id="${targetId}"]`,
+        );
+
+        if (invulnerableSaveProfile) {
+          const invulnerableSaveComment =
+            invulnerableSaveProfile.querySelector('comment');
+
+          if (invulnerableSaveComment) {
+            const invulnerableSaveText =
+              invulnerableSaveComment.textContent.trim();
+            // Extract the number followed by '+'
+            const regex = /(\d+\+)/;
+            const match = invulnerableSaveText.match(regex);
+            invulnerableSaveValue = match ? match[0] : 'N/A';
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
+      // Return the extracted value
+      return invulnerableSaveValue;
+    }
+
+    // If conditions are not met, return the initial value
+    return invulnerableSaveValue;
+  }
+
   function populateModelList(modelArray) {
     modelListContainer.innerHTML = '';
     modelArray.forEach((model) => {
@@ -69,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function displayCharacteristics(modelName) {
+  async function displayCharacteristics(modelName) {
     // Find the selectionEntry for the model
     const selectionEntry = Array.from(
       xmlDoc.querySelectorAll('selectionEntry'),
@@ -96,7 +155,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const W = characteristicsMap['W'];
 
         // Extract and display invulnerable save value
-        const invulnerableSaveValue = getInvulnerableSaveValue(selectionEntry);
+        const invulnerableSaveValue = await getInvulnerableSaveValue(
+          selectionEntry,
+          fileFilter,
+        );
 
         // Set input values
         tInput.value = T || '';
@@ -112,10 +174,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function getInvulnerableSaveValue(selectionEntry) {
+  async function getInvulnerableSaveValue(selectionEntry, fileFilter) {
     let invulnerableSaveValue = 'N/A';
 
     // Check if there's a profile with the exact name "Invulnerable Save"
+
     const invulnerableSaveProfile = Array.from(
       selectionEntry.querySelectorAll('profile'),
     ).find((profile) =>
@@ -126,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const characteristic = invulnerableSaveProfile.querySelector(
         'characteristic[name="Description"]',
       );
+
       if (characteristic) {
         const invulnerableSaveText = characteristic.textContent.trim();
         const regex = /(\d+\+)/;
@@ -159,9 +223,14 @@ document.addEventListener('DOMContentLoaded', function () {
             invulnerableSaveValue = match ? match[0] : 'N/A';
           }
         }
+        invulnerableSaveValue = await handleImperiumData(
+          invulnerableSaveValue,
+          fileFilter,
+          targetId,
+        );
+        console.log('invulnerableSaveValue: ', invulnerableSaveValue);
       }
     }
-
     return invulnerableSaveValue;
   }
 
