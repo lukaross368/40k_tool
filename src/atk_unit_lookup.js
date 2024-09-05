@@ -255,7 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .characteristics || [];
 
     characteristics.forEach((characteristic) => {
-      console.log('characteristic: ', characteristic);
       const name = characteristic.name;
       const value = characteristic.value;
 
@@ -308,13 +307,13 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   function populateKeywordsSelect(keywords) {
-    if (!keywordsOptions) {
+    if (!keywordsOptions || !keywordsInput) {
       return;
     }
 
     keywordsOptions.innerHTML = ''; // Clear existing options
 
-    const keywordsSet = new Set();
+    const keywordsSet = new Set(); // To ensure unique keywords
 
     keywords.forEach((keyword) => {
       const trimmedKeyword = keyword.trim(); // Trim leading and trailing whitespace
@@ -326,8 +325,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const lowerPredefinedKeyword = trimmedPredefinedKeyword.toLowerCase(); // Convert to lowercase
 
         if (lowerKeyword.includes(lowerPredefinedKeyword)) {
+          // Check if the keyword is already added
           if (!keywordsSet.has(trimmedKeyword)) {
-            // Check if the keyword is already added
             keywordsSet.add(trimmedKeyword); // Add the keyword to the set if it matches
 
             // Create and append the option element
@@ -346,12 +345,6 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }
       });
-    });
-
-    // Event listener to toggle the dropdown display
-    keywordsInput.addEventListener('click', function () {
-      keywordsOptions.style.display =
-        keywordsOptions.style.display === 'block' ? 'none' : 'block';
     });
   }
 
@@ -502,6 +495,13 @@ document.addEventListener('DOMContentLoaded', function () {
   weaponInput.addEventListener('change', function () {
     const selectedWeapon = weaponInput.value;
     populateWeaponCharacteristics(selectedWeapon, uniqueWeapons);
+    woundrerollInput.value = '0';
+    lethalInput.checked = elementStates[lethalInput.id];
+    heavyInput.value = '';
+    lanceInput.value = '';
+    devwoundsInput.checked = elementStates[devwoundsInput.id];
+    sustainedInput.value = '';
+    antiInput.value = '';
   });
 
   atk_fetchFileNames();
@@ -527,6 +527,13 @@ document.addEventListener('DOMContentLoaded', function () {
     atk_modelListContainer.innerHTML = '';
     atk_weaponsListContainer.innerHTML = '';
     keywordsOptions.innerHTML = '';
+    woundrerollInput.value = '0';
+    lethalInput.checked = elementStates[lethalInput.id];
+    heavyInput.value = '';
+    lanceInput.value = '';
+    devwoundsInput.checked = elementStates[devwoundsInput.id];
+    sustainedInput.value = '';
+    antiInput.value = '';
   });
 
   modelInput.addEventListener('change', function () {
@@ -535,5 +542,43 @@ document.addEventListener('DOMContentLoaded', function () {
     keywordsOptions.innerHTML = ''; // Clears the keywords dropdown
     keywordsInput.value = ''; // Clears the keywords input field
     keywordsOptions.innerHTML = '';
+    woundrerollInput.value = '0';
+    lethalInput.checked = elementStates[lethalInput.id];
+    heavyInput.value = '';
+    lanceInput.value = '';
+    devwoundsInput.checked = elementStates[devwoundsInput.id];
+    sustainedInput.value = '';
+    antiInput.value = '';
   });
+
+  // Ensure only one event listener is attached
+  keywordsInput.removeEventListener('click', toggleDropdown); // Remove any existing listener
+  keywordsInput.addEventListener('click', toggleDropdown); // Add the new listener
+
+  function toggleDropdown(event) {
+    event.stopPropagation(); // Prevent the event from bubbling up to the document
+    keywordsOptions.style.display =
+      keywordsOptions.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function closeDropdown(event) {
+    if (
+      !keywordsOptions.contains(event.target) &&
+      event.target !== keywordsInput
+    ) {
+      keywordsOptions.style.display = 'none';
+    }
+  }
+
+  // Add event listener to close dropdown when clicking outside
+  document.addEventListener('click', closeDropdown);
 });
+
+// const coverInput = document.getElementById('cover');
+//   const woundrerollInput = document.getElementById('wound_reroll');
+//   const lethalInput = document.getElementById('hit_leth');
+//   const heavyInput = document.getElementById('hit_mod');
+//   const lanceInput = document.getElementById('wound_mod');
+//   const devwoundsInput = document.getElementById('wound_dev');
+// const sustainedInput = document.getElementById('hit_sus');
+// const antiInput = document.getElementById('wound_crit');
