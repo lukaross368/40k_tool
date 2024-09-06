@@ -1,3 +1,43 @@
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+}
+
+.image-container {
+  background-image: url('../figures/attacker.png'); /* Set the local background image */
+  background-size: cover; /* Makes the image cover the entire container */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  position: relative; /* Allows layering of elements, if needed */
+  width: 100%; /* or a specific width */
+  height: 400px; /* or a specific height */
+}
+
+.right-column {
+  margin-left: -400px; /* Shrink the gap by moving the right column closer */
+}
+
+.attack-stats, .defense-stats {
+  border: 1px solid #ccc; /* Optional: add borders around sections for clarity */
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .stats-container {
+      grid-template-columns: 1fr; /* Stack vertically on smaller screens */
+  }
+}
+
+hr {
+  margin: 0; /* Remove any default margin */
+  padding: 0; /* Remove any default padding */
+  border: none; /* Remove default border style */
+  border-top: 1px solid black; /* Set a custom line */
+  width: 100%; /* Ensure it spans the full width of the container */
+  box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+
+
 /* Container for the keywords input field and options dropdown */
 .keywords-container {
   position: relative; /* Positions children absolutely within this container */
