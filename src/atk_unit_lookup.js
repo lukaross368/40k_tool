@@ -307,14 +307,10 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   function populateKeywordsSelect(keywords) {
-    console.log('Running function');
-
     if (!keywordsOptions || !keywordsInput) {
-      console.log('Skipped');
       return;
     }
 
-    console.log('Continuing');
     keywordsOptions.innerHTML = ''; // Clear existing options
 
     const keywordsSet = new Set(); // To ensure unique keywords

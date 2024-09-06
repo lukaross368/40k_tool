@@ -154,8 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const fnpValue = await getFNPValue(selectionEntry);
 
-        console.log('fnpValue: ', fnpValue);
-
         // Set input values
         tInput.value = T || '';
         saveInput.value = SV || '';
