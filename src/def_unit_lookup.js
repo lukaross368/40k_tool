@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const saveInput = document.getElementById('save');
   const invulnerableInput = document.getElementById('invulnerable');
   const woundsInput = document.getElementById('wounds');
+  const fnpInput = document.getElementById('fnp');
   let xmlDoc; // Declare xmlDoc variable to hold the parsed XML document
+  let marine_xmlDoc;
 
   async function fetchFileNames() {
     try {
@@ -55,6 +57,55 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {}
   }
 
+  async function handleImperiumData(value, fileFilter, targetId) {
+    // Check if the condition to fetch and parse data is met
+    if (value === 'N/A' && fileFilter.value.includes('Imperium')) {
+      try {
+        // Fetch the XML file
+        const marine_response = await fetch(
+          `http://localhost:3000/wh40k-10e/Imperium - Space Marines.cat`,
+        );
+
+        if (!marine_response.ok) {
+          throw new Error('Failed to fetch');
+        }
+
+        // Get the file content as text
+        const marine_fileContent = await marine_response.text();
+        const marine_parser = new DOMParser();
+        const marine_xmlDoc = marine_parser.parseFromString(
+          marine_fileContent,
+          'application/xml',
+        );
+
+        // Query the XML document
+        const Profile = marine_xmlDoc.querySelector(
+          `profile[id="${targetId}"]`,
+        );
+
+        if (Profile) {
+          const Comment = Profile.querySelector('comment');
+
+          if (Comment) {
+            const Text = Comment.textContent.trim();
+            // Extract the number followed by '+'
+            const regex = /(\d+\+)/;
+            const match = Text.match(regex);
+            value = match ? match[0] : 'N/A';
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
+      // Return the extracted value
+      return value;
+    }
+
+    // If conditions are not met, return the initial value
+    return value;
+  }
+
   function populateModelList(modelArray) {
     modelListContainer.innerHTML = '';
     modelArray.forEach((model) => {
@@ -69,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function displayCharacteristics(modelName) {
+  async function displayCharacteristics(modelName) {
     // Find the selectionEntry for the model
     const selectionEntry = Array.from(
       xmlDoc.querySelectorAll('selectionEntry'),
@@ -96,7 +147,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const W = characteristicsMap['W'];
 
         // Extract and display invulnerable save value
-        const invulnerableSaveValue = getInvulnerableSaveValue(selectionEntry);
+        const invulnerableSaveValue = await getInvulnerableSaveValue(
+          selectionEntry,
+          fileFilter,
+        );
+
+        const fnpValue = await getFNPValue(selectionEntry);
 
         // Set input values
         tInput.value = T || '';
@@ -104,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
         invulnerableInput.value =
           invulnerableSaveValue !== 'N/A' ? invulnerableSaveValue : '';
         woundsInput.value = W || '';
+        fnpInput.value = fnpValue || '';
       } else {
         clearInputValues();
       }
@@ -112,10 +169,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function getInvulnerableSaveValue(selectionEntry) {
+  async function getInvulnerableSaveValue(selectionEntry, fileFilter) {
     let invulnerableSaveValue = 'N/A';
 
     // Check if there's a profile with the exact name "Invulnerable Save"
+
     const invulnerableSaveProfile = Array.from(
       selectionEntry.querySelectorAll('profile'),
     ).find((profile) =>
@@ -126,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const characteristic = invulnerableSaveProfile.querySelector(
         'characteristic[name="Description"]',
       );
+
       if (characteristic) {
         const invulnerableSaveText = characteristic.textContent.trim();
         const regex = /(\d+\+)/;
@@ -159,10 +218,70 @@ document.addEventListener('DOMContentLoaded', function () {
             invulnerableSaveValue = match ? match[0] : 'N/A';
           }
         }
+        invulnerableSaveValue = await handleImperiumData(
+          (value = invulnerableSaveValue),
+          fileFilter,
+          targetId,
+        );
       }
     }
-
     return invulnerableSaveValue;
+  }
+
+  async function getFNPValue(selectionEntry) {
+    let fnpValue = 'N/A';
+
+    // Check if there's a profile with the exact name "Invulnerable Save"
+
+    const fnpProfile = Array.from(
+      selectionEntry.querySelectorAll('infoLink'),
+    ).find((profile) => profile.getAttribute('name').includes('Feel No Pain'));
+
+    if (fnpProfile) {
+      const characteristic = fnpProfile
+        .querySelector('modifier')
+        ?.getAttribute('value');
+
+      if (characteristic) {
+        const regex = /(\d+\+)/;
+        const match = characteristic.match(regex);
+        fnpValue = match ? match[0] : 'N/A';
+      }
+    } //else {
+    // If not found directly, fallback to the infoLink method
+    //   const fnpInfoLink = Array.from(
+    //     selectionEntry.querySelectorAll('infoLink'),
+    //   ).find((infoLink) =>
+    //     infoLink.getAttribute('name').includes('Feel No Pain'),
+    //   );
+
+    //   if (fnpInfoLink) {
+    //     const targetId = fnpInfoLink.getAttribute('targetId');
+    //     const fnpProfile = xmlDoc.querySelector(
+    //       `profile[id="${targetId}"]`,
+    //     );
+
+    //     if (fnpProfile) {
+    //       const fnpComment =
+    //         fnpProfile.querySelector('comment');
+
+    //       if (fnpComment) {
+    //         const fnpText =
+    //           fnpComment.textContent.trim();
+    //         // Extract the number followed by '+'
+    //         const regex = /(\d+\+)/;
+    //         const match = fnpText.match(regex);
+    //         fnpValue = match ? match[0] : 'N/A';
+    //       }
+    //     }
+    //     fnpValue = await handleImperiumData(
+    //       value = fnpValue,
+    //       fileFilter,
+    //       targetId,
+    //     );
+    //   }
+    // }
+    return fnpValue;
   }
 
   function clearInputValues() {
@@ -170,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function () {
     saveInput.value = '';
     invulnerableInput.value = '';
     woundsInput.value = '';
+    fnpInput.value = '';
   }
 
   fetchFileNames();
