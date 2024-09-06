@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -33,228 +33,230 @@
   </head>
   <body onload="init_40k()">
     <h1>40K Visual Dice Calculator (10th Ed)</h1>
-    <p>
-      The update to 10th Edition is new and there may still be bugs. However,
-      I've also fixed a number of existing bugs and limitations while adding
-      support for new rules and abilities. As always, any feedback or bug
-      reports are welcome.
-    </p>
     <div class="stats-container">
-      <div class="left-column">
-        <div>
-          <h2>Attack Stats</h2>
-          <!-- File filter input box added here -->
-          <label for="atk_file-filter">Select Faction:</label>
-          <input
-            list="atk_file-list-container"
-            id="atk_file-filter"
-            placeholder="Enter faction..."
-          />
-          <datalist id="atk_file-list-container">
-            <!-- File names will be populated dynamically -->
-          </datalist>
-          <!-- End here-->
-          <label for="atk_model-filter">Select Model:</label>
-          <input
-            list="atk_model-list-container"
-            id="atk_model-filter"
-            placeholder="Enter model..."
-          />
-          <datalist id="atk_model-list-container">
-            <!-- Model names will be populated dynamically -->
-          </datalist>
-          <label for="atk_weapons-filter">Select Weapon:</label>
-          <input
-            list="atk_weapons-list-container"
-            id="atk_weapons-filter"
-            placeholder="Enter weapon..."
-          />
-          <datalist id="atk_weapons-list-container">
-            <!-- Weapons will be populated dynamically -->
-          </datalist>
+      <div class="atk-image-container">
+        <div class="left-column">
           <div>
-            <label for="keywords-input" class="keywords-label"
-              >Select Active Keywords:</label
-            >
-            <div class="keywords-container">
-              <div
-                id="keywords-input"
-                class="keywords-input"
-                tabindex="0"
-                data-placeholder="Keywords"
-              ></div>
-              <div id="keywords-options" class="keywords-options">
-                <!-- Options will be dynamically populated here -->
+            <h2>Attack Stats</h2>
+            <!-- File filter input box added here -->
+            <label for="atk_file-filter">Select Faction:</label>
+            <input
+              list="atk_file-list-container"
+              id="atk_file-filter"
+              placeholder="Enter faction..."
+            />
+            <datalist id="atk_file-list-container">
+              <!-- File names will be populated dynamically -->
+            </datalist>
+            <!-- End here-->
+            <label for="atk_model-filter">Select Model:</label>
+            <input
+              list="atk_model-list-container"
+              id="atk_model-filter"
+              placeholder="Enter model..."
+            />
+            <datalist id="atk_model-list-container">
+              <!-- Model names will be populated dynamically -->
+            </datalist>
+            <label for="atk_weapons-filter">Select Weapon:</label>
+            <input
+              list="atk_weapons-list-container"
+              id="atk_weapons-filter"
+              placeholder="Enter weapon..."
+            />
+            <datalist id="atk_weapons-list-container">
+              <!-- Weapons will be populated dynamically -->
+            </datalist>
+            <div>
+              <label for="keywords-input" class="keywords-label"
+                >Select Active Keywords:</label
+              >
+              <div class="keywords-container">
+                <div
+                  id="keywords-input"
+                  class="keywords-input"
+                  tabindex="0"
+                  data-placeholder="Keywords"
+                ></div>
+                <div id="keywords-options" class="keywords-options">
+                  <!-- Options will be dynamically populated here -->
+                </div>
               </div>
             </div>
-          </div>
-          <!-- Keywords will be populated dynamically -->
+            <!-- Keywords will be populated dynamically -->
 
-          <p>
-            <label>Attacks: <input type="text" id="attacks" /></label>
-            <span class="description">Ex: 4, 2d3, d6+1</span>
-          </p>
-          <p>
-            <label>BS/WS: <input type="text" id="bs" /></label>
-            <span class="description">Ex: 4, leave blank to auto-hit</span>
-          </p>
-          <p>
-            <label>S: <input type="text" id="s" /></label>
-            <span class="description">Ex: 4, leave blank to auto-wound</span>
-          </p>
-          <p>
-            <label>AP: <input type="text" id="ap" /></label>
-            <span class="description">Ex: -1, 2 (sign is ignored)</span>
-          </p>
-          <p>
-            <label>D: <input type="text" id="d" value="1" /></label>
-            <span class="description">Ex: 4, 2d3, d6+1</span>
-          </p>
-          <hr style="width: 65%; border: 1px solid grey" />
-          <p>
-            <label>Hit Modifier: <input type="text" id="hit_mod" /></label>
-            <span class="description">Ex: 1, -2</span>
-          </p>
-          <p>
-            <label
-              ><input type="checkbox" id="hit_leth" value="1" />Lethal
-              Hits</label
-            >
-          </p>
-          <p>
-            <label>Sustained Hits: <input type="text" id="hit_sus" /></label>
-            <span class="description">Ex: 1, 2</span>
-          </p>
-          <p>
-            <label>Critical Hit: <input type="text" id="hit_crit" /></label>
-            <span class="description">Ex: 2, 4</span>
-          </p>
-          <p>
-            Critical hit rolls:
-            <select id="hit_of_6">
-              <option value="">Have no other abilities</option>
-              <option value="+mortal">
-                Deal 1 mortal wound in addition to regular damage
-              </option>
-              <option value="mortal">Deal their damage as mortal wounds</option>
-            </select>
-          </p>
-          <p>
-            Reroll:
-            <select id="hit_reroll">
-              <option value="">No hit rolls</option>
-              <option value="1">Hit rolls of 1</option>
-              <option value="fail">Failed hit rolls</option>
-              <option value="noncrit">Non-critical hit rolls</option>
-            </select>
-          </p>
-          <hr style="width: 65%; border: 1px solid grey" />
-          <p>
-            <label>Wound Modifier: <input type="text" id="wound_mod" /></label>
-            <span class="description">Ex: 1, -2</span>
-          </p>
-          <p>
-            <label
-              ><input type="checkbox" id="wound_dev" value="1" />Devastating
-              Wounds</label
-            >
-          </p>
-          <p>
-            <label
-              >Critical Wound (Anti-X): <input type="text" id="wound_crit"
-            /></label>
-            <span class="description">Ex: 2, 4</span>
-          </p>
-          <p>
-            Critical wound rolls:
-            <select id="wound_of_6">
-              <option value="">Have no other abilities</option>
-              <option value="+mortal">
-                Deal 1 mortal wound in addition to regular damage
-              </option>
-            </select>
-          </p>
-          <p>
-            Reroll:
-            <select id="wound_reroll">
-              <option value="0">No wound rolls</option>
-              <option value="1">Wound rolls of 1</option>
-              <option value="fail">Failed wound rolls</option>
-              <option value="noncrit">Non-critical wound rolls</option>
-            </select>
-          </p>
+            <p>
+              <label>Attacks: <input type="text" id="attacks" /></label>
+              <span class="description">Ex: 4, 2d3, d6+1</span>
+            </p>
+            <p>
+              <label>BS/WS: <input type="text" id="bs" /></label>
+              <span class="description">Ex: 4, leave blank to auto-hit</span>
+            </p>
+            <p>
+              <label>S: <input type="text" id="s" /></label>
+              <span class="description">Ex: 4, leave blank to auto-wound</span>
+            </p>
+            <p>
+              <label>AP: <input type="text" id="ap" /></label>
+              <span class="description">Ex: -1, 2 (sign is ignored)</span>
+            </p>
+            <p>
+              <label>D: <input type="text" id="d" value="1" /></label>
+              <span class="description">Ex: 4, 2d3, d6+1</span>
+            </p>
+            <hr style="width: 95%; border: 1px solid grey" />
+            <p>
+              <label>Hit Modifier: <input type="text" id="hit_mod" /></label>
+              <span class="description">Ex: 1, -2</span>
+            </p>
+            <p>
+              <label
+                ><input type="checkbox" id="hit_leth" value="1" />Lethal
+                Hits</label
+              >
+            </p>
+            <p>
+              <label>Sustained Hits: <input type="text" id="hit_sus" /></label>
+              <span class="description">Ex: 1, 2</span>
+            </p>
+            <p>
+              <label>Critical Hit: <input type="text" id="hit_crit" /></label>
+              <span class="description">Ex: 2, 4</span>
+            </p>
+            <p>
+              Critical hit rolls:
+              <select id="hit_of_6">
+                <option value="">Have no other abilities</option>
+                <option value="+mortal">
+                  Deal 1 mortal wound in addition to regular damage
+                </option>
+                <option value="mortal">
+                  Deal their damage as mortal wounds
+                </option>
+              </select>
+            </p>
+            <p>
+              Reroll:
+              <select id="hit_reroll">
+                <option value="">No hit rolls</option>
+                <option value="1">Hit rolls of 1</option>
+                <option value="fail">Failed hit rolls</option>
+                <option value="noncrit">Non-critical hit rolls</option>
+              </select>
+            </p>
+            <hr style="width: 95%; border: 1px solid grey" />
+            <p>
+              <label
+                >Wound Modifier: <input type="text" id="wound_mod"
+              /></label>
+              <span class="description">Ex: 1, -2</span>
+            </p>
+            <p>
+              <label
+                ><input type="checkbox" id="wound_dev" value="1" />Devastating
+                Wounds</label
+              >
+            </p>
+            <p>
+              <label
+                >Critical Wound (Anti-X): <input type="text" id="wound_crit"
+              /></label>
+              <span class="description">Ex: 2, 4</span>
+            </p>
+            <p>
+              Critical wound rolls:
+              <select id="wound_of_6">
+                <option value="">Have no other abilities</option>
+                <option value="+mortal">
+                  Deal 1 mortal wound in addition to regular damage
+                </option>
+              </select>
+            </p>
+            <p>
+              Reroll:
+              <select id="wound_reroll">
+                <option value="0">No wound rolls</option>
+                <option value="1">Wound rolls of 1</option>
+                <option value="fail">Failed wound rolls</option>
+                <option value="noncrit">Non-critical wound rolls</option>
+              </select>
+            </p>
+          </div>
         </div>
       </div>
       <div>
         <div class="right-column">
-          <h2>Defense Stats</h2>
-          <!-- File filter input box added here -->
-          <label for="file-filter">Select Faction:</label>
-          <input
-            list="file-list-container"
-            id="file-filter"
-            placeholder="Enter faction..."
-          />
-          <datalist id="file-list-container">
-            <!-- File names will be populated dynamically -->
-          </datalist>
-          <!-- End here-->
-          <label for="model-filter">Select Model:</label>
-          <input
-            list="model-list-container"
-            id="model-filter"
-            placeholder="Enter model..."
-          />
-          <datalist id="model-list-container">
-            <!-- Model names will be populated dynamically -->
-          </datalist>
-          <!-- End here-->
-          <!-- Characteristics Display -->
-          <div id="characteristics-display">
-            <!-- Characteristics like T, SV, W will be displayed here -->
+          <div class="def-image-container">
+            <h2>Defense Stats</h2>
+            <!-- File filter input box added here -->
+            <label for="file-filter">Select Faction:</label>
+            <input
+              list="file-list-container"
+              id="file-filter"
+              placeholder="Enter faction..."
+            />
+            <datalist id="file-list-container">
+              <!-- File names will be populated dynamically -->
+            </datalist>
+            <!-- End here-->
+            <label for="model-filter">Select Model:</label>
+            <input
+              list="model-list-container"
+              id="model-filter"
+              placeholder="Enter model..."
+            />
+            <datalist id="model-list-container">
+              <!-- Model names will be populated dynamically -->
+            </datalist>
+            <!-- End here-->
+            <!-- Characteristics Display -->
+            <div id="characteristics-display">
+              <!-- Characteristics like T, SV, W will be displayed here -->
+            </div>
+            <!-- End here-->
+            <p>
+              <label>T: <input type="text" id="t" /></label>
+              <span class="description">Ex: 4, leave blank to auto-wound</span>
+            </p>
+            <p>
+              <label>Save: <input type="text" id="save" /></label>
+              <span class="description">Ex: 4</span>
+            </p>
+            <p>
+              <label>Save Modifier: <input type="text" id="save_mod" /></label>
+              <span class="description">Ex: 1, -2</span>
+            </p>
+            <p>
+              <label><input type="checkbox" id="cover" value="1" />Cover</label>
+            </p>
+            <p>
+              <label
+                >Invulnerable Save: <input type="text" id="invulnerable"
+              /></label>
+              <span class="description">Ex: 4</span>
+            </p>
+            <p>
+              Reroll:
+              <select id="save_reroll">
+                <option value="">No save rolls</option>
+                <option value="1">Any save rolls of 1</option>
+                <option value="fail">Any failed save rolls</option>
+                <option value="inv_1">Invulnerable save rolls of 1</option>
+                <option value="inv_fail">Failed invulnerable save rolls</option>
+              </select>
+            </p>
+            <p>
+              <label>Wounds per model: <input type="text" id="wounds" /></label>
+              <span class="description"
+                >Ex: 1, 13, leave blank if you don't care</span
+              >
+            </p>
+            <p>
+              <label>Feel No Pain: <input type="text" id="fnp" /></label>
+              <span class="description">Ex: 4, 6</span>
+            </p>
           </div>
-          <!-- End here-->
-          <p>
-            <label>T: <input type="text" id="t" /></label>
-            <span class="description">Ex: 4, leave blank to auto-wound</span>
-          </p>
-          <p>
-            <label>Save: <input type="text" id="save" /></label>
-            <span class="description">Ex: 4</span>
-          </p>
-          <p>
-            <label>Save Modifier: <input type="text" id="save_mod" /></label>
-            <span class="description">Ex: 1, -2</span>
-          </p>
-          <p>
-            <label><input type="checkbox" id="cover" value="1" />Cover</label>
-          </p>
-          <p>
-            <label
-              >Invulnerable Save: <input type="text" id="invulnerable"
-            /></label>
-            <span class="description">Ex: 4</span>
-          </p>
-          <p>
-            Reroll:
-            <select id="save_reroll">
-              <option value="">No save rolls</option>
-              <option value="1">Any save rolls of 1</option>
-              <option value="fail">Any failed save rolls</option>
-              <option value="inv_1">Invulnerable save rolls of 1</option>
-              <option value="inv_fail">Failed invulnerable save rolls</option>
-            </select>
-          </p>
-          <p>
-            <label>Wounds per model: <input type="text" id="wounds" /></label>
-            <span class="description"
-              >Ex: 1, 13, leave blank if you don't care</span
-            >
-          </p>
-          <p>
-            <label>Feel No Pain: <input type="text" id="fnp" /></label>
-            <span class="description">Ex: 4, 6</span>
-          </p>
         </div>
       </div>
     </div>

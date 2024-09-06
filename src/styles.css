@@ -3,18 +3,61 @@
   grid-template-columns: 1fr 1fr; /* Two equal columns */
 }
 
-.image-container {
-  background-image: url('../figures/attacker.png'); /* Set the local background image */
-  background-size: cover; /* Makes the image cover the entire container */
-  background-position: center; /* Centers the image */
+.atk-image-container {
+  position: relative; /* Allows positioning of the pseudo-element */
+  width: 64%; /* or a specific width */
+  height: 750px; /* or a specific height */
+  border: 2px solid #000; /* 2px solid black border */
+  border-radius: 8px; /* Optional: rounded corners */
+  overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
+}
+
+.atk-image-container::before {
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Positions the overlay absolutely within the container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/figures/attacker.png'); /* Set the local background image */
+  background-size: 100% 100%; /* Scales the image up, effectively squeezing it in */
+  background-position: center; /* Keeps the image centered */
   background-repeat: no-repeat; /* Prevents the image from repeating */
-  position: relative; /* Allows layering of elements, if needed */
-  width: 100%; /* or a specific width */
-  height: 400px; /* or a specific height */
+  opacity: 0.4; /* 10% opacity for the image */
+  z-index: -1; /* Ensures the overlay is behind the content */
+}
+
+.def-image-container {
+  position: relative; /* Allows positioning of the pseudo-element */
+  width: 40%; /* or a specific width */
+  height: 750px; /* or a specific height */
+  border: 2px solid #000; /* 2px solid black border */
+  border-radius: 8px; /* Optional: rounded corners */
+  overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
+  padding: 0 20px; /* Vertical padding is 0, horizontal padding is 10px */
+}
+
+.def-image-container::before {
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Positions the overlay absolutely within the container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/figures/defender.png'); /* Set the local background image */
+  background-size: 110% 110%; /* Scales the image up, effectively squeezing it in */
+  background-position: center; /* Keeps the image centered */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  opacity: 0.4; /* 10% opacity for the image */
+  z-index: -1; /* Ensures the overlay is behind the content */
+}
+
+.left-column {
+  margin-left: 20px; /* Shrink the gap by moving the right column closer */
 }
 
 .right-column {
-  margin-left: -400px; /* Shrink the gap by moving the right column closer */
+  margin-left: -350px; /* Shrink the gap by moving the right column closer */
 }
 
 .attack-stats, .defense-stats {
