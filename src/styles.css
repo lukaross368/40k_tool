@@ -185,3 +185,26 @@ hr {
   color: grey;
   font-style: italic;
 }
+
+.roll-button {
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  padding: 10px 20px;
+  font-size: 30px;
+  margin-left: 520px;
+  margin-bottom: 50px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.roll-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+
+.roll-container {
+  position: relative; /* Allows positioning of the pseudo-element */
+  margin-left: 300px;
+}
+
