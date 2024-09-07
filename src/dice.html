@@ -39,44 +39,47 @@
           <div>
             <h2>Attack Stats</h2>
             <!-- File filter input box added here -->
-            <label for="atk_file-filter">Select Faction:</label>
+            <!-- <label for="atk_file-filter">Select Faction:</label> -->
             <input
               list="atk_file-list-container"
               id="atk_file-filter"
               placeholder="Enter faction..."
+              style="margin-right: 10px"
             />
             <datalist id="atk_file-list-container">
               <!-- File names will be populated dynamically -->
             </datalist>
             <!-- End here-->
-            <label for="atk_model-filter">Select Model:</label>
+            <!-- <label for="atk_model-filter">Select Model:</label> -->
             <input
               list="atk_model-list-container"
               id="atk_model-filter"
               placeholder="Enter model..."
+              style="margin-right: 10px"
             />
             <datalist id="atk_model-list-container">
               <!-- Model names will be populated dynamically -->
             </datalist>
-            <label for="atk_weapons-filter">Select Weapon:</label>
+            <!-- <label for="atk_weapons-filter">Select Weapon:</label> -->
             <input
               list="atk_weapons-list-container"
               id="atk_weapons-filter"
               placeholder="Enter weapon..."
+              style="margin-right: 10px"
             />
             <datalist id="atk_weapons-list-container">
               <!-- Weapons will be populated dynamically -->
             </datalist>
             <div>
-              <label for="keywords-input" class="keywords-label"
+              <!-- <label for="keywords-input" class="keywords-label"
                 >Select Active Keywords:</label
-              >
+              > -->
               <div class="keywords-container">
                 <div
                   id="keywords-input"
                   class="keywords-input"
                   tabindex="0"
-                  data-placeholder="Keywords"
+                  data-placeholder="Select Keywords"
                 ></div>
                 <div id="keywords-options" class="keywords-options">
                   <!-- Options will be dynamically populated here -->
@@ -190,17 +193,18 @@
           <div class="def-image-container">
             <h2>Defense Stats</h2>
             <!-- File filter input box added here -->
-            <label for="file-filter">Select Faction:</label>
+            <!-- <label for="file-filter">Select Faction:</label> -->
             <input
               list="file-list-container"
               id="file-filter"
               placeholder="Enter faction..."
+              style="margin-right: 10px"
             />
             <datalist id="file-list-container">
               <!-- File names will be populated dynamically -->
             </datalist>
             <!-- End here-->
-            <label for="model-filter">Select Model:</label>
+            <!-- <label for="model-filter">Select Model:</label> -->
             <input
               list="model-list-container"
               id="model-filter"
@@ -257,24 +261,47 @@
               <span class="description">Ex: 4, 6</span>
             </p>
           </div>
+          <div class="atk-save-profile">
+            <h2>Attacker Profiles</h2>
+            <div id="list-container">
+              <ul id="dynamic-list">
+                <!-- Dynamic list items will be added here -->
+              </ul>
+            </div>
+            <p>
+              <input
+                type="text"
+                id="newItemInput"
+                placeholder="Enter new item"
+              />
+              <button onclick="save_profile()">Save Profile</button>
+            </p>
+          </div>
+          <div class="def-save-profile">
+            <h2>Defender Profiles</h2>
+            <div id="list-container">
+              <ul id="dynamic-list">
+                <!-- Dynamic list items will be added here -->
+              </ul>
+            </div>
+            <p>
+              <input
+                type="text"
+                id="newItemInput"
+                placeholder="Enter new item"
+              />
+              <button onclick="save_profile()">Save Profile</button>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-
-    <h2>Saved Profiles</h2>
-    <div id="list-container">
-      <ul id="dynamic-list">
-        <!-- Dynamic list items will be added here -->
-      </ul>
-    </div>
-    <p>
-      <input type="text" id="newItemInput" placeholder="Enter new item" />
-      <button onclick="save_profile()">Save Profile</button>
-    </p>
     <div class="roll-container">
-      <p>
-        <button class="roll-button" onclick="roll_40k()">Roll</button>
-      </p>
+      <div class="roll-image-container">
+        <p>
+          <button class="roll-button" onclick="roll_40k()">Roll</button>
+        </p>
+      </div>
       <div class="output">
         <div class="chart">
           <canvas id="attack_chart" width="100" height="100"></canvas>

@@ -4,8 +4,9 @@
 }
 
 .atk-image-container {
+  float: left;
   position: relative; /* Allows positioning of the pseudo-element */
-  width: 64%; /* or a specific width */
+  width: 55%; /* or a specific width */
   height: 750px; /* or a specific height */
   border: 2px solid #000; /* 2px solid black border */
   border-radius: 8px; /* Optional: rounded corners */
@@ -13,6 +14,7 @@
 }
 
 .atk-image-container::before {
+  float: left;
   content: ""; /* Required for pseudo-elements */
   position: absolute; /* Positions the overlay absolutely within the container */
   top: 0;
@@ -29,8 +31,8 @@
 
 .def-image-container {
   position: relative; /* Allows positioning of the pseudo-element */
-  width: 40%; /* or a specific width */
-  height: 750px; /* or a specific height */
+  width: 33%; /* or a specific width */
+  height: 420px; /* or a specific height */
   border: 2px solid #000; /* 2px solid black border */
   border-radius: 8px; /* Optional: rounded corners */
   overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
@@ -45,7 +47,7 @@
   width: 100%;
   height: 100%;
   background-image: url('/figures/defender.png'); /* Set the local background image */
-  background-size: 110% 110%; /* Scales the image up, effectively squeezing it in */
+  background-size: 100% 100%; /*Scales the image up, effectively squeezing it in */
   background-position: center; /* Keeps the image centered */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   opacity: 0.4; /* 10% opacity for the image */
@@ -57,7 +59,7 @@
 }
 
 .right-column {
-  margin-left: -350px; /* Shrink the gap by moving the right column closer */
+  margin-left: -450px; /* Shrink the gap by moving the right column closer */
 }
 
 .attack-stats, .defense-stats {
@@ -81,12 +83,13 @@ hr {
 }
 
 
-/* Container for the keywords input field and options dropdown */
 .keywords-container {
-  position: relative; /* Positions children absolutely within this container */
-  padding: 5px; /* Adds padding inside the container */
-  display: inline-block; /* Makes the container fit its contents and be inline */
-  vertical-align: middle; /* Aligns the container vertically in the middle */
+  position: absolute; /* Keeps it within the .atk-image-container */
+  top: 68px; /* Adjust vertical position as needed */
+  left: 520px; /* Adjust horizontal position as needed */
+  display: inline-block; /* Ensures it fits its content and stays inline */
+  vertical-align: middle; /* Aligns vertically if needed */
+  z-index: 10; /* Ensures it stays above other content within .atk-image-container */
 }
 
 /* Label for the keywords input */
@@ -101,19 +104,20 @@ hr {
 /* Input field for keywords */
 .keywords-input {
   display: inline-block; /* Makes the input fit its contents and be inline */
-  width: 200px; /* Sets the width to 200px */
-  height: 20px; /* Sets the height to 20px */
+  width: 153px; /* Sets the width to 200px */
+  height: 21px; /* Sets the height to 20px */
   padding: 8px 12px; /* Sets the padding: 8px top/bottom, 12px left/right */
   border: 1px solid gray; /* Sets a gray border with 1px width */
   font-family: Arial; /* Uses Arial as the font family */
   box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-  border-radius: 3px; /* Rounds the corners with a 3px radius */
+  border-radius: 1px; /* Rounds the corners with a 3px radius */
   cursor: pointer; /* Changes the cursor to a pointer when hovering over */
   font-size: 16px; /* Sets the font size to 16px */
   line-height: 1.5; /* Sets the line height to 1.5 times the font size */
   color: #333; /* Sets the text color to dark grey */
   position: relative; /* Positions pseudo-elements absolutely within this input */
   vertical-align: middle; /* Aligns the input vertically in the middle */
+  background-color: white;
 }
 
 /* Placeholder text for the keywords input */
@@ -147,12 +151,12 @@ hr {
   z-index: 1000; /* Ensures the dropdown appears above other elements */
   width: 100%; /* Sets the width to 100% of the container */
   box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-  font-size: 16px; /* Sets the font size to 16px for dropdown text */
+  font-size: 14px; /* Sets the font size to 16px for dropdown text */
 }
 
 /* Individual options within the dropdown */
 .keywords-options .option {
-  padding: 8px 12px; /* Sets the padding: 8px top/bottom, 12px left/right */
+  /* padding: 8px 8px; Sets the padding: 8px top/bottom, 12px left/right */
   cursor: pointer; /* Changes the cursor to a pointer when hovering over */
 }
 
@@ -167,13 +171,19 @@ hr {
   color: #fff; /* Changes the text color to white when selected */
 }
 
+.def-save-profile {
+  position: relative;
+  margin-left: 350px;
+  margin-top: -90px;
+}
+
 .output {
   float: left;
 }
 
 .chart {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
 }
 
 .endnote {
@@ -184,27 +194,59 @@ hr {
 .description {
   color: grey;
   font-style: italic;
+  font-weight: bold;
+}
+
+.roll-image-container {
+  position: relative; /* Allows positioning of the pseudo-element */
+  width: 7%;
+  height: 150px;
+  margin-left: 600px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
+}
+
+.roll-image-container::before {
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Positions the overlay absolutely within the container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/figures/dice.png'); /* Set the local background image */
+  background-size: 150% 150%; /* Scales the image up, effectively squeezing it in */
+  background-position: center; /* Keeps the image centered */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  opacity: 0.5; /* 10% opacity for the image */
+  z-index: -1; /* Ensures the overlay is behind the content */
 }
 
 .roll-button {
-  background-color: #4CAF50; /* Green background */
-  color: white; /* White text */
+  background-color: transparent;
+  color: black;
   padding: 10px 20px;
-  font-size: 30px;
-  margin-left: 520px;
-  margin-bottom: 50px;
+  font-size: 40px;
+  margin-top: 19px;
+  margin-left: 26px;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
+  font-weight: bold;
 }
 
-.roll-button:hover {
-  background-color: #45a049; /* Darker green on hover */
+.roll-image-container:hover {
+  position: relative;
+  border: 3px solid #000;
+  border-radius: 10px;
+  margin-bottom: 7px;
+  margin-top: 17px;
+  margin-left: 597px;
+  padding: 0px;
 }
 
 
 .roll-container {
   position: relative; /* Allows positioning of the pseudo-element */
-  margin-left: 300px;
+  margin-left: 100px;
 }
 
