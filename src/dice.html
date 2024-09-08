@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <title>40K Visual Dice Calculator (10th Ed)</title>
     <link href="styles.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="dice.js"></script>
@@ -70,20 +71,18 @@
             <datalist id="atk_weapons-list-container">
               <!-- Weapons will be populated dynamically -->
             </datalist>
-            <div>
-              <!-- <label for="keywords-input" class="keywords-label"
+            <!-- <label for="keywords-input" class="keywords-label"
                 >Select Active Keywords:</label
               > -->
-              <div class="keywords-container">
-                <div
-                  id="keywords-input"
-                  class="keywords-input"
-                  tabindex="0"
-                  data-placeholder="Select Keywords"
-                ></div>
-                <div id="keywords-options" class="keywords-options">
-                  <!-- Options will be dynamically populated here -->
-                </div>
+            <div class="keywords-container">
+              <div
+                id="keywords-input"
+                class="keywords-input"
+                tabindex="0"
+                data-placeholder="Select Keywords"
+              ></div>
+              <div id="keywords-options" class="keywords-options">
+                <!-- Options will be dynamically populated here -->
               </div>
             </div>
             <!-- Keywords will be populated dynamically -->
@@ -261,37 +260,39 @@
               <span class="description">Ex: 4, 6</span>
             </p>
           </div>
-          <div class="atk-save-profile">
-            <h2>Attacker Profiles</h2>
-            <div id="list-container">
-              <ul id="dynamic-list">
-                <!-- Dynamic list items will be added here -->
-              </ul>
+          <div class="save-profiles">
+            <div class="atk-save-profile">
+              <h2>Attacker Profiles</h2>
+              <div id="list-container">
+                <ul id="dynamic-list">
+                  <!-- Dynamic list items will be added here -->
+                </ul>
+              </div>
+              <p>
+                <input
+                  type="text"
+                  id="newItemInput"
+                  placeholder="Enter new item"
+                />
+                <button onclick="save_profile()">Save Profile</button>
+              </p>
             </div>
-            <p>
-              <input
-                type="text"
-                id="newItemInput"
-                placeholder="Enter new item"
-              />
-              <button onclick="save_profile()">Save Profile</button>
-            </p>
-          </div>
-          <div class="def-save-profile">
-            <h2>Defender Profiles</h2>
-            <div id="list-container">
-              <ul id="dynamic-list">
-                <!-- Dynamic list items will be added here -->
-              </ul>
+            <div class="def-save-profile">
+              <h2>Defender Profiles</h2>
+              <div id="list-container">
+                <ul id="dynamic-list">
+                  <!-- Dynamic list items will be added here -->
+                </ul>
+              </div>
+              <p>
+                <input
+                  type="text"
+                  id="newItemInput"
+                  placeholder="Enter new item"
+                />
+                <button onclick="save_profile()">Save Profile</button>
+              </p>
             </div>
-            <p>
-              <input
-                type="text"
-                id="newItemInput"
-                placeholder="Enter new item"
-              />
-              <button onclick="save_profile()">Save Profile</button>
-            </p>
           </div>
         </div>
       </div>
