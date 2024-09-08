@@ -83,7 +83,7 @@ hr {
   position: relative; /* Keeps it positioned within the .atk-image-container */
   display: inline-block;
   vertical-align: middle;
-  margin-top: 1%; /*Adjust padding for a better user experience*/
+  margin-top: -0.5%; /*Adjust padding for a better user experience*/
   z-index: 10;
   max-width: 300px; /* Set a fixed max-width to prevent it from expanding too much */
   overflow: visible; /* Ensure the container content is visible */
@@ -124,10 +124,11 @@ hr {
   color: #757575;
   position: absolute;
   top: 50%;
-  left: 8px; /* Adjust for better alignment */
+  left: 8px;
   transform: translateY(-50%);
   pointer-events: none;
   font-size: 13px;
+  display: block; /* Ensure it always displays */
 }
 
 /* Removes the placeholder text when the input is not empty */
@@ -183,8 +184,8 @@ hr {
 }
 
 .chart {
-  width: 150%;
-  height: 150%;
+  width: 140%;
+  height: 140%;
 }
 
 .endnote {
