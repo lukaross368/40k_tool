@@ -83,7 +83,7 @@ hr {
   position: relative; /* Keeps it positioned within the .atk-image-container */
   display: inline-block;
   vertical-align: middle;
-  margin-top: -0.9%; /*Adjust padding for a better user experience*/
+  margin-top: 1%; /*Adjust padding for a better user experience*/
   z-index: 10;
   max-width: 300px; /* Set a fixed max-width to prevent it from expanding too much */
   overflow: visible; /* Ensure the container content is visible */
@@ -183,8 +183,8 @@ hr {
 }
 
 .chart {
-  width: 250px;
-  height: 250px;
+  width: 150%;
+  height: 150%;
 }
 
 .endnote {
@@ -202,7 +202,8 @@ hr {
   position: relative; /* Allows positioning of the pseudo-element */
   width: 7%;
   height: 150px;
-  margin-left: 600px;
+  width: 125px;
+  margin-left: 30%;
   margin-top: 20px;
   margin-bottom: 10px;
   overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
@@ -210,26 +211,27 @@ hr {
 
 .roll-image-container::before {
   content: ""; /* Required for pseudo-elements */
-  position: absolute; /* Positions the overlay absolutely within the container */
-  top: 0;
-  left: 0;
+  position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('/figures/dice.png'); /* Set the local background image */
-  background-size: 150% 150%; /* Scales the image up, effectively squeezing it in */
-  background-position: center; /* Keeps the image centered */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
-  opacity: 0.5; /* 10% opacity for the image */
-  z-index: -1; /* Ensures the overlay is behind the content */
+  background-image: url('/figures/dice.png');
+  background-size: 150% 120%;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  z-index: -1;
 }
 
 .roll-button {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjusts the element to be perfectly centered */
+  
   background-color: transparent;
   color: black;
   padding: 10px 20px;
   font-size: 40px;
-  margin-top: 19px;
-  margin-left: 25px;
   border: none;
   cursor: pointer;
   font-weight: bold;
@@ -238,11 +240,12 @@ hr {
 .roll-image-container:hover {
   position: relative;
   border: 3px solid #000;
+  /* margin-top: 2%; */
   border-radius: 10px;
-  margin-bottom: 7px;
-  margin-top: 17px;
-  margin-left: 597px;
-  padding: 0px;
+  margin-bottom: 4px;
+  margin-top: 20px;
+  margin-right: 12px;
+  /* padding: 0px; */
 }
 
 
