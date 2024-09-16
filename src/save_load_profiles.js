@@ -4,8 +4,6 @@
 
 // Function to save the attacker profile
 function save_atk_profile() {
-  console.log('called save profile');
-
   // Fetching all required values from the attacker container
   let hit_dice = fetch_value('attacks');
   let hit_stat = fetch_int_value('bs');
@@ -133,7 +131,7 @@ function remove_selected_atk_profile() {
   let atkprofile_map =
     JSON.parse(localStorage.getItem('atk_profile_map')) || {};
   delete atkprofile_map[selectedProfile];
-  localStorage.setItem('atk_profile_map', JSON.stringify(profile_map));
+  localStorage.setItem('atk_profile_map', JSON.stringify(atkprofile_map));
 
   // Refresh the dropdown after removing the profile
   update_atk_profile_dropdown();
@@ -143,11 +141,9 @@ function remove_selected_atk_profile() {
 // Defender save profiles
 //////////////////////////////////////////////////////////////////////////////////////////
 
-// Function to save the attacker profile
+// Function to save the defender profile
 function save_def_profile() {
-  console.log('called save profile');
-
-  // Fetching all required values from the attacker container
+  // Fetching all required values from the defender container
   let t = fetch_int_value('t');
   let save_stat = fetch_int_value('save');
   let invuln_stat = fetch_int_value('invulnerable');
@@ -265,11 +261,3 @@ function set_checked(id, isChecked) {
     element.checked = isChecked;
   }
 }
-
-window.onload = function () {
-  update_atk_profile_dropdown();
-};
-
-window.onload = function () {
-  update_def_profile_dropdown();
-};
