@@ -9,6 +9,7 @@
     <script type="text/javascript" src="chart.js/dist/chart.umd.js"></script>
     <script src="atk_unit_lookup.js"></script>
     <script src="def_unit_lookup.js"></script>
+    <script src="save_load_profiles.js"></script>
     <link
       rel="apple-touch-icon-precomposed"
       sizes="144x144"
@@ -260,38 +261,52 @@
               <span class="description">Ex: 4, 6</span>
             </p>
           </div>
-          <!-- <div class="save-profiles">
-            <div class="atk-save-profile">
-              <h2>Attacker Profiles</h2>
-              <div id="list-container">
-                <ul id="dynamic-list">
-                </ul>
+          <div class="save-profiles">
+            <div class="save-profiles">
+              <div class="atk-save-profile">
+                <h2>Attacker Profiles</h2>
+                <div id="list-container">
+                  <p>
+                    <input type="text" id="atksaveprofile" />
+                    <button onclick="save_atk_profile()">Save Profile</button>
+                  </p>
+                  <p>
+                    <label for="atk-profile-dropdown">Select a profile:</label>
+                    <select id="atk-profile-dropdown">
+                      <option value="">Select a profile</option>
+                    </select>
+                  </p>
+                  <button onclick="load_selected_atk_profile()">
+                    Load Profile
+                  </button>
+                  <button onclick="remove_selected_atk_profile()">
+                    Remove Profile
+                  </button>
+                </div>
               </div>
-              <p>
-                <input
-                  type="text"
-                  id="newItemInput"
-                  placeholder="Enter new item"
-                />
-                <button onclick="save_profile()">Save Profile</button>
-              </p>
             </div>
             <div class="def-save-profile">
               <h2>Defender Profiles</h2>
               <div id="list-container">
-                <ul id="dynamic-list">
-                </ul>
+                <p>
+                  <input type="text" id="defsaveprofile" />
+                  <button onclick="save_def_profile()">Save Profile</button>
+                </p>
+                <p>
+                  <label for="def-profile-dropdown">Select a profile:</label>
+                  <select id="def-profile-dropdown">
+                    <option value="">Select a profile</option>
+                  </select>
+                </p>
+                <button onclick="load_selected_def_profile()">
+                  Load Profile
+                </button>
+                <button onclick="remove_selected_def_profile()">
+                  Remove Profile
+                </button>
               </div>
-              <p>
-                <input
-                  type="text"
-                  id="newItemInput"
-                  placeholder="Enter new item"
-                />
-                <button onclick="save_profile()">Save Profile</button>
-              </p>
             </div>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
