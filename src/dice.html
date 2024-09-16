@@ -34,7 +34,7 @@
     />
   </head>
   <body
-    onload="init_40k(); update_atk_profile_dropdown(); update_def_profile_dropdown();"
+    onload="init_40k(); update_atk_profile_dropdown(); update_def_profile_dropdown(); clearAllFields();"
   >
     <h1>40K Visual Dice Calculator (10th Ed)</h1>
     <div class="stats-container">
@@ -107,7 +107,7 @@
               <span class="description">Ex: -1, 2 (sign is ignored)</span>
             </p>
             <p>
-              <label>D: <input type="text" id="d" value="1" /></label>
+              <label>D: <input type="text" id="d" value="" /></label>
               <span class="description">Ex: 4, 2d3, d6+1</span>
             </p>
             <hr style="width: 95%; border: 1px solid grey" />
@@ -368,5 +368,10 @@
       >
       is &copy; Games Workshop Limited.<br />
     </p>
+    <script>
+      window.addEventListener('load', function () {
+        clearAllFields(); // Call your initialization function once the entire page is loaded
+      });
+    </script>
   </body>
 </html>

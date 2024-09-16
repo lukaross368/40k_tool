@@ -39,7 +39,6 @@ function save_atk_profile() {
     wound_crit: wound_crit,
     wound_of_6: wound_of_6,
     ap_val: ap_val,
-    cover: cover,
     damage_val: damage_val,
   };
 
@@ -112,7 +111,6 @@ function load_selected_atk_profile() {
     set_value('wound_crit', profile.wound_crit);
     set_value('wound_of_6', profile.wound_of_6);
     set_value('ap', profile.ap_val);
-    set_checked('cover', profile.cover);
     set_value('d', profile.damage_val);
   } else {
     console.error('Profile not found');
@@ -149,6 +147,7 @@ function save_def_profile() {
   let invuln_stat = fetch_int_value('invulnerable');
   let save_mod = fetch_int_value('save_mod');
   let save_reroll = fetch_value('save_reroll');
+  let cover = is_checked('cover');
   let wound_val = fetch_int_value('wounds');
   let fnp = fetch_int_value('fnp');
 
@@ -158,6 +157,7 @@ function save_def_profile() {
     invuln_stat: invuln_stat,
     save_mod: save_mod,
     save_reroll: save_reroll,
+    cover: cover,
     wound_val: wound_val,
     fnp: fnp,
   };
@@ -221,6 +221,7 @@ function load_selected_def_profile() {
     set_value('invulnerable', profile.invuln_stat);
     set_value('save_mod', profile.save_mod);
     set_value('save_reroll', profile.save_reroll);
+    set_checked('cover', profile.cover);
     set_value('wounds', profile.wound_val);
     set_value('fnp', profile.fnp);
   } else {

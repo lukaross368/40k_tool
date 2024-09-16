@@ -779,40 +779,40 @@ function do_killed_40k(damage_prob, fnp, unsaved, wound_val) {
 // }
 
 // Function to load profiles from localStorage and populate the list
-function load_profiles() {
-  let profile_map = JSON.parse(localStorage.getItem('profile_map')) || {};
-  let dynamicList = document.getElementById('dynamic-list');
+// function load_profiles() {
+//   let profile_map = JSON.parse(localStorage.getItem('profile_map')) || {};
+//   let dynamicList = document.getElementById('dynamic-list');
 
-  for (let profile in profile_map) {
-    var li = document.createElement('li');
-    var itemText = document.createTextNode(profile);
-    li.appendChild(itemText);
+//   for (let profile in profile_map) {
+//     var li = document.createElement('li');
+//     var itemText = document.createTextNode(profile);
+//     li.appendChild(itemText);
 
-    var remove_button = document.createElement('button');
-    remove_button.textContent = 'Remove';
-    remove_button.onclick = function () {
-      li.remove();
-      delete profile_map[profile];
-      localStorage.setItem('profile_map', JSON.stringify(profile_map));
-    };
+//     var remove_button = document.createElement('button');
+//     remove_button.textContent = 'Remove';
+//     remove_button.onclick = function () {
+//       li.remove();
+//       delete profile_map[profile];
+//       localStorage.setItem('profile_map', JSON.stringify(profile_map));
+//     };
 
-    var roll_button = document.createElement('button');
-    roll_button.textContent = 'Roll';
-    roll_button.onclick = function () {
-      let page_inputs = profile_map[profile];
-      console.log(
-        'calling roll_40k function with page_inputs: ' +
-          JSON.stringify(page_inputs),
-      );
-      roll_40k(true, page_inputs);
-    };
+//     var roll_button = document.createElement('button');
+//     roll_button.textContent = 'Roll';
+//     roll_button.onclick = function () {
+//       let page_inputs = profile_map[profile];
+//       console.log(
+//         'calling roll_40k function with page_inputs: ' +
+//           JSON.stringify(page_inputs),
+//       );
+//       roll_40k(true, page_inputs);
+//     };
 
-    li.appendChild(remove_button);
-    li.appendChild(roll_button);
+//     li.appendChild(remove_button);
+//     li.appendChild(roll_button);
 
-    dynamicList.appendChild(li);
-  }
-}
+//     dynamicList.appendChild(li);
+//   }
+// }
 
 function roll_40k(from_profile = false, page_inputs = {}) {
   console.log('called roll 40k');
@@ -1436,8 +1436,39 @@ var selects_40k = [
   'wound_reroll',
   'save_reroll',
 ];
+
+function clearAllFields() {
+  // Attacker stats
+  document.getElementById('attacks').value = '';
+  document.getElementById('bs').value = '';
+  document.getElementById('s').value = '';
+  document.getElementById('ap').value = '';
+  document.getElementById('d').value = '';
+  document.getElementById('hit_mod').value = '';
+  document.getElementById('hit_leth').checked = false;
+  document.getElementById('hit_sus').value = '';
+  document.getElementById('hit_crit').value = '';
+  document.getElementById('hit_of_6').value = '';
+  document.getElementById('hit_reroll').value = '';
+  document.getElementById('wound_mod').value = '';
+  document.getElementById('wound_dev').checked = false;
+  document.getElementById('wound_crit').value = '';
+  document.getElementById('wound_of_6').value = '';
+  document.getElementById('wound_reroll').value = '';
+
+  // Defender stats
+  document.getElementById('t').value = '';
+  document.getElementById('save').value = '';
+  document.getElementById('save_mod').value = '';
+  document.getElementById('cover').checked = false;
+  document.getElementById('invulnerable').value = '';
+  document.getElementById('save_reroll').value = '';
+  document.getElementById('wounds').value = '';
+  document.getElementById('fnp').value = '';
+}
+
 function init_40k() {
-  load_profiles();
+  // load_profiles();
 
   charts['attack'] = init_chart('attack_chart', 'attacks');
   charts['hit'] = init_chart('hit_chart', 'hits');

@@ -487,9 +487,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Toggle options container visibility
-  // keywordsInput.addEventListener('click', () => {
-  //   keywordsOptions.classList.toggle('active');
-  // });
+  keywordsInput.addEventListener('click', () => {
+    keywordsOptions.classList.toggle('active');
+  });
 
   atk_fetchFileNames();
 
@@ -515,6 +515,7 @@ document.addEventListener('DOMContentLoaded', function () {
     atk_weaponsListContainer.innerHTML = '';
     keywordsOptions.innerHTML = '';
     woundrerollInput.value = '0';
+    damageInput.value = '';
     lethalInput.checked = elementStates[lethalInput.id];
     heavyInput.value = '';
     lanceInput.value = '';
@@ -531,6 +532,7 @@ document.addEventListener('DOMContentLoaded', function () {
     woundrerollInput.value = '0';
     lethalInput.checked = elementStates[lethalInput.id];
     heavyInput.value = '';
+    damageInput.value = '';
     lanceInput.value = '';
     devwoundsInput.checked = elementStates[devwoundsInput.id];
     sustainedInput.value = '';
@@ -544,6 +546,7 @@ document.addEventListener('DOMContentLoaded', function () {
     woundrerollInput.value = '0';
     lethalInput.checked = elementStates[lethalInput.id];
     heavyInput.value = '';
+    damageInput.value = '';
     lanceInput.value = '';
     devwoundsInput.checked = elementStates[devwoundsInput.id];
     sustainedInput.value = '';
