@@ -169,16 +169,6 @@ hr {
   color: #fff;
 }
 
-
-.save-profiles {
-  display: flex; /* This aligns the child elements side by side */
-  padding: 5px;
-}
-
-.def-save-profile {
-  margin-left: 5%;
-}
-
 .output {
   float: left;
 }
@@ -255,6 +245,12 @@ hr {
   margin-left: 100px;
 }
 
+/* Add this to your CSS to highlight the selected profile */
+.selected {
+  background-color: #007bff; /* Blue color */
+  color: white;
+}
+
 .custom-dropdown {
   position: relative;
   display: inline-block;
@@ -271,6 +267,7 @@ hr {
   cursor: pointer;
   background: #fff;
   width: 100%;
+  text-indent: 2.5%; /* Shift the text slightly to the right */
 }
 
 .custom-dropdown-list {
@@ -283,16 +280,24 @@ hr {
 }
 
 .custom-dropdown-list div {
+  display: flex;
+  justify-content: space-between; /* Distribute space between profile name and 'X' */
+  align-items: center; /* Vertically center both the text and 'X' */
   padding: 8px;
   cursor: pointer;
   width: 100%;
-  box-sizing: border-box; /* Keep hover effect and selected width consistent */
+  box-sizing: border-box;
 }
 
 .custom-dropdown-list div:hover {
   background: #f0f0f0;
   box-sizing: border-box; /* Keep hover effect within boundaries */
   width: 100%;
+}
+
+.selected {
+  background-color: #007bff; /* Blue color */
+  color: white;
 }
 
 .custom-dropdown-list div:hover {
@@ -306,13 +311,23 @@ hr {
   color: #fff;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 
 .remove-btn {
-  position: absolute;
-  float: right;
-  margin-left: 80%;
   cursor: pointer;
+  border-radius: 4px;
+  margin-left: auto;
   color: red;
-  width: 100%;
-  background-size: 100% 100%;
+  background-color: rgba(255, 0, 0, 0.3); /* Initial red background with 0.3 opacity */
+  border: 1px solid rgba(255, 0, 0, 0.3); /* Border matching initial background */
+  font-family: 'Lato', sans-serif; /* Apply Lato font */
+  font-weight: normal;
+  padding: 2px 5px;
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
+}
+
+.remove-btn:hover {
+  background-color: rgba(255, 0, 0, 0.5); /* Darker red background with 0.5 opacity */
+  border: 1px solid rgba(255, 0, 0, 0.7); /* Darker border for hover effect */
+  /* No width or padding changes to keep button size consistent */
 }
