@@ -264,29 +264,24 @@
             </p>
           </div>
           <div class="save-profiles">
-            <div class="save-profiles">
-              <div class="atk-save-profile">
-                <h2>Attacker Profiles</h2>
-                <div id="list-container">
-                  <p>
-                    <input type="text" id="atksaveprofile" />
-                    <button onclick="save_atk_profile()">Save Profile</button>
-                  </p>
-                  <p>
-                    <label for="atk-profile-dropdown">Select a profile:</label>
-                    <select id="atk-profile-dropdown">
-                      <option value="">Select a profile</option>
-                    </select>
-                  </p>
-                  <button onclick="load_selected_atk_profile()">
-                    Load Profile
-                  </button>
-                  <button onclick="remove_selected_atk_profile()">
-                    Remove Profile
-                  </button>
-                </div>
+            <div class="atk-save-profile">
+              <h2>Attacker Profiles</h2>
+              <div id="list-container">
+                <p>
+                  <input type="text" id="atksaveprofile" />
+                  <button onclick="save_atk_profile()">Save Profile</button>
+                </p>
+                <p>
+                  <label for="atk-profile-dropdown">Select a profile:</label>
+                  <div id="atk-profile-dropdown" class="custom-dropdown">
+                    <div class="custom-dropdown-selected" onclick="toggleDropdown('atk-profile-dropdown-list')">Select Profile</div>
+                    <div id="atk-profile-dropdown-list" class="custom-dropdown-list">
+                      <!-- Options will be dynamically inserted here -->
+                    </div>
+                  </div>
+                </p>
               </div>
-            </div>
+            </div>            
             <div class="def-save-profile">
               <h2>Defender Profiles</h2>
               <div id="list-container">
@@ -295,20 +290,18 @@
                   <button onclick="save_def_profile()">Save Profile</button>
                 </p>
                 <p>
-                  <label for="def-profile-dropdown">Select a profile:</label>
-                  <select id="def-profile-dropdown">
-                    <option value="">Select a profile</option>
-                  </select>
+                  <label for="def-profile-dropdown">Select Profile:</label>
+                  <div id="def-profile-dropdown" class="custom-dropdown">
+                    <div class="custom-dropdown-selected" onclick="toggleDropdown('def-profile-dropdown-list')">Select Profile</div>
+                    <div id="def-profile-dropdown-list" class="custom-dropdown-list">
+                      <!-- Options will be dynamically inserted here -->
+                    </div>
+                  </div>
                 </p>
-                <button onclick="load_selected_def_profile()">
-                  Load Profile
-                </button>
-                <button onclick="remove_selected_def_profile()">
-                  Remove Profile
-                </button>
+                <button onclick="load_selected_def_profile()">Load Profile</button>
               </div>
             </div>
-          </div>
+          </div>          
         </div>
       </div>
     </div>

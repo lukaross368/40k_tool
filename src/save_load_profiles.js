@@ -66,34 +66,75 @@ function save_atk_profile() {
 
 // Function to update the dropdown with saved profiles
 function update_atk_profile_dropdown() {
-  let atkprofile_map =
-    JSON.parse(localStorage.getItem('atk_profile_map')) || {};
-  let atkprofileDropdown = document.getElementById('atk-profile-dropdown');
+  let atkprofile_map = JSON.parse(localStorage.getItem('atk_profile_map')) || {};
+  let dropdownList = document.getElementById('atk-profile-dropdown-list');
 
   // Clear existing options
-  atkprofileDropdown.innerHTML = '<option value="">Select a profile</option>';
+  dropdownList.innerHTML = '';
 
   // Populate dropdown with profiles
   for (let atkprofileName in atkprofile_map) {
-    let option = document.createElement('option');
-    option.value = atkprofileName;
-    option.textContent = atkprofileName;
-    atkprofileDropdown.appendChild(option);
+    let option = document.createElement('div');
+    option.innerHTML = `
+      <span>${atkprofileName}</span>
+      <span class="remove-btn" onclick="remove_atk_profile('${atkprofileName}', event)">X</span>
+    `;
+
+    // Event to load/deselect the profile when the name is clicked
+    option.addEventListener('click', function (e) {
+      if (!e.target.classList.contains('remove-btn')) {
+        let selectedText = document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent;
+        if (selectedText === atkprofileName) {
+          // If the profile is already selected, deselect it
+          document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent = 'Select a profile';
+          highlightSelectedProfile(null); // Remove highlighting
+        } else {
+          // Otherwise, select the profile
+          document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent = atkprofileName;
+          load_selected_atk_profile(atkprofileName);
+          highlightSelectedProfile(atkprofileName);
+        }
+      }
+    });
+
+    dropdownList.appendChild(option);
+  }
+
+  // Reset dropdown to "Select a profile" when no profile is selected
+  if (!document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent) {
+    document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent = 'Select a profile';
+  }
+
+  // Disable the dropdown toggle if no profiles are present
+  let toggleButton = document.querySelector('#atk-profile-dropdown .custom-dropdown-selected');
+  if (Object.keys(atkprofile_map).length === 0) {
+    toggleButton.style.pointerEvents = 'none'; // Disable dropdown toggle
+    toggleButton.style.opacity = '0.5'; // Grey out
+  } else {
+    toggleButton.style.pointerEvents = 'auto'; // Enable dropdown toggle
+    toggleButton.style.opacity = '1'; // Reset opacity
   }
 }
 
-// Function to load selected profile from the dropdown
-function load_selected_atk_profile() {
-  let selectedProfile = document.getElementById('atk-profile-dropdown').value;
-
-  if (!selectedProfile) {
-    alert('Please select a profile to load.');
-    return;
+// Function to close the dropdown if clicking outside of it
+document.addEventListener('click', function (e) {
+  const dropdown = document.getElementById('atk-profile-dropdown-list');
+  const dropdownToggle = document.getElementById('atk-profile-dropdown');
+  if (!dropdown.contains(e.target) && !dropdownToggle.contains(e.target)) {
+    closeDropdown(); // Close dropdown if clicked outside
   }
+});
 
-  let atkprofile_map =
-    JSON.parse(localStorage.getItem('atk_profile_map')) || {};
-  let profile = atkprofile_map[selectedProfile];
+// Close the dropdown
+function closeDropdown() {
+  document.getElementById('atk-profile-dropdown-list').style.display = 'none';
+}
+
+
+// Function to load selected profile from the dropdown
+function load_selected_atk_profile(profileName) {
+  let atkprofile_map = JSON.parse(localStorage.getItem('atk_profile_map')) || {};
+  let profile = atkprofile_map[profileName];
 
   if (profile) {
     // Populate fields with the loaded profile values
@@ -119,22 +160,27 @@ function load_selected_atk_profile() {
   }
 }
 
-// Function to remove the selected profile from localStorage
-function remove_selected_atk_profile() {
-  let selectedProfile = document.getElementById('atk-profile-dropdown').value;
-
-  if (!selectedProfile) {
-    alert('Please select a profile to remove.');
-    return;
-  }
-
-  let atkprofile_map =
-    JSON.parse(localStorage.getItem('atk_profile_map')) || {};
-  delete atkprofile_map[selectedProfile];
+// Function to remove the selected attacker profile
+function remove_atk_profile(profileName, event) {
+  event.stopPropagation(); // Prevent the click from triggering profile load
+  let atkprofile_map = JSON.parse(localStorage.getItem('atk_profile_map')) || {};
+  delete atkprofile_map[profileName];
   localStorage.setItem('atk_profile_map', JSON.stringify(atkprofile_map));
-
-  // Refresh the dropdown after removing the profile
   update_atk_profile_dropdown();
+
+  // Reset dropdown to "Select a profile" if nothing is selected
+  document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent = 'Select a profile';
+}
+
+// Function to highlight the selected profile in blue
+function highlightSelectedProfile(selectedProfile) {
+  let profileItems = document.querySelectorAll('#atk-profile-dropdown-list div');
+  profileItems.forEach(function (item) {
+    item.classList.remove('selected');
+    if (selectedProfile && item.querySelector('span').textContent === selectedProfile) {
+      item.classList.add('selected');
+    }
+  });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -183,21 +229,23 @@ function save_def_profile() {
   update_def_profile_dropdown();
 }
 
-// Function to update the dropdown with saved profiles
+// Function to update the defender profile dropdown with 'x' buttons
 function update_def_profile_dropdown() {
   let defprofile_map =
     JSON.parse(localStorage.getItem('def_profile_map')) || {};
-  let defprofileDropdown = document.getElementById('def-profile-dropdown');
+  let defprofileContainer = document.getElementById('def-profile-container');
 
-  // Clear existing options
-  defprofileDropdown.innerHTML = '<option value="">Select a profile</option>';
+  // Clear existing profiles
+  defprofileContainer.innerHTML = '';
 
   // Populate dropdown with profiles
   for (let defprofileName in defprofile_map) {
-    let option = document.createElement('option');
-    option.value = defprofileName;
-    option.textContent = defprofileName;
-    defprofileDropdown.appendChild(option);
+    let profileDiv = document.createElement('div');
+    profileDiv.className = 'profile-item';
+    profileDiv.innerHTML = `
+      ${defprofileName} <button class="remove-profile" onclick="remove_def_profile('${defprofileName}')">x</button>
+    `;
+    defprofileContainer.appendChild(profileDiv);
   }
 }
 
@@ -206,7 +254,7 @@ function load_selected_def_profile() {
   let selectedProfile = document.getElementById('def-profile-dropdown').value;
 
   if (!selectedProfile) {
-    alert('Please select a profile to load.');
+    alert('Please Select Profile to load.');
     return;
   }
 
@@ -228,25 +276,47 @@ function load_selected_def_profile() {
   }
 }
 
-// Function to remove the selected profile from localStorage
-function remove_selected_def_profile() {
-  let selectedProfile = document.getElementById('def-profile-dropdown').value;
-
-  if (!selectedProfile) {
-    alert('Please select a profile to remove.');
-    return;
-  }
-
+// Function to remove the defender profile
+function remove_def_profile(profileName) {
   let defprofile_map =
     JSON.parse(localStorage.getItem('def_profile_map')) || {};
-  delete defprofile_map[selectedProfile];
+  delete defprofile_map[profileName];
   localStorage.setItem('def_profile_map', JSON.stringify(defprofile_map));
 
   // Refresh the dropdown after removing the profile
   update_def_profile_dropdown();
 }
 
-// Utility function to set values of input fields
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Non specific functions
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// // Function to toggle dropdown visibility
+// function toggleDropdown(listId) {
+//   let list = document.getElementById(listId);
+//   list.style.display = list.style.display === 'block' ? 'none' : 'block';
+  
+//   // Reset to "Select Profile" if nothing is selected
+//   let selectedText = document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent;
+//   if (!selectedText || selectedText.trim() === '') {
+//     document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent = 'Select PFrofile';
+//   }
+// }
+
+// Open/close dropdown toggle (if profiles exist)
+function toggleDropdown(listId) {
+  let list = document.getElementById(listId);
+  if (list.style.display === 'block') {
+    closeDropdown(); // Close if already open
+  } else {
+    let hasProfiles = list.children.length > 0;
+    if (hasProfiles) {
+      list.style.display = 'block'; // Open if profiles exist
+    }
+  }
+}
+
+// Utility functions
 function set_value(id, value) {
   let element = document.getElementById(id);
   if (element) {
@@ -254,10 +324,10 @@ function set_value(id, value) {
   }
 }
 
-// Utility function to set checked status for checkboxes
 function set_checked(id, isChecked) {
   let element = document.getElementById(id);
   if (element && element.type === 'checkbox') {
     element.checked = isChecked;
   }
 }
+

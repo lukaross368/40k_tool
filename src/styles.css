@@ -255,3 +255,64 @@ hr {
   margin-left: 100px;
 }
 
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -0.5%; /*Adjust padding for a better user experience*/
+  z-index: 10;
+  width: 100%; /* Set a fixed max-width to prevent it from expanding too much */
+  overflow: visible; /* Ensure the container content is visible */
+}
+
+.custom-dropdown-selected {
+  border: 1px solid #ccc;
+  /* padding: 8px; */
+  cursor: pointer;
+  background: #fff;
+  width: 100%;
+}
+
+.custom-dropdown-list {
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  width: 100%;
+  z-index: 1;
+}
+
+.custom-dropdown-list div {
+  padding: 8px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box; /* Keep hover effect and selected width consistent */
+}
+
+.custom-dropdown-list div:hover {
+  background: #f0f0f0;
+  box-sizing: border-box; /* Keep hover effect within boundaries */
+  width: 100%;
+}
+
+.custom-dropdown-list div:hover {
+  background: #f0f0f0;
+  width: 100%;
+}
+
+.custom-dropdown-list div.selected {
+  background-color: #007bff;
+  width: 100%;
+  color: #fff;
+}
+
+
+.remove-btn {
+  position: absolute;
+  float: right;
+  margin-left: 80%;
+  cursor: pointer;
+  color: red;
+  width: 100%;
+  background-size: 100% 100%;
+}
