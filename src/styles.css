@@ -38,7 +38,8 @@
   border-radius: 8px; /* Optional: rounded corners */
   overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
   /* padding: 0% 5%; Vertical padding is 0, horizontal padding is 10px */
-  padding: 1%
+  padding: 1%;
+  overflow: visible;
 }
 
 .def-image-container::before {
@@ -54,6 +55,7 @@
   background-repeat: no-repeat; /* Prevents the image from repeating */
   opacity: 0.4; /* 10% opacity for the image */
   z-index: -1; /* Ensures the overlay is behind the content */
+  overflow: visible;
 }
 
 .left-column {
@@ -62,6 +64,7 @@
 
 .right-column {
   margin-left: -30%; /* Shrink the gap by moving the right column closer */
+  overflow: visible;
 }
 
 .attack-stats, .defense-stats {
@@ -245,19 +248,13 @@ hr {
   margin-left: 100px;
 }
 
-/* Add this to your CSS to highlight the selected profile */
-.selected {
-  background-color: #007bff; /* Blue color */
-  color: white;
-}
-
 .custom-dropdown {
   position: relative;
   display: inline-block;
   vertical-align: middle;
   margin-top: -0.5%; /*Adjust padding for a better user experience*/
-  z-index: 10;
-  width: 100%; /* Set a fixed max-width to prevent it from expanding too much */
+  z-index: 999;
+  width: 50%; /* Set a fixed max-width to prevent it from expanding too much */
   overflow: visible; /* Ensure the container content is visible */
 }
 
@@ -267,7 +264,7 @@ hr {
   cursor: pointer;
   background: #fff;
   width: 100%;
-  text-indent: 2.5%; /* Shift the text slightly to the right */
+  text-indent: 1%;
 }
 
 .custom-dropdown-list {
@@ -276,7 +273,7 @@ hr {
   background: #fff;
   border: 1px solid #ccc;
   width: 100%;
-  z-index: 1;
+  z-index: 999;
 }
 
 .custom-dropdown-list div {
@@ -293,11 +290,6 @@ hr {
   background: #f0f0f0;
   box-sizing: border-box; /* Keep hover effect within boundaries */
   width: 100%;
-}
-
-.selected {
-  background-color: #007bff; /* Blue color */
-  color: white;
 }
 
 .custom-dropdown-list div:hover {

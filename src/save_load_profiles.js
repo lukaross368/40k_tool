@@ -77,7 +77,7 @@ function update_atk_profile_dropdown() {
       if (!e.target.classList.contains('remove-btn')) {
         let selectedText = document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent;
         if (selectedText === atkprofileName) {
-          document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent = 'Select Profile';
+          document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent = 'Select Saved Profile';
           highlightSelectedProfile(null); // Remove highlighting
         } else {
           document.querySelector('#atk-profile-dropdown .custom-dropdown-selected').textContent = atkprofileName;
@@ -93,7 +93,7 @@ function update_atk_profile_dropdown() {
   // Auto-close the dropdown if no profiles
   if (Object.keys(atkprofile_map).length === 0) {
     closeDropdown('atk-profile-dropdown-list');
-    toggleButton.textContent = 'Select Profile';
+    toggleButton.textContent = 'Select Saved Profile';
   } else {
     toggleButton.style.pointerEvents = 'auto';
     toggleButton.style.opacity = '1';
@@ -228,7 +228,7 @@ function update_def_profile_dropdown() {
       if (!e.target.classList.contains('remove-btn')) {
         let selectedText = document.querySelector('#def-profile-dropdown .custom-dropdown-selected').textContent;
         if (selectedText === defprofileName) {
-          document.querySelector('#def-profile-dropdown .custom-dropdown-selected').textContent = 'Select Profile';
+          document.querySelector('#def-profile-dropdown .custom-dropdown-selected').textContent = 'Select Saved Profile';
           highlightSelectedDefProfile(null); // Remove highlighting
         } else {
           document.querySelector('#def-profile-dropdown .custom-dropdown-selected').textContent = defprofileName;
@@ -244,7 +244,7 @@ function update_def_profile_dropdown() {
   // Auto-close the dropdown if no profiles
   if (Object.keys(defprofile_map).length === 0) {
     closeDropdown('def-profile-dropdown-list');
-    toggleButton.textContent = 'Select Profile';
+    toggleButton.textContent = 'Select Saved Profile';
   } else {
     toggleButton.style.pointerEvents = 'auto';
     toggleButton.style.opacity = '1';
@@ -255,8 +255,8 @@ function update_def_profile_dropdown() {
 function load_selected_def_profile() {
   let selectedProfile = document.querySelector('#def-profile-dropdown .custom-dropdown-selected').textContent;
 
-  if (!selectedProfile || selectedProfile === 'Select Profile') {
-    alert('Please Select Profile to load.');
+  if (!selectedProfile || selectedProfile === 'Select Saved Profile') {
+    alert('Please Select Saved Profile to load.');
     return;
   }
 
