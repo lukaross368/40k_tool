@@ -90,8 +90,6 @@ hr {
   z-index: 10;
   max-width: 300px; /* Set a fixed max-width to prevent it from expanding too much */
   overflow: visible; /* Ensure the container content is visible */
-  /* top: 10px; Adjust positioning within the parent container */
-  /* left: 10px; Adjust positioning within the parent container */
 }
 
 /* Label for the keywords input */
@@ -256,6 +254,7 @@ hr {
   z-index: 999;
   width: 50%; /* Set a fixed max-width to prevent it from expanding too much */
   overflow: visible; /* Ensure the container content is visible */
+  height: 100%;
 }
 
 .custom-dropdown-selected {
@@ -265,6 +264,7 @@ hr {
   background: #fff;
   width: 100%;
   text-indent: 1%;
+  height: 100%;
 }
 
 .custom-dropdown-list {
@@ -274,6 +274,7 @@ hr {
   border: 1px solid #ccc;
   width: 100%;
   z-index: 999;
+  height: 100%;
 }
 
 .custom-dropdown-list div {
@@ -284,6 +285,8 @@ hr {
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
+  height: 100%;
+  z-index: 999;
 }
 
 .custom-dropdown-list div:hover {
@@ -314,9 +317,11 @@ hr {
   border: 1px solid rgba(255, 0, 0, 0.3); /* Border matching initial background */
   font-family: 'Lato', sans-serif; /* Apply Lato font */
   font-weight: normal;
-  padding: 2px 5px;
+  padding: 0.1% 0.8%;
   transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
+  position: relative; /* Make it possible to move it relative to its normal position */
 }
+
 
 .remove-btn:hover {
   background-color: rgba(255, 0, 0, 0.5); /* Darker red background with 0.5 opacity */
