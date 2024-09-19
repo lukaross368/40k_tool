@@ -245,7 +245,6 @@ hr {
   font-size: 16px; /* Adjust font size */
   color: black; /* Adjust text color */
   margin-bottom: 100px;
-  margin-top: 5%;
 }
 
 
@@ -299,13 +298,14 @@ hr {
   background: #f0f0f0;
   box-sizing: border-box; /* Keep hover effect within boundaries */
   width: 100%;
+  z-index: 999;
 }
 
-.custom-dropdown-list div:hover {
+/* .custom-dropdown-list div:hover {
   background: #f0f0f0;
   width: 100%;
   z-index: 999;
-}
+} */
 
 .custom-dropdown-list div.selected {
   background-color: #007bff;
