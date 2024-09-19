@@ -546,7 +546,6 @@ document.addEventListener('DOMContentLoaded', function () {
     woundrerollInput.value = '0';
     lethalInput.checked = elementStates[lethalInput.id];
     heavyInput.value = '';
-    damageInput.value = '';
     lanceInput.value = '';
     devwoundsInput.checked = elementStates[devwoundsInput.id];
     sustainedInput.value = '';

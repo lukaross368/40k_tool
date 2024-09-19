@@ -181,8 +181,8 @@ hr {
   position: relative;
   width: 150px;
   height: 180px;
-  margin-left: 30%;
-  margin-top: 1%;
+  margin-left: 40%;
+  margin-top: -100px;
   cursor: pointer; /* Makes the whole container clickable */
   background-image: url('/figures/dice.png');
   background-size: cover;
@@ -214,29 +214,22 @@ hr {
 .roll-container {
   position: absolute; /* Allows positioning of the pseudo-element */
   margin-left: 100px;
-  max-width: 100vw;
-  width: 100%;
-  margin-top: -5%;
 }
 
 /* Container for charts */
 .chart-container {
   display: flex; /* Aligns charts in a row */
   flex-wrap: nowrap; /* Prevents charts from wrapping to the next line */
-  width: 80%; /* Ensures the container takes the full width of the screen */
-  max-width: 80vw;
-  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+  width: 100%; /* Ensures the container takes the full width of the screen */
   overflow-x: auto; /* Allows horizontal scrolling if needed */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
 }
 
 .chart {
-  display: flex;
-  flex-direction: column; /* Stack the chart and text vertically */
-  align-items: center; /* Center-align items horizontally */
+  flex: 1 0 auto; /* Allows charts to grow and shrink, but not break into multiple rows */
   height: 100%; /* Adjusts the height as needed */
-  width: 100%;
-  max-width: 100vw; /* Ensures charts do not exceed the container width */
-  overflow-x: hidden;
+  min-width: 300px; /* Ensures charts are not too small (adjust based on your needs) */
+  max-width: 100%; /* Ensures charts do not exceed the container width */
 }
 
 .chart-text {
@@ -298,14 +291,13 @@ hr {
   background: #f0f0f0;
   box-sizing: border-box; /* Keep hover effect within boundaries */
   width: 100%;
-  z-index: 999;
 }
 
-/* .custom-dropdown-list div:hover {
+.custom-dropdown-list div:hover {
   background: #f0f0f0;
   width: 100%;
   z-index: 999;
-} */
+}
 
 .custom-dropdown-list div.selected {
   background-color: #007bff;
