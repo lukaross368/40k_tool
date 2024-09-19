@@ -1,6 +1,10 @@
 <!doctype html>
 <html>
   <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <meta charset="UTF-8" />
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <title>40K Visual Dice Calculator (10th Ed)</title>
@@ -188,6 +192,32 @@
               </select>
             </p>
           </div>
+          <div class="atk-save-profile">
+            <div id="list-container">
+              <p>
+                <input
+                  type="text"
+                  id="atksaveprofile"
+                  placeholder="Enter Custom Profile"
+                />
+                <button onclick="save_atk_profile()">Save Profile</button>
+              </p>
+              <div id="atk-profile-dropdown" class="custom-dropdown">
+                <div
+                  class="custom-dropdown-selected"
+                  onclick="toggleDropdown('atk-profile-dropdown-list')"
+                >
+                  Select Profile
+                </div>
+                <div
+                  id="atk-profile-dropdown-list"
+                  class="custom-dropdown-list"
+                >
+                  <!-- Options will be dynamically inserted here -->
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div>
@@ -262,50 +292,30 @@
               <label>Feel No Pain: <input type="text" id="fnp" /></label>
               <span class="description">Ex: 4, 6</span>
             </p>
-          </div>
-          <div class="save-profiles">
-            <div class="save-profiles">
-              <div class="atk-save-profile">
-                <h2>Attacker Profiles</h2>
-                <div id="list-container">
-                  <p>
-                    <input type="text" id="atksaveprofile" />
-                    <button onclick="save_atk_profile()">Save Profile</button>
-                  </p>
-                  <p>
-                    <label for="atk-profile-dropdown">Select a profile:</label>
-                    <select id="atk-profile-dropdown">
-                      <option value="">Select a profile</option>
-                    </select>
-                  </p>
-                  <button onclick="load_selected_atk_profile()">
-                    Load Profile
-                  </button>
-                  <button onclick="remove_selected_atk_profile()">
-                    Remove Profile
-                  </button>
-                </div>
-              </div>
-            </div>
             <div class="def-save-profile">
-              <h2>Defender Profiles</h2>
               <div id="list-container">
                 <p>
-                  <input type="text" id="defsaveprofile" />
+                  <input
+                    type="text"
+                    id="defsaveprofile"
+                    placeholder="Enter Custom Profile"
+                  />
                   <button onclick="save_def_profile()">Save Profile</button>
                 </p>
-                <p>
-                  <label for="def-profile-dropdown">Select a profile:</label>
-                  <select id="def-profile-dropdown">
-                    <option value="">Select a profile</option>
-                  </select>
-                </p>
-                <button onclick="load_selected_def_profile()">
-                  Load Profile
-                </button>
-                <button onclick="remove_selected_def_profile()">
-                  Remove Profile
-                </button>
+                <div id="def-profile-dropdown" class="custom-dropdown">
+                  <div
+                    class="custom-dropdown-selected"
+                    onclick="toggleDropdown('def-profile-dropdown-list')"
+                  >
+                    Select Profile
+                  </div>
+                  <div
+                    id="def-profile-dropdown-list"
+                    class="custom-dropdown-list"
+                  >
+                    <!-- Options will be dynamically inserted here -->
+                  </div>
+                </div>
               </div>
             </div>
           </div>

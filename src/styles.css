@@ -38,7 +38,8 @@
   border-radius: 8px; /* Optional: rounded corners */
   overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
   /* padding: 0% 5%; Vertical padding is 0, horizontal padding is 10px */
-  padding: 1%
+  padding: 1%;
+  overflow: visible;
 }
 
 .def-image-container::before {
@@ -54,6 +55,7 @@
   background-repeat: no-repeat; /* Prevents the image from repeating */
   opacity: 0.4; /* 10% opacity for the image */
   z-index: -1; /* Ensures the overlay is behind the content */
+  overflow: visible;
 }
 
 .left-column {
@@ -62,6 +64,7 @@
 
 .right-column {
   margin-left: -30%; /* Shrink the gap by moving the right column closer */
+  overflow: visible;
 }
 
 .attack-stats, .defense-stats {
@@ -87,8 +90,6 @@ hr {
   z-index: 10;
   max-width: 300px; /* Set a fixed max-width to prevent it from expanding too much */
   overflow: visible; /* Ensure the container content is visible */
-  /* top: 10px; Adjust positioning within the parent container */
-  /* left: 10px; Adjust positioning within the parent container */
 }
 
 /* Label for the keywords input */
@@ -169,16 +170,6 @@ hr {
   color: #fff;
 }
 
-
-.save-profiles {
-  display: flex; /* This aligns the child elements side by side */
-  padding: 5px;
-}
-
-.def-save-profile {
-  margin-left: 5%;
-}
-
 .output {
   float: left;
 }
@@ -255,3 +246,85 @@ hr {
   margin-left: 100px;
 }
 
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -0.5%; /*Adjust padding for a better user experience*/
+  z-index: 999;
+  width: 50%; /* Set a fixed max-width to prevent it from expanding too much */
+  overflow: visible; /* Ensure the container content is visible */
+  height: 100%;
+}
+
+.custom-dropdown-selected {
+  border: 1px solid #ccc;
+  /* padding: 8px; */
+  cursor: pointer;
+  background: #fff;
+  width: 100%;
+  text-indent: 1%;
+  height: 100%;
+}
+
+.custom-dropdown-list {
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  width: 100%;
+  z-index: 999;
+  height: 100%;
+}
+
+.custom-dropdown-list div {
+  display: flex;
+  justify-content: space-between; /* Distribute space between profile name and 'X' */
+  align-items: center; /* Vertically center both the text and 'X' */
+  padding: 8px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  z-index: 999;
+}
+
+.custom-dropdown-list div:hover {
+  background: #f0f0f0;
+  box-sizing: border-box; /* Keep hover effect within boundaries */
+  width: 100%;
+}
+
+.custom-dropdown-list div:hover {
+  background: #f0f0f0;
+  width: 100%;
+}
+
+.custom-dropdown-list div.selected {
+  background-color: #007bff;
+  width: 100%;
+  color: #fff;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+.remove-btn {
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: auto;
+  color: red;
+  background-color: rgba(255, 0, 0, 0.3); /* Initial red background with 0.3 opacity */
+  border: 1px solid rgba(255, 0, 0, 0.3); /* Border matching initial background */
+  font-family: 'Lato', sans-serif; /* Apply Lato font */
+  font-weight: normal;
+  padding: 0.1% 0.8%;
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
+  position: relative; /* Make it possible to move it relative to its normal position */
+}
+
+
+.remove-btn:hover {
+  background-color: rgba(255, 0, 0, 0.5); /* Darker red background with 0.5 opacity */
+  border: 1px solid rgba(255, 0, 0, 0.7); /* Darker border for hover effect */
+  /* No width or padding changes to keep button size consistent */
+}

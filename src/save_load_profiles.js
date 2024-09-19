@@ -4,7 +4,6 @@
 
 // Function to save the attacker profile
 function save_atk_profile() {
-  // Fetching all required values from the attacker container
   let hit_dice = fetch_value('attacks');
   let hit_stat = fetch_int_value('bs');
   let hit_mod = fetch_int_value('hit_mod');
@@ -42,7 +41,6 @@ function save_atk_profile() {
     damage_val: damage_val,
   };
 
-  // Get the profile name from input field
   var atkprofileName = document.getElementById('atksaveprofile').value;
 
   if (!atkprofileName) {
@@ -50,16 +48,13 @@ function save_atk_profile() {
     return;
   }
 
-  // Clear the input field after saving
   document.getElementById('atksaveprofile').value = '';
 
-  // Append profile name and data to localStorage
   let atkprofile_map =
     JSON.parse(localStorage.getItem('atk_profile_map')) || {};
   atkprofile_map[atkprofileName] = atk_profile;
   localStorage.setItem('atk_profile_map', JSON.stringify(atkprofile_map));
 
-  // Refresh the dropdown with new profile
   update_atk_profile_dropdown();
 }
 
@@ -67,35 +62,87 @@ function save_atk_profile() {
 function update_atk_profile_dropdown() {
   let atkprofile_map =
     JSON.parse(localStorage.getItem('atk_profile_map')) || {};
-  let atkprofileDropdown = document.getElementById('atk-profile-dropdown');
+  let dropdownList = document.getElementById('atk-profile-dropdown-list');
+  let toggleButton = document.querySelector(
+    '#atk-profile-dropdown .custom-dropdown-selected',
+  );
 
-  // Clear existing options
-  atkprofileDropdown.innerHTML = '<option value="">Select a profile</option>';
+  dropdownList.innerHTML = '';
 
-  // Populate dropdown with profiles
   for (let atkprofileName in atkprofile_map) {
-    let option = document.createElement('option');
-    option.value = atkprofileName;
-    option.textContent = atkprofileName;
-    atkprofileDropdown.appendChild(option);
+    let option = document.createElement('div');
+    option.innerHTML = `
+      <span>${atkprofileName}</span>
+      <span class="remove-btn" onclick="remove_atk_profile('${atkprofileName}', event)">X</span>
+    `;
+
+    option.addEventListener('click', function (e) {
+      if (!e.target.classList.contains('remove-btn')) {
+        let selectedText = document.querySelector(
+          '#atk-profile-dropdown .custom-dropdown-selected',
+        ).textContent;
+        if (selectedText === atkprofileName) {
+          document.querySelector(
+            '#atk-profile-dropdown .custom-dropdown-selected',
+          ).textContent = 'Select Saved Profile';
+          highlightSelectedProfile(null); // Remove highlighting
+        } else {
+          document.querySelector(
+            '#atk-profile-dropdown .custom-dropdown-selected',
+          ).textContent = atkprofileName;
+          load_selected_atk_profile(atkprofileName);
+          highlightSelectedProfile(atkprofileName);
+        }
+      }
+    });
+
+    dropdownList.appendChild(option);
+  }
+
+  // Auto-close the dropdown if no profiles
+  if (Object.keys(atkprofile_map).length === 0) {
+    closeDropdown('atk-profile-dropdown-list');
+    toggleButton.textContent = 'Select Saved Profile';
+  } else {
+    toggleButton.style.pointerEvents = 'auto';
+    toggleButton.style.opacity = '1';
   }
 }
 
-// Function to load selected profile from the dropdown
-function load_selected_atk_profile() {
-  let selectedProfile = document.getElementById('atk-profile-dropdown').value;
+// Function to close the dropdown if clicking outside of it
+document.addEventListener('click', function (e) {
+  const atkDropdown = document.getElementById('atk-profile-dropdown-list');
+  const atkDropdownToggle = document.getElementById('atk-profile-dropdown');
+  const defDropdown = document.getElementById('def-profile-dropdown-list');
+  const defDropdownToggle = document.getElementById('def-profile-dropdown');
 
-  if (!selectedProfile) {
-    alert('Please select a profile to load.');
-    return;
+  if (
+    !atkDropdown.contains(e.target) &&
+    !atkDropdownToggle.contains(e.target)
+  ) {
+    closeDropdown('atk-profile-dropdown-list'); // Close attacker dropdown if clicked outside
   }
 
+  if (
+    !defDropdown.contains(e.target) &&
+    !defDropdownToggle.contains(e.target)
+  ) {
+    closeDropdown('def-profile-dropdown-list'); // Close defender dropdown if clicked outside
+  }
+});
+
+// Close the dropdown
+function closeDropdown(listId) {
+  document.getElementById(listId).style.display = 'none';
+}
+
+// Function to load selected profile from the dropdown
+function load_selected_atk_profile(profileName) {
   let atkprofile_map =
     JSON.parse(localStorage.getItem('atk_profile_map')) || {};
-  let profile = atkprofile_map[selectedProfile];
+  let profile = atkprofile_map[profileName];
 
   if (profile) {
-    // Populate fields with the loaded profile values
     set_value('attacks', profile.hit_dice);
     set_value('bs', profile.hit_stat);
     set_value('hit_mod', profile.hit_mod);
@@ -117,22 +164,30 @@ function load_selected_atk_profile() {
   }
 }
 
-// Function to remove the selected profile from localStorage
-function remove_selected_atk_profile() {
-  let selectedProfile = document.getElementById('atk-profile-dropdown').value;
-
-  if (!selectedProfile) {
-    alert('Please select a profile to remove.');
-    return;
-  }
-
+// Function to remove the selected attacker profile
+function remove_atk_profile(profileName, event) {
+  event.stopPropagation();
   let atkprofile_map =
     JSON.parse(localStorage.getItem('atk_profile_map')) || {};
-  delete atkprofile_map[selectedProfile];
+  delete atkprofile_map[profileName];
   localStorage.setItem('atk_profile_map', JSON.stringify(atkprofile_map));
-
-  // Refresh the dropdown after removing the profile
   update_atk_profile_dropdown();
+}
+
+// Function to highlight the selected profile in blue
+function highlightSelectedProfile(selectedProfile) {
+  let profileItems = document.querySelectorAll(
+    '#atk-profile-dropdown-list div',
+  );
+  profileItems.forEach(function (item) {
+    item.classList.remove('selected');
+    if (
+      selectedProfile &&
+      item.querySelector('span').textContent === selectedProfile
+    ) {
+      item.classList.add('selected');
+    }
+  });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +196,6 @@ function remove_selected_atk_profile() {
 
 // Function to save the defender profile
 function save_def_profile() {
-  // Fetching all required values from the defender container
   let t = fetch_int_value('t');
   let save_stat = fetch_int_value('save');
   let invuln_stat = fetch_int_value('invulnerable');
@@ -162,7 +216,6 @@ function save_def_profile() {
     fnp: fnp,
   };
 
-  // Get the profile name from input field
   var defprofileName = document.getElementById('defsaveprofile').value;
 
   if (!defprofileName) {
@@ -170,43 +223,75 @@ function save_def_profile() {
     return;
   }
 
-  // Clear the input field after saving
   document.getElementById('defsaveprofile').value = '';
 
-  // Append profile name and data to localStorage
   let defprofile_map =
     JSON.parse(localStorage.getItem('def_profile_map')) || {};
   defprofile_map[defprofileName] = def_profile;
   localStorage.setItem('def_profile_map', JSON.stringify(defprofile_map));
 
-  // Refresh the dropdown with new profile
   update_def_profile_dropdown();
 }
 
-// Function to update the dropdown with saved profiles
+// Function to update the defender profile dropdown with 'x' buttons
 function update_def_profile_dropdown() {
   let defprofile_map =
     JSON.parse(localStorage.getItem('def_profile_map')) || {};
-  let defprofileDropdown = document.getElementById('def-profile-dropdown');
+  let dropdownList = document.getElementById('def-profile-dropdown-list');
+  let toggleButton = document.querySelector(
+    '#def-profile-dropdown .custom-dropdown-selected',
+  );
 
-  // Clear existing options
-  defprofileDropdown.innerHTML = '<option value="">Select a profile</option>';
+  dropdownList.innerHTML = '';
 
-  // Populate dropdown with profiles
   for (let defprofileName in defprofile_map) {
-    let option = document.createElement('option');
-    option.value = defprofileName;
-    option.textContent = defprofileName;
-    defprofileDropdown.appendChild(option);
+    let option = document.createElement('div');
+    option.innerHTML = `
+      <span>${defprofileName}</span>
+      <span class="remove-btn" onclick="remove_def_profile('${defprofileName}', event)">X</span>
+    `;
+
+    option.addEventListener('click', function (e) {
+      if (!e.target.classList.contains('remove-btn')) {
+        let selectedText = document.querySelector(
+          '#def-profile-dropdown .custom-dropdown-selected',
+        ).textContent;
+        if (selectedText === defprofileName) {
+          document.querySelector(
+            '#def-profile-dropdown .custom-dropdown-selected',
+          ).textContent = 'Select Saved Profile';
+          highlightSelectedDefProfile(null); // Remove highlighting
+        } else {
+          document.querySelector(
+            '#def-profile-dropdown .custom-dropdown-selected',
+          ).textContent = defprofileName;
+          load_selected_def_profile();
+          highlightSelectedDefProfile(defprofileName);
+        }
+      }
+    });
+
+    dropdownList.appendChild(option);
+  }
+
+  // Auto-close the dropdown if no profiles
+  if (Object.keys(defprofile_map).length === 0) {
+    closeDropdown('def-profile-dropdown-list');
+    toggleButton.textContent = 'Select Saved Profile';
+  } else {
+    toggleButton.style.pointerEvents = 'auto';
+    toggleButton.style.opacity = '1';
   }
 }
 
-// Function to load selected profile from the dropdown
+// Function to load selected defender profile from the dropdown
 function load_selected_def_profile() {
-  let selectedProfile = document.getElementById('def-profile-dropdown').value;
+  let selectedProfile = document.querySelector(
+    '#def-profile-dropdown .custom-dropdown-selected',
+  ).textContent;
 
-  if (!selectedProfile) {
-    alert('Please select a profile to load.');
+  if (!selectedProfile || selectedProfile === 'Select Saved Profile') {
+    alert('Please Select Saved Profile to load.');
     return;
   }
 
@@ -215,7 +300,6 @@ function load_selected_def_profile() {
   let profile = defprofile_map[selectedProfile];
 
   if (profile) {
-    // Populate fields with the loaded profile values
     set_value('t', profile.t);
     set_value('save', profile.save_stat);
     set_value('invulnerable', profile.invuln_stat);
@@ -229,25 +313,56 @@ function load_selected_def_profile() {
   }
 }
 
-// Function to remove the selected profile from localStorage
-function remove_selected_def_profile() {
-  let selectedProfile = document.getElementById('def-profile-dropdown').value;
-
-  if (!selectedProfile) {
-    alert('Please select a profile to remove.');
-    return;
-  }
-
+// Function to remove the selected defender profile
+function remove_def_profile(profileName, event) {
+  event.stopPropagation();
   let defprofile_map =
     JSON.parse(localStorage.getItem('def_profile_map')) || {};
-  delete defprofile_map[selectedProfile];
+  delete defprofile_map[profileName];
   localStorage.setItem('def_profile_map', JSON.stringify(defprofile_map));
-
-  // Refresh the dropdown after removing the profile
   update_def_profile_dropdown();
 }
 
-// Utility function to set values of input fields
+// Function to highlight the selected defender profile in blue
+function highlightSelectedDefProfile(selectedProfile) {
+  let profileItems = document.querySelectorAll(
+    '#def-profile-dropdown-list div',
+  );
+  profileItems.forEach(function (item) {
+    item.classList.remove('selected');
+    if (
+      selectedProfile &&
+      item.querySelector('span').textContent === selectedProfile
+    ) {
+      item.classList.add('selected');
+    }
+  });
+}
+
+// Function to toggle dropdown visibility
+function toggleDropdown(listId) {
+  let list = document.getElementById(listId);
+  if (list.style.display === 'block') {
+    closeDropdown(listId); // Close if already open
+  } else {
+    let hasProfiles = list.children.length > 0;
+    if (hasProfiles) {
+      list.style.display = 'block'; // Open if profiles exist
+    }
+  }
+}
+
+// Utility functions
+function fetch_value(id) {
+  let element = document.getElementById(id);
+  return element ? element.value : '';
+}
+
+function fetch_int_value(id) {
+  let element = document.getElementById(id);
+  return element ? parseInt(element.value, 10) : 0;
+}
+
 function set_value(id, value) {
   let element = document.getElementById(id);
   if (element) {
@@ -255,7 +370,6 @@ function set_value(id, value) {
   }
 }
 
-// Utility function to set checked status for checkboxes
 function set_checked(id, isChecked) {
   let element = document.getElementById(id);
   if (element && element.type === 'checkbox') {
