@@ -323,42 +323,30 @@
       </div>
     </div>
     <div class="roll-container">
-      <div class="roll-image-container">
-        <p>
-          <button class="roll-button" onclick="roll_40k()">Roll</button>
-        </p>
+      <div class="roll-image-container" onclick="roll_40k()">
+        <span class="roll-text">Roll</span>
       </div>
-      <div class="output">
+      <div class="chart-container">
         <div class="chart">
           <canvas id="attack_chart" width="100" height="100"></canvas>
         </div>
         <p id="attack_text"></p>
-      </div>
-      <div class="output">
         <div class="chart">
           <canvas id="hit_chart" width="100" height="100"></canvas>
         </div>
         <p id="hit_text"></p>
-      </div>
-      <div class="output">
         <div class="chart">
           <canvas id="wound_chart" width="100" height="100"></canvas>
         </div>
         <p id="wound_text"></p>
-      </div>
-      <div class="output">
         <div class="chart">
           <canvas id="unsaved_chart" width="100" height="100"></canvas>
         </div>
         <p id="unsaved_text"></p>
-      </div>
-      <div class="output">
         <div class="chart">
           <canvas id="damage_chart" width="100" height="100"></canvas>
         </div>
         <p id="damage_text"></p>
-      </div>
-      <div class="output">
         <div class="chart">
           <canvas id="killed_chart" width="100" height="100"></canvas>
         </div>

@@ -170,70 +170,80 @@ hr {
   color: #fff;
 }
 
-.output {
-  float: left;
+.roll-image-container {
+  position: relative;
+  width: 150px;
+  height: 180px;
+  margin-left: 80%;
+  margin-top: 1%;
+  overflow: hidden;
+  cursor: pointer; /* Makes the whole container clickable */
+  background-image: url('/figures/dice.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  overflow: visible; /* Ensure the container content is visible */
+}
+
+.roll-image-container:hover {
+  opacity: 1; /* Slight hover effect */
+}
+
+.roll-text {
+  position: absolute;
+  top: 32%;
+  left: 35%;
+  /* background-color: transparent; */
+  background: none;
+  color: black;
+  font-size: 40px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  padding-right: 100%;
+  pointer-events: none; /* Prevents the button text from blocking clicks */
+  overflow: visible; /* Ensure the container content is visible */
+  text-align: centre;
+}
+
+.roll-container {
+  position: absolute; /* Allows positioning of the pseudo-element */
+  margin-left: 100px;
+}
+
+/* Container for charts */
+.chart-container {
+  display: flex; /* Aligns charts in a row */
+  flex-wrap: nowrap; /* Prevents charts from wrapping to the next line */
+  width: 100%; /* Ensures the container takes the full width of the screen */
+  overflow-x: auto; /* Allows horizontal scrolling if needed */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
 }
 
 .chart {
-  width: 140%;
-  height: 140%;
+  flex: 1 0 auto; /* Allows charts to grow and shrink, but not break into multiple rows */
+  height: 100%; /* Adjusts the height as needed */
+  min-width: 300px; /* Ensures charts are not too small (adjust based on your needs) */
+  max-width: 100%; /* Ensures charts do not exceed the container width */
 }
 
-.endnote {
+/* Clearfix for floating elements */
+.clearfix::after {
+  content: "";
+  display: table;
   clear: both;
+}
+
+
+.endnote {
   font-size: 75%;
 }
 
+/* Description styling */
 .description {
   color: grey;
   font-style: italic;
   font-weight: bold;
-}
-
-.roll-image-container {
-  position: relative; /* Allows positioning of the pseudo-element */
-  width: 7%;
-  height: 150px;
-  width: 125px;
-  margin-left: 30%;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
-}
-
-.roll-image-container::before {
-  content: ""; /* Required for pseudo-elements */
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image: url('/figures/dice.png');
-  background-size: 150% 120%;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.5;
-  z-index: -1;
-}
-
-.roll-button {
-  position: absolute;
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Adjusts the element to be perfectly centered */
-  
-  background-color: transparent;
-  color: black;
-  padding: 10px 20px;
-  font-size: 40px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-
-
-.roll-container {
-  position: relative; /* Allows positioning of the pseudo-element */
-  margin-left: 100px;
 }
 
 .custom-dropdown {
