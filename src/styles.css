@@ -246,7 +246,6 @@ hr {
   margin-bottom: 100px;
 }
 
-
 .custom-dropdown {
   position: relative;
   display: inline-block;
@@ -254,7 +253,6 @@ hr {
   margin-top: -0.5%; /*Adjust padding for a better user experience*/
   z-index: 999;
   width: 50%; /* Set a fixed max-width to prevent it from expanding too much */
-  overflow: visible; /* Ensure the container content is visible */
   height: 100%;
 }
 
@@ -285,22 +283,19 @@ hr {
   align-items: center; /* Vertically center both the text and 'X' */
   padding: 8px;
   cursor: pointer;
-  width: 100%;
+  width: 100%; /* Full width of the dropdown item */
   box-sizing: border-box;
-  height: 100%;
-  z-index: 999;
+  height: 100%; /* Adjust height based on content */
   background: #fff;
   border: 0.05px solid #f0f0f0;
+  overflow: hidden; /* Hide any overflow text */
+  text-overflow: ellipsis; /* Truncate long text with an ellipsis */
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
 }
 
 .custom-dropdown-list div:hover {
   background: #f0f0f0;
   box-sizing: border-box; /* Keep hover effect within boundaries */
-  width: 100%;
-}
-
-.custom-dropdown-list div:hover {
-  background: #f0f0f0;
   width: 100%;
   z-index: 999;
 }
@@ -317,7 +312,8 @@ hr {
 .remove-btn {
   cursor: pointer;
   border-radius: 4px;
-  margin-left: auto;
+  /* margin-left: auto; */
+  left: 96%;
   color: red;
   background-color: rgba(255, 0, 0, 0.3); /* Initial red background with 0.3 opacity */
   border: 1px solid rgba(255, 0, 0, 0.3); /* Border matching initial background */
@@ -326,10 +322,11 @@ hr {
   font-size: 12px; /* Reduce the font size of the 'x' */
   padding: 0.2% 0.5%; /* Reduce padding for a smaller background box */
   transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
-  position: relative; /* Make it possible to move it relative to its normal position */
+  position: absolute; /* Make it possible to move it relative to its normal position */
 }
 
 .remove-btn:hover {
   background-color: rgba(255, 0, 0, 0.5); /* Darker red background with 0.5 opacity */
   border: 1px solid rgba(255, 0, 0, 0.7); /* Darker border for hover effect */
+  opacity: 1;
 }
