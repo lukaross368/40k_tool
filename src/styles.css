@@ -177,75 +177,6 @@ hr {
   color: #fff;
 }
 
-.roll-image-container {
-  position: relative;
-  width: 150px;
-  height: 180px;
-  margin-left: 40%;
-  margin-top: -100px;
-  cursor: pointer; /* Makes the whole container clickable */
-  background-image: url('/figures/dice.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  opacity: 0.8;
-  overflow: visible; /* Ensure the container content is visible */
-}
-
-.roll-image-container:hover {
-  opacity: 1; /* Slight hover effect */
-}
-
-.roll-text {
-  position: absolute;
-  top: 32%;
-  left: 35%;
-  /* background-color: transparent; */
-  background: none;
-  color: black;
-  font-size: 40px;
-  font-weight: bold;
-  cursor: pointer;
-  padding-right: 100%;
-  pointer-events: none; /* Prevents the button text from blocking clicks */
-  overflow: visible; /* Ensure the container content is visible */
-  text-align: centre;
-}
-
-.roll-container {
-  position: absolute; /* Allows positioning of the pseudo-element */
-  margin-left: 100px;
-}
-
-/* Container for charts */
-.chart-container {
-  display: flex; /* Aligns charts in a row */
-  flex-wrap: nowrap; /* Prevents charts from wrapping to the next line */
-  width: 80vw; /* Ensures the container always takes up 80% of the viewport width */
-  max-width: 80vw; /* Ensures it cannot exceed 80% of the viewport width */
-  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-  overflow-x: auto; /* Allows horizontal scrolling if needed */
-}
-
-/* Individual chart styling */
-.chart {
-  display: flex;
-  flex-direction: column; /* Stack the chart and text vertically */
-  align-items: center; /* Center-align items horizontally */
-  width: 80%; /* Ensure each chart is 80% of the container */
-  max-width: 80%; /* Prevent the chart from exceeding 80% of the container */
-  height: auto; /* Let the height adjust based on the content */
-  overflow-x: hidden; /* Prevent horizontal overflow */
-}
-
-
-.chart-text {
-  text-align: center; /* Center-align text horizontally */
-  margin-top: 8px; /* Space between chart and text (adjust as needed) */
-  font-size: 16px; /* Adjust font size */
-  color: black; /* Adjust text color */
-  margin-bottom: 100px;
-}
-
 .custom-dropdown {
   position: relative;
   display: inline-block;
@@ -329,4 +260,73 @@ hr {
   background-color: rgba(255, 0, 0, 0.5); /* Darker red background with 0.5 opacity */
   border: 1px solid rgba(255, 0, 0, 0.7); /* Darker border for hover effect */
   opacity: 1;
+}
+
+.roll-image-container {
+  position: relative;
+  width: 150px;
+  height: 180px;
+  margin-left: 40%;
+  margin-top: -100px;
+  cursor: pointer; /* Makes the whole container clickable */
+  background-image: url('/figures/dice.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  overflow: visible; /* Ensure the container content is visible */
+}
+
+.roll-image-container:hover {
+  opacity: 1; /* Slight hover effect */
+}
+
+.roll-text {
+  position: absolute;
+  top: 32%;
+  left: 35%;
+  /* background-color: transparent; */
+  background: none;
+  color: black;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  padding-right: 100%;
+  pointer-events: none; /* Prevents the button text from blocking clicks */
+  overflow: visible; /* Ensure the container content is visible */
+  text-align: centre;
+}
+
+.roll-container {
+  position: absolute; /* Allows positioning of the pseudo-element */
+  margin-left: 100px;
+}
+
+/* Container for charts */
+.chart-container {
+  display: flex; /* Aligns charts in a row */
+  flex-wrap: nowrap; /* Prevents charts from wrapping to the next line */
+  width: 80vw; /* Ensures the container always takes up 80% of the viewport width */
+  max-width: 80vw; /* Ensures it cannot exceed 80% of the viewport width */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+  overflow-x: auto; /* Allows horizontal scrolling if needed */
+}
+
+/* Individual chart styling */
+.chart {
+  display: flex;
+  flex-direction: column; /* Stack the chart and text vertically */
+  align-items: center; /* Center-align items horizontally */
+  width: 80%; /* Ensure each chart is 80% of the container */
+  max-width: 80%; /* Prevent the chart from exceeding 80% of the container */
+  height: auto; /* Let the height adjust based on the content */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
+
+.chart-text {
+  text-align: center; /* Center-align text horizontally */
+  margin-top: 8px; /* Space between chart and text (adjust as needed) */
+  font-size: 16px; /* Adjust font size */
+  color: black; /* Adjust text color */
+  margin-bottom: 100px;
 }
