@@ -210,7 +210,7 @@ hr {
   position: absolute;
   background: #fff;
   border: 1px solid #ccc;
-  height: 100px; /* Set a fixed height for the dropdown */
+  max-height: 100px; /* Set a fixed height for the dropdown */
   overflow-y: auto; /* Enable vertical scrolling */
   width: 423px; /* Adjusted the width to fit the dropdown container */
   z-index: 999;
