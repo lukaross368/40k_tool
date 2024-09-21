@@ -180,85 +180,104 @@ hr {
 .custom-dropdown {
   position: relative;
   display: inline-block;
-  vertical-align: middle;
-  margin-top: -0.5%; /*Adjust padding for a better user experience*/
-  z-index: 999;
-  width: 50%; /* Set a fixed max-width to prevent it from expanding too much */
-  height: 100%;
+  width: 424px; /* Full width in px */
+  z-index: 10;
+  height: 24px; /* Ensure this height */
+  line-height: 24px; /* Match line-height to height */
+  border: 1px solid gray; /* Border around the dropdown */
+  box-sizing: border-box; /* Ensure padding/borders are included in dimensions */
+  border-radius: 3px;
+  font-size: 13px;  font-family: Arial;
+  color: #757575;
+  background-color: white;
 }
 
 .custom-dropdown-selected {
   border: 1px solid #ccc;
-  /* padding: 8px; */
-  cursor: pointer;
   background: #fff;
-  width: 100%;
-  text-indent: 1%;
-  height: 100%;
-  z-index: 999;
+  width: 400px;
+  padding: 0 10px 0 10px; /* Increased left padding to 15px */
+  cursor: pointer;
+  height: 20px; /* Halved the height */
+  line-height: 20px; /* Vertically center the text based on the new height */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .custom-dropdown-list {
-  display: none;
+  display: none; /* Keep hidden by default */
   position: absolute;
   background: #fff;
   border: 1px solid #ccc;
-  width: 100%;
+  height: 100px; /* Set a fixed height for the dropdown */
+  overflow-y: auto; /* Enable vertical scrolling */
+  width: 423px; /* Adjusted the width to fit the dropdown container */
   z-index: 999;
-  height: 100%;
+  box-sizing: border-box;
+  font-size: 13px;
+  font-family: Arial;
+  color: black;
 }
 
+
+/* Optionally, set a max height for individual options if needed */
 .custom-dropdown-list div {
   display: flex;
-  justify-content: space-between; /* Distribute space between profile name and 'X' */
-  align-items: center; /* Vertically center both the text and 'X' */
-  padding: 8px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 4px 4px 10px; /* Added left padding */
   cursor: pointer;
-  width: 100%; /* Full width of the dropdown item */
+  width: 100%;
   box-sizing: border-box;
-  height: 100%; /* Adjust height based on content */
   background: #fff;
   border: 0.05px solid #f0f0f0;
-  overflow: hidden; /* Hide any overflow text */
-  text-overflow: ellipsis; /* Truncate long text with an ellipsis */
-  white-space: nowrap; /* Prevent text from wrapping to the next line */
+  height: 24px; /* Ensure each option has a height */
+  line-height: 24px; /* Vertically center the text */
+}
+
+
+.custom-dropdown-list div span:first-child {
+  display: inline-block;
+  max-width: 95%; /* Earlier ellipsis to leave space for 'x' */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .custom-dropdown-list div:hover {
   background: #f0f0f0;
-  box-sizing: border-box; /* Keep hover effect within boundaries */
-  width: 100%;
-  z-index: 999;
 }
 
 .custom-dropdown-list div.selected {
   background-color: #007bff;
-  width: 100%;
   color: #fff;
-  z-index: 999;
 }
+
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 
 .remove-btn {
   cursor: pointer;
   border-radius: 4px;
-  /* margin-left: auto; */
-  left: 96%;
+  left: auto; /* Keep at the right edge */
+  right: 1px; /* Align the 'x' button properly */
   color: red;
-  background-color: rgba(255, 0, 0, 0.3); /* Initial red background with 0.3 opacity */
-  border: 1px solid rgba(255, 0, 0, 0.3); /* Border matching initial background */
-  font-family: 'Lato', sans-serif; /* Apply Lato font */
+  background-color: rgba(255, 0, 0, 0.3); /* Red background with 0.3 opacity */
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  font-family: 'Lato', sans-serif;
   font-weight: normal;
-  font-size: 12px; /* Reduce the font size of the 'x' */
-  padding: 0.2% 0.5%; /* Reduce padding for a smaller background box */
-  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
-  position: absolute; /* Make it possible to move it relative to its normal position */
+  font-size: 12px;
+  padding: 1px 4px; /* Adjust padding for a smaller background box */
+  height: auto; /* Let the content determine the height */
+  line-height: normal; /* Set to normal to avoid extra vertical space */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  position: absolute;
 }
 
 .remove-btn:hover {
-  background-color: rgba(255, 0, 0, 0.5); /* Darker red background with 0.5 opacity */
-  border: 1px solid rgba(255, 0, 0, 0.7); /* Darker border for hover effect */
+  background-color: rgba(255, 0, 0, 0.5);
+  border: 1px solid rgba(255, 0, 0, 0.7);
   opacity: 1;
 }
 
