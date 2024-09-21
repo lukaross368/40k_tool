@@ -19,7 +19,6 @@ function save_atk_profile() {
   let wound_crit = fetch_int_value('wound_crit');
   let wound_of_6 = fetch_value('wound_of_6');
   let ap_val = fetch_int_value('ap');
-  let cover = is_checked('cover');
   let damage_val = fetch_value('d');
 
   let atk_profile = {
