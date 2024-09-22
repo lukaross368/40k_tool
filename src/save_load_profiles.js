@@ -1,6 +1,52 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Attacker save profiles
 //////////////////////////////////////////////////////////////////////////////////////////
+let previousAttackerValues = null; // Global variable to hold previous values
+
+function saveCurrentAttackerValues() {
+  previousAttackerValues = {
+      previous_hit_dice: fetch_value('attacks'),
+      previous_hit_stat: fetch_value('bs'),
+      previous_hit_mod: fetch_value('hit_mod'),
+      previous_hit_reroll: fetch_value('hit_reroll'),
+      previous_hit_leth: is_checked('hit_leth'),
+      previous_hit_sus: fetch_value('hit_sus'),
+      previous_hit_crit: fetch_value('hit_crit'),
+      previous_hit_of_6: fetch_value('hit_of_6'),
+      previous_wound_mod: fetch_value('wound_mod'),
+      previous_wound_reroll: fetch_value('wound_reroll'),
+      previous_wound_dev: is_checked('wound_dev'),
+      previous_wound_crit: fetch_value('wound_crit'),
+      previous_wound_of_6: fetch_value('wound_of_6'),
+      previous_strength: fetch_value('s'),
+      previous_ap: fetch_value('ap'),
+      previous_damage: fetch_value('d')
+  };
+
+  console.log("inside function: ", previousAttackerValues);
+
+  return previousAttackerValues; // Return the saved values for further use
+}
+
+
+function repopulateAttackerFields(savedValues) {
+  set_value('attacks', savedValues.previous_hit_dice);
+  set_value('bs', savedValues.previous_hit_stat);
+  set_value('hit_mod', savedValues.previous_hit_mod);
+  set_value('hit_reroll', savedValues.previous_hit_reroll);
+  set_checked('hit_leth', savedValues.previous_hit_leth);
+  set_value('hit_sus', savedValues.previous_hit_sus);
+  set_value('hit_crit', savedValues.previous_hit_crit);
+  set_value('hit_of_6', savedValues.previous_hit_of_6);
+  set_value('wound_mod', savedValues.previous_wound_mod);
+  set_value('wound_reroll', savedValues.previous_wound_reroll);
+  set_checked('wound_dev', savedValues.previous_wound_dev);
+  set_value('wound_crit', savedValues.previous_wound_crit);
+  set_value('wound_of_6', savedValues.previous_wound_of_6);
+  set_value('s', savedValues.previous_strength);
+  set_value('ap', savedValues.previous_ap);
+  set_value('d', savedValues.previous_damage);
+}
 
 // Function to save the attacker profile
 function save_atk_profile() {
@@ -59,12 +105,9 @@ function save_atk_profile() {
 
 // Function to update the dropdown with saved profiles
 function update_atk_profile_dropdown() {
-  let atkprofile_map =
-    JSON.parse(localStorage.getItem('atk_profile_map')) || {};
+  let atkprofile_map = JSON.parse(localStorage.getItem('atk_profile_map')) || {};
   let dropdownList = document.getElementById('atk-profile-dropdown-list');
-  let toggleButton = document.querySelector(
-    '#atk-profile-dropdown .custom-dropdown-selected',
-  );
+  let toggleButton = document.querySelector('#atk-profile-dropdown .custom-dropdown-selected');
 
   dropdownList.innerHTML = '';
 
@@ -76,24 +119,33 @@ function update_atk_profile_dropdown() {
     `;
 
     option.addEventListener('click', function (e) {
+      // Save current values first
+    
       if (!e.target.classList.contains('remove-btn')) {
         let selectedText = document.querySelector(
-          '#atk-profile-dropdown .custom-dropdown-selected',
+          '#atk-profile-dropdown .custom-dropdown-selected'
         ).textContent;
+    
         if (selectedText === atkprofileName) {
+          // Deselect the current profile
           document.querySelector(
-            '#atk-profile-dropdown .custom-dropdown-selected',
+            '#atk-profile-dropdown .custom-dropdown-selected'
           ).textContent = 'Select Saved Profile';
           highlightSelectedProfile(null); // Remove highlighting
+          repopulateAttackerFields(previousAttackerValues);
+          // You might want to repopulate fields here if necessary
         } else {
+          // Select a new profile
           document.querySelector(
-            '#atk-profile-dropdown .custom-dropdown-selected',
+            '#atk-profile-dropdown .custom-dropdown-selected'
           ).textContent = atkprofileName;
-          load_selected_atk_profile(atkprofileName);
+          previousAttackerValues = saveCurrentAttackerValues(); 
+          console.log("previousAttackerValues: ", previousAttackerValues);
+          load_selected_atk_profile(atkprofileName); // Load new profile values
           highlightSelectedProfile(atkprofileName);
         }
       }
-    });
+    });    
 
     dropdownList.appendChild(option);
   }
