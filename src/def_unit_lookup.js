@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   async function getFNPValue(selectionEntry) {
-    let fnpValue = 'N/A';
+    let fnpValue = '';
 
     // Check if there's a profile with the exact name "Invulnerable Save"
 
@@ -245,42 +245,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (characteristic) {
         const regex = /(\d+\+)/;
         const match = characteristic.match(regex);
-        fnpValue = match ? match[0] : 'N/A';
+        fnpValue = match ? match[0] : '';
       }
-    } //else {
-    // If not found directly, fallback to the infoLink method
-    //   const fnpInfoLink = Array.from(
-    //     selectionEntry.querySelectorAll('infoLink'),
-    //   ).find((infoLink) =>
-    //     infoLink.getAttribute('name').includes('Feel No Pain'),
-    //   );
-
-    //   if (fnpInfoLink) {
-    //     const targetId = fnpInfoLink.getAttribute('targetId');
-    //     const fnpProfile = xmlDoc.querySelector(
-    //       `profile[id="${targetId}"]`,
-    //     );
-
-    //     if (fnpProfile) {
-    //       const fnpComment =
-    //         fnpProfile.querySelector('comment');
-
-    //       if (fnpComment) {
-    //         const fnpText =
-    //           fnpComment.textContent.trim();
-    //         // Extract the number followed by '+'
-    //         const regex = /(\d+\+)/;
-    //         const match = fnpText.match(regex);
-    //         fnpValue = match ? match[0] : 'N/A';
-    //       }
-    //     }
-    //     fnpValue = await handleImperiumData(
-    //       value = fnpValue,
-    //       fileFilter,
-    //       targetId,
-    //     );
-    //   }
-    // }
+    }
     return fnpValue;
   }
 

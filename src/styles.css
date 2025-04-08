@@ -1,104 +1,351 @@
-/* Container for the keywords input field and options dropdown */
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+}
+
+.atk-image-container {
+  float: left;
+  position: relative; /* Allows positioning of the pseudo-element */
+  width: 60%; /* or a specific width */
+  height: 100%; /* or a specific height */
+  border: 2px solid #000; /* 2px solid black border */
+  border-radius: 8px; /* Optional: rounded corners */
+  overflow: visible; /* Changed to visible to prevent clipping */
+  padding: 1%;
+}
+
+.atk-image-container::before {
+  float: left;
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Positions the overlay absolutely within the container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/figures/attacker.png'); /* Set the local background image */
+  background-size: 100% 100%; /* Scales the image up, effectively squeezing it in */
+  background-position: center; /* Keeps the image centered */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  opacity: 0.4; /* 10% opacity for the image */
+  z-index: -1; /* Ensures the overlay is behind the content */
+}
+
+.def-image-container {
+  position: relative; /* Allows positioning of the pseudo-element */
+  width: 45%; /* or a specific width */
+  height: 50%; /* or a specific height */
+  border: 2px solid #000; /* 2px solid black border */
+  border-radius: 8px; /* Optional: rounded corners */
+  overflow: hidden; /* Ensures the pseudo-element doesn’t overflow */
+  /* padding: 0% 5%; Vertical padding is 0, horizontal padding is 10px */
+  padding: 1%;
+  overflow: visible;
+}
+
+.def-image-container::before {
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Positions the overlay absolutely within the container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/figures/defender.png'); /* Set the local background image */
+  background-size: 100% 100%; /*Scales the image up, effectively squeezing it in */
+  background-position: center; /* Keeps the image centered */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  opacity: 0.4; /* 10% opacity for the image */
+  z-index: -1; /* Ensures the overlay is behind the content */
+  overflow: visible;
+}
+
+.left-column {
+  margin-left: 0%; /* Shrink the gap by moving the right column closer */
+}
+
+.right-column {
+  margin-left: -30%; /* Shrink the gap by moving the right column closer */
+  overflow: visible;
+}
+
+.attack-stats, .defense-stats {
+  border: 1px solid #ccc; /* Optional: add borders around sections for clarity */
+}
+
+/* Description styling */
+.description {
+  color: grey;
+  font-style: italic;
+  font-weight: bold;
+}
+
+
+hr {
+  margin: 0; /* Remove any default margin */
+  padding: 0; /* Remove any default padding */
+  border: none; /* Remove default border style */
+  border-top: 1px solid black; /* Set a custom line */
+  width: 100%; /* Ensure it spans the full width of the container */
+  box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+
+
 .keywords-container {
-  position: relative; /* Positions children absolutely within this container */
-  padding: 5px; /* Adds padding inside the container */
-  display: inline-block; /* Makes the container fit its contents and be inline */
-  vertical-align: middle; /* Aligns the container vertically in the middle */
+  position: relative; /* Keeps it positioned within the .atk-image-container */
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -0.5%; /*Adjust padding for a better user experience*/
+  z-index: 10;
+  max-width: 300px; /* Set a fixed max-width to prevent it from expanding too much */
+  overflow: visible; /* Ensure the container content is visible */
 }
 
 /* Label for the keywords input */
 .keywords-label {
-  font-size: 16px; /* Sets the font size to 16px */
-  left: 1px; /* Positions the label slightly to the right (1px from the left) */
-  line-height: 1.5; /* Sets the line height to 1.5 times the font size */
-  display: inline-block; /* Makes the label fit its contents and be inline */
-  vertical-align: middle; /* Aligns the label vertically in the middle */
+  font-size: 16px;
+  line-height: 1.5;
+  display: flex;
+  vertical-align: middle;
 }
 
 /* Input field for keywords */
 .keywords-input {
-  display: inline-block; /* Makes the input fit its contents and be inline */
-  width: 200px; /* Sets the width to 200px */
-  height: 20px; /* Sets the height to 20px */
-  padding: 8px 12px; /* Sets the padding: 8px top/bottom, 12px left/right */
-  border: 1px solid gray; /* Sets a gray border with 1px width */
-  font-family: Arial; /* Uses Arial as the font family */
-  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-  border-radius: 3px; /* Rounds the corners with a 3px radius */
-  cursor: pointer; /* Changes the cursor to a pointer when hovering over */
-  font-size: 16px; /* Sets the font size to 16px */
-  line-height: 1.5; /* Sets the line height to 1.5 times the font size */
-  color: #333; /* Sets the text color to dark grey */
-  position: relative; /* Positions pseudo-elements absolutely within this input */
-  vertical-align: middle; /* Aligns the input vertically in the middle */
+  display: inline-block; /* Adjusts the input to fit its container */
+  width: 147px; /* Set width to full container width */
+  height: 20px;
+  border: 1px solid gray;
+  font-family: Arial;
+  box-sizing: border-box;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: white;
+  position: relative;
+  vertical-align: middle;
 }
 
 /* Placeholder text for the keywords input */
 .keywords-input::before {
-  content: attr(data-placeholder); /* Uses the data-placeholder attribute as content */
-  font-family: Arial; /* Uses Arial as the font family for placeholder text */
-  color: #757575; /* Sets the placeholder text color to light grey */
-  position: absolute; /* Positions the placeholder text absolutely within the input */
-  top: 50%; /* Centers the text vertically */
-  left: 2px; /* Positions the text 2px from the left */
-  transform: translateY(-50%); /* Adjusts the text to be perfectly centered vertically */
-  pointer-events: none; /* Makes the placeholder text not interactable */
-  font-size: 13px; /* Sets the font size to 13px for the placeholder text */
+  content: attr(data-placeholder);
+  font-family: Arial;
+  color: #757575;
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 13px;
+  display: block; /* Ensure it always displays */
 }
 
 /* Removes the placeholder text when the input is not empty */
-.keywords-input:not(:empty)::before {
-  content: ""; /* Sets the content to an empty string to hide the placeholder */
+.keywords-input:focus::before {
+  content: ""; /* Remove the placeholder when the input is focused */
 }
 
 /* Dropdown options container */
 .keywords-options {
-  display: none; /* Hides the dropdown by default */
-  position: absolute; /* Positions the dropdown absolutely within its container */
-  border: 1px solid #ccc; /* Sets a light grey border with 1px width */
-  border-top: none; /* Removes the top border to blend with the input */
-  font-family: Arial; /* Uses Arial as the font family for dropdown text */
-  background-color: #fff; /* Sets the background color to white */
-  max-height: 200px; /* Sets the maximum height to 200px */
-  overflow-y: auto; /* Adds a vertical scrollbar if the content overflows */
-  z-index: 1000; /* Ensures the dropdown appears above other elements */
-  width: 100%; /* Sets the width to 100% of the container */
-  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-  font-size: 16px; /* Sets the font size to 16px for dropdown text */
+  display: none; /* Hide the dropdown by default */
+  position: absolute;
+  border: 1px solid #ccc;
+  border-top: none;
+  font-family: Arial;
+  background-color: #fff;
+  max-height: 200px; /* Limit height for better usability */
+  overflow-y: auto;
+  z-index: 1000;
+  width: 100%; /* Matches the width of the input */
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 /* Individual options within the dropdown */
 .keywords-options .option {
-  padding: 8px 12px; /* Sets the padding: 8px top/bottom, 12px left/right */
-  cursor: pointer; /* Changes the cursor to a pointer when hovering over */
+  padding: 8px;
+  cursor: pointer;
 }
 
 /* Hover state for individual options */
 .keywords-options .option:hover {
-  background-color: #f0f0f0; /* Changes the background color to light grey on hover */
+  background-color: #f0f0f0;
 }
 
 /* Selected state for individual options */
 .keywords-options .option.selected {
-  background-color: #007bff; /* Changes the background color to blue when selected */
-  color: #fff; /* Changes the text color to white when selected */
+  background-color: #007bff;
+  color: #fff;
 }
 
-.output {
-  float: left;
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+  width: 424px; /* Full width in px */
+  z-index: 10;
+  height: 24px; /* Ensure this height */
+  line-height: 24px; /* Match line-height to height */
+  border: 1px solid gray; /* Border around the dropdown */
+  box-sizing: border-box; /* Ensure padding/borders are included in dimensions */
+  border-radius: 3px;
+  font-size: 13px;  font-family: Arial;
+  color: #757575;
+  background-color: white;
 }
 
+.custom-dropdown-selected {
+  border: 1px solid #ccc;
+  background: #fff;
+  width: 400px;
+  padding: 0 10px 0 10px; /* Increased left padding to 15px */
+  cursor: pointer;
+  height: 20px; /* Halved the height */
+  line-height: 20px; /* Vertically center the text based on the new height */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-dropdown-list {
+  display: none; /* Keep hidden by default */
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  max-height: 100px; /* Set a fixed height for the dropdown */
+  overflow-y: auto; /* Enable vertical scrolling */
+  width: 423px; /* Adjusted the width to fit the dropdown container */
+  z-index: 999;
+  box-sizing: border-box;
+  font-size: 13px;
+  font-family: Arial;
+  color: black;
+}
+
+
+/* Optionally, set a max height for individual options if needed */
+.custom-dropdown-list div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 4px 4px 10px; /* Added left padding */
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  border: 0.05px solid #f0f0f0;
+  height: 24px; /* Ensure each option has a height */
+  line-height: 24px; /* Vertically center the text */
+}
+
+
+.custom-dropdown-list div span:first-child {
+  display: inline-block;
+  max-width: 95%; /* Earlier ellipsis to leave space for 'x' */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-dropdown-list div:hover {
+  background: #f0f0f0;
+}
+
+.custom-dropdown-list div.selected {
+  background-color: #007bff;
+  color: #fff;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+.remove-btn {
+  cursor: pointer;
+  border-radius: 4px;
+  left: auto; /* Keep at the right edge */
+  right: 1px; /* Align the 'x' button properly */
+  color: red;
+  background-color: rgba(255, 0, 0, 0.3); /* Red background with 0.3 opacity */
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  font-family: 'Lato', sans-serif;
+  font-weight: normal;
+  font-size: 12px;
+  padding: 1px 4px; /* Adjust padding for a smaller background box */
+  height: auto; /* Let the content determine the height */
+  line-height: normal; /* Set to normal to avoid extra vertical space */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  position: absolute;
+}
+
+.remove-btn:hover {
+  background-color: rgba(255, 0, 0, 0.5);
+  border: 1px solid rgba(255, 0, 0, 0.7);
+  opacity: 1;
+}
+
+.roll-image-container {
+  position: relative;
+  width: 150px;
+  height: 180px;
+  margin-left: 40%;
+  margin-top: -100px;
+  cursor: pointer; /* Makes the whole container clickable */
+  background-image: url('/figures/dice.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  overflow: visible; /* Ensure the container content is visible */
+}
+
+.roll-image-container:hover {
+  opacity: 1; /* Slight hover effect */
+}
+
+.roll-text {
+  position: absolute;
+  top: 32%;
+  left: 35%;
+  /* background-color: transparent; */
+  background: none;
+  color: black;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  padding-right: 100%;
+  pointer-events: none; /* Prevents the button text from blocking clicks */
+  overflow: visible; /* Ensure the container content is visible */
+  text-align: centre;
+}
+
+.roll-container {
+  position: absolute; /* Allows positioning of the pseudo-element */
+  margin-left: 100px;
+}
+
+/* Container for charts */
+.chart-container {
+  display: flex; /* Aligns charts in a row */
+  flex-wrap: nowrap; /* Prevents charts from wrapping to the next line */
+  width: 80vw; /* Ensures the container always takes up 80% of the viewport width */
+  max-width: 80vw; /* Ensures it cannot exceed 80% of the viewport width */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+  overflow-x: auto; /* Allows horizontal scrolling if needed */
+}
+
+/* Individual chart styling */
 .chart {
-  width: 200px;
-  height: 200px;
+  display: flex;
+  flex-direction: column; /* Stack the chart and text vertically */
+  align-items: center; /* Center-align items horizontally */
+  width: 80%; /* Ensure each chart is 80% of the container */
+  max-width: 80%; /* Prevent the chart from exceeding 80% of the container */
+  height: auto; /* Let the height adjust based on the content */
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
-.endnote {
-  clear: both;
-  font-size: 75%;
-}
 
-.description {
-  color: grey;
-  font-style: italic;
+.chart-text {
+  text-align: center; /* Center-align text horizontally */
+  margin-top: 8px; /* Space between chart and text (adjust as needed) */
+  font-size: 16px; /* Adjust font size */
+  color: black; /* Adjust text color */
+  margin-bottom: 100px;
 }
